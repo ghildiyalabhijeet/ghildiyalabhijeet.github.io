@@ -2,39 +2,67 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   // Years
   const y = String(new Date().getFullYear());
-  $("#year") && ($("#year").textContent = y);
-  $("#year2") && ($("#year2").textContent = y);
+  const year1 = $("#year");
+  const year2 = $("#year2");
+  if (year1) year1.textContent = y;
+  if (year2) year2.textContent = y;
 
   // ==============================
-  // Neon snowflake roam (NOT STATIC)
+  // Snowflake roam (FIXED: not static)
+  // - JS drives movement (CSS fallback stays if JS fails)
   // ==============================
   const snowflake = $("#snowflakeModel");
-  if (snowflake && !prefersReduced) {
-    // Disable CSS fallback animation once JS is active (prevents double motion)
+  if (snowflake) {
+    // Disable fallback animation when JS is active
     snowflake.style.animation = "none";
 
+    const clamp01 = (v) => Math.max(0, Math.min(1, v));
+    const lerp = (a, b, t) => a + (b - a) * t;
+
     let t0 = performance.now();
+    let mouseX = 0.5;
+    let mouseY = 0.5;
+
+    // subtle mouse influence (makes it feel alive)
+    window.addEventListener(
+      "pointermove",
+      (e) => {
+        if (e.pointerType !== "mouse") return;
+        mouseX = e.clientX / Math.max(1, window.innerWidth);
+        mouseY = e.clientY / Math.max(1, window.innerHeight);
+      },
+      { passive: true }
+    );
+
+    let fx = 0.5;
+    let fy = 0.5;
 
     const tick = (t) => {
       const time = (t - t0) / 1000;
 
-      const size = snowflake.offsetWidth || 180;
+      const size = snowflake.offsetWidth || 160;
       const w = window.innerWidth;
       const h = window.innerHeight;
 
-      // smooth roam (lissajous-like)
-      const nx = 0.5 + 0.34 * Math.sin(time / 9.2) + 0.10 * Math.sin(time / 3.4);
-      const ny = 0.5 + 0.30 * Math.cos(time / 10.4) + 0.10 * Math.sin(time / 4.0);
+      // roam path (more obvious movement)
+      const nx = 0.5 + 0.36 * Math.sin(time / 7.8) + 0.12 * Math.sin(time / 2.9);
+      const ny = 0.5 + 0.32 * Math.cos(time / 9.2) + 0.12 * Math.sin(time / 3.6);
 
-      const x = (w - size) * nx;
-      const y = (h - size) * ny;
+      // blend with mouse a bit
+      const tx = clamp01(lerp(nx, mouseX, 0.12));
+      const ty = clamp01(lerp(ny, mouseY, 0.10));
 
-      const rot = time * 18;                // slow spin
-      const scale = 0.94 + 0.06 * Math.sin(time / 4.8);
+      // smooth-follow (prevents jitter)
+      fx = lerp(fx, tx, 0.035);
+      fy = lerp(fy, ty, 0.032);
+
+      const x = (w - size) * fx;
+      const y = (h - size) * fy;
+
+      const rot = time * 22; // spin
+      const scale = 0.92 + 0.07 * Math.sin(time / 4.4);
 
       snowflake.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rot}deg) scale(${scale})`;
 
@@ -55,8 +83,7 @@
 
   const setActive = (id) => {
     navLinks.forEach((a) => {
-      const href = a.getAttribute("href") || "";
-      a.classList.toggle("is-active", href === `#${id}`);
+      a.classList.toggle("is-active", (a.getAttribute("href") || "") === `#${id}`);
     });
   };
 
@@ -77,7 +104,7 @@
   }
 
   // ==============================
-  // Copy helpers (email + project links)
+  // Copy helpers
   // ==============================
   const toast = $("#toast");
   const showToast = (msg) => {
@@ -129,9 +156,9 @@
     const group = bubble.dataset.group || "all";
     const desc = bubble.dataset.desc || "—";
 
-    skillName && (skillName.textContent = name);
-    skillGroup && (skillGroup.textContent = GROUP_LABEL[group] || "All");
-    skillText && (skillText.textContent = desc);
+    if (skillName) skillName.textContent = name;
+    if (skillGroup) skillGroup.textContent = GROUP_LABEL[group] || "All";
+    if (skillText) skillText.textContent = desc;
 
     skillBubbles.forEach((x) => x.classList.toggle("is-selected", x === bubble));
   };
@@ -157,12 +184,13 @@
   };
 
   filters.forEach((f) => f.addEventListener("click", () => applyFilter(f.dataset.filter || "all")));
+
   skillBubbles.forEach((b) => {
     b.addEventListener("mouseenter", () => setInspector(b));
     b.addEventListener("click", () => setInspector(b));
   });
 
-  if (skillsCloud && !prefersReduced) {
+  if (skillsCloud) {
     skillsCloud.addEventListener(
       "pointermove",
       (e) => {
@@ -178,7 +206,7 @@
   applyFilter("all");
 
   // ==============================
-  // Projects: infinite scroll + auto switch every 4s + drawer in/out
+  // Projects: 2-up view + infinite loop + auto switch
   // ==============================
   const PROJECTS = {
     genai: {
@@ -240,7 +268,6 @@
   const bulletsEl = $("#projBullets");
   const openEl = $("#projOpen");
   const copyBtn = $("#projCopy");
-
   const prevBtn = $("#projectsPrev");
   const nextBtn = $("#projectsNext");
 
@@ -251,19 +278,18 @@
 
   const tilesAll = () => (row ? Array.from(row.querySelectorAll(".proj-square")) : []);
 
-  const centerTile = (tile, smooth = true) => {
+  const snapTileToStart = (tile, smooth = true) => {
     if (!row || !tile) return;
-    const left = tile.offsetLeft - (row.clientWidth - tile.offsetWidth) / 2;
-    row.scrollTo({ left, behavior: smooth ? "smooth" : "auto" });
+    row.scrollTo({ left: tile.offsetLeft, behavior: smooth ? "smooth" : "auto" });
   };
 
   const updateDetails = (key) => {
     const p = PROJECTS[key];
     if (!p) return;
 
-    titleEl && (titleEl.textContent = p.title);
-    metaEl && (metaEl.textContent = p.meta);
-    descEl && (descEl.textContent = p.desc);
+    if (titleEl) titleEl.textContent = p.title;
+    if (metaEl) metaEl.textContent = p.meta;
+    if (descEl) descEl.textContent = p.desc;
 
     if (bulletsEl) {
       bulletsEl.innerHTML = "";
@@ -278,7 +304,7 @@
     if (copyBtn) copyBtn.dataset.copy = p.link;
   };
 
-  const selectTileElement = (tile, { center = false, smooth = true } = {}) => {
+  const selectTileElement = (tile, { snap = false, smooth = true } = {}) => {
     if (!tile) return;
     const key = tile.dataset.project;
     if (!PROJECTS[key]) return;
@@ -289,21 +315,20 @@
     currentTile = tile;
     updateDetails(key);
 
-    if (center) centerTile(tile, smooth);
+    if (snap) snapTileToStart(tile, smooth);
   };
 
-  const nearestCenterTile = () => {
+  const nearestStartTile = () => {
     if (!row) return null;
     const tiles = tilesAll();
     if (!tiles.length) return null;
 
-    const center = row.scrollLeft + row.clientWidth / 2;
+    const left = row.scrollLeft;
     let best = tiles[0];
     let bestDist = Infinity;
 
     for (const t of tiles) {
-      const tc = t.offsetLeft + t.offsetWidth / 2;
-      const d = Math.abs(tc - center);
+      const d = Math.abs(t.offsetLeft - left);
       if (d < bestDist) {
         best = t;
         bestDist = d;
@@ -312,20 +337,27 @@
     return best;
   };
 
+  const measureSetWidth = () => {
+    if (!row || !originals.length) return;
+    const firstOrig = originals[0];
+    const lastOrig = originals[originals.length - 1];
+    setWidth = (lastOrig.offsetLeft + lastOrig.offsetWidth) - firstOrig.offsetLeft;
+  };
+
   const wrapInfinite = () => {
     if (!row || !setWidth || !originals.length) return;
-    const firstOrig = originals[0];
-    const leftLimit = firstOrig.offsetLeft - setWidth * 0.5;
-    const rightLimit = firstOrig.offsetLeft + setWidth * 1.5;
 
-    if (row.scrollLeft < leftLimit) row.scrollLeft += setWidth;
-    else if (row.scrollLeft > rightLimit) row.scrollLeft -= setWidth;
+    const firstOrig = originals[0];
+    const start = firstOrig.offsetLeft; // typically ≈ setWidth
+
+    // keep scroll in the middle band
+    if (row.scrollLeft < start - setWidth * 0.25) row.scrollLeft += setWidth;
+    else if (row.scrollLeft > start + setWidth * 1.25) row.scrollLeft -= setWidth;
   };
 
   const setupInfinite = () => {
     if (!row) return;
 
-    // capture originals BEFORE cloning
     originals = Array.from(row.querySelectorAll(".proj-square"));
     if (originals.length < 2) return;
 
@@ -339,13 +371,11 @@
     originals.forEach((t) => afterFrag.appendChild(t.cloneNode(true)));
     row.appendChild(afterFrag);
 
-    // measure after layout
     requestAnimationFrame(() => {
-      const firstOrig = originals[0];
-      const lastOrig = originals[originals.length - 1];
-      setWidth = (lastOrig.offsetLeft + lastOrig.offsetWidth) - firstOrig.offsetLeft;
+      measureSetWidth();
 
-      selectTileElement(firstOrig, { center: true, smooth: false });
+      // start at the original set (middle)
+      selectTileElement(originals[0], { snap: true, smooth: false });
     });
 
     let scrollEndT = 0;
@@ -353,11 +383,24 @@
       "scroll",
       () => {
         wrapInfinite();
+
         clearTimeout(scrollEndT);
         scrollEndT = window.setTimeout(() => {
-          const t = nearestCenterTile();
+          const t = nearestStartTile();
           if (t) selectTileElement(t);
         }, 120);
+      },
+      { passive: true }
+    );
+
+    window.addEventListener(
+      "resize",
+      () => {
+        requestAnimationFrame(() => {
+          measureSetWidth();
+          // keep the current tile snapped correctly after resize
+          if (currentTile) snapTileToStart(currentTile, false);
+        });
       },
       { passive: true }
     );
@@ -372,14 +415,13 @@
     const idx = tiles.indexOf(currentTile);
     if (idx === -1) return tiles[0];
 
-    const next = tiles[idx + dir];
-    return next || (dir > 0 ? tiles[0] : tiles[tiles.length - 1]);
+    return tiles[idx + dir] || (dir > 0 ? tiles[0] : tiles[tiles.length - 1]);
   };
 
   const stopAuto = () => {
     if (autoTimer) clearInterval(autoTimer);
     autoTimer = null;
-    drawer && drawer.classList.remove("is-cycle-out");
+    if (drawer) drawer.classList.remove("is-cycle-out");
   };
 
   const cycleOnce = () => {
@@ -387,41 +429,36 @@
     const next = getNextTile(1);
     if (!next) return;
 
-    // drawer out
     if (drawer) drawer.classList.add("is-cycle-out");
 
-    // switch content while hidden
     window.setTimeout(() => {
-      selectTileElement(next, { center: true, smooth: true });
+      selectTileElement(next, { snap: true, smooth: true });
     }, 260);
 
-    // drawer back in
     window.setTimeout(() => {
       if (drawer) drawer.classList.remove("is-cycle-out");
     }, 520);
   };
 
   const startAuto = () => {
-    if (prefersReduced || !row) return;
     stopAuto();
     autoTimer = window.setInterval(cycleOnce, 4000);
   };
 
-  // Event delegation (works for clones too)
+  // Event delegation (works for clones)
   if (row) {
     row.addEventListener("click", (e) => {
       const tile = e.target.closest(".proj-square");
       if (!tile || !row.contains(tile)) return;
       stopAuto();
-      selectTileElement(tile, { center: true, smooth: true });
+      selectTileElement(tile, { snap: true, smooth: true });
       startAuto();
     });
 
     row.addEventListener("dblclick", (e) => {
       const tile = e.target.closest(".proj-square");
       if (!tile || !row.contains(tile)) return;
-      const key = tile.dataset.project;
-      const p = PROJECTS[key];
+      const p = PROJECTS[tile.dataset.project];
       if (p) window.open(p.link, "_blank", "noopener,noreferrer");
     });
 
@@ -429,8 +466,7 @@
       const tile = e.target.closest(".proj-square");
       if (!tile || !row.contains(tile)) return;
       if (e.key === "Enter") {
-        const key = tile.dataset.project;
-        const p = PROJECTS[key];
+        const p = PROJECTS[tile.dataset.project];
         if (p) window.open(p.link, "_blank", "noopener,noreferrer");
       }
     });
@@ -448,18 +484,18 @@
   prevBtn?.addEventListener("click", () => {
     stopAuto();
     const prev = getNextTile(-1);
-    if (prev) selectTileElement(prev, { center: true, smooth: true });
+    if (prev) selectTileElement(prev, { snap: true, smooth: true });
     startAuto();
   });
 
   nextBtn?.addEventListener("click", () => {
     stopAuto();
     const next = getNextTile(1);
-    if (next) selectTileElement(next, { center: true, smooth: true });
+    if (next) selectTileElement(next, { snap: true, smooth: true });
     startAuto();
   });
 
-  // Pause auto when user is hovering/working in the drawer
+  // Pause auto when hovering drawer
   drawer?.addEventListener("pointerenter", stopAuto);
   drawer?.addEventListener("pointerleave", startAuto);
   drawer?.addEventListener("focusin", stopAuto);
