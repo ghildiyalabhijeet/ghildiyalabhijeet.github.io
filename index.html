@@ -21,7 +21,7 @@
     />
 
     <link rel="icon" href="assets/img/favicon.svg" />
-    <link rel="stylesheet" href="assets/css/main.css?v=8" />
+    <link rel="stylesheet" href="assets/css/main.css?v=10" />
   </head>
 
   <body class="min-h-screen">
@@ -30,18 +30,18 @@
     <div class="bg-noise" aria-hidden="true"></div>
     <div class="snowfall" aria-hidden="true"></div>
 
-    <!-- One floating snowflake model (global, NOT inside Projects) -->
+    <!-- One neon snowflake model roaming globally -->
     <div class="snowflake-model" id="snowflakeModel" aria-hidden="true">
       <svg viewBox="0 0 200 200" fill="none">
         <defs>
           <linearGradient id="sfGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="rgba(220, 245, 255, 0.95)" />
-            <stop offset="0.55" stop-color="rgba(160, 220, 255, 0.95)" />
-            <stop offset="1" stop-color="rgba(120, 180, 255, 0.95)" />
+            <stop offset="0" stop-color="rgba(77,195,255,0.98)" />
+            <stop offset="0.55" stop-color="rgba(163,107,255,0.98)" />
+            <stop offset="1" stop-color="rgba(255,93,167,0.98)" />
           </linearGradient>
 
-          <filter id="sfGlow" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur stdDeviation="3.8" result="blur" />
+          <filter id="sfGlow" x="-70%" y="-70%" width="240%" height="240%">
+            <feGaussianBlur stdDeviation="4.4" result="blur" />
             <feColorMatrix
               in="blur"
               type="matrix"
@@ -49,7 +49,7 @@
                 1 0 0 0 0
                 0 1 0 0 0
                 0 0 1 0 0
-                0 0 0 18 -7"
+                0 0 0 20 -7"
               result="glow"
             />
             <feMerge>
@@ -59,14 +59,13 @@
           </filter>
         </defs>
 
-        <!-- main snowflake -->
         <g
           stroke="url(#sfGrad)"
           stroke-width="3.6"
           stroke-linecap="round"
           stroke-linejoin="round"
           filter="url(#sfGlow)"
-          opacity="0.92"
+          opacity="0.96"
         >
           <!-- spokes -->
           <line x1="100" y1="18" x2="100" y2="182" />
@@ -96,7 +95,7 @@
           <line x1="142" y1="100" x2="128" y2="88" />
           <line x1="142" y1="100" x2="128" y2="112" />
 
-          <!-- center crystal -->
+          <!-- center -->
           <circle cx="100" cy="100" r="9" />
           <circle cx="100" cy="100" r="3.5" />
         </g>
@@ -157,7 +156,7 @@
 
           <a
             class="contact-icon"
-            href="https://github.com/ghildiyalabhjeet"
+            href="https://github.com/ghildiyalabhijeet"
             target="_blank"
             rel="noopener"
             aria-label="GitHub"
@@ -184,7 +183,7 @@
         </div>
       </section>
 
-      <!-- ABOUT (vertical stacking) -->
+      <!-- ABOUT -->
       <section id="about" class="screen" aria-label="About">
         <div class="panel glass panel-strong about-panel">
           <div class="panel-head">
@@ -193,7 +192,7 @@
           </div>
 
           <div class="about-layout">
-            <!-- 1) Summary -->
+            <!-- Summary -->
             <div class="card glass card-strong lift">
               <div class="card-head">
                 <h3 class="card-title">Summary</h3>
@@ -218,7 +217,7 @@
               <div class="toast mono" id="toast" aria-live="polite" aria-atomic="true"></div>
             </div>
 
-            <!-- 2) Education -->
+            <!-- Education -->
             <div class="card glass card-strong lift">
               <div class="card-head">
                 <h3 class="card-title">Education</h3>
@@ -256,7 +255,7 @@
               </div>
             </div>
 
-            <!-- 3) Experience (ONLY ONCE) -->
+            <!-- Experience -->
             <div class="card glass card-strong lift">
               <div class="card-head">
                 <h3 class="card-title">Experience</h3>
@@ -371,18 +370,18 @@
         <div class="panel glass panel-strong projects-panel">
           <div class="panel-head">
             <h2 class="panel-title">Projects</h2>
-            <p class="panel-sub">Horizontal drawer · 1:1 tiles · double‑click to open</p>
+            <p class="panel-sub">Infinite drawer · bigger 1:1 tiles · auto-switch every 4s</p>
           </div>
 
-          <div class="drawer glass">
+          <div class="drawer glass" id="projectsDrawer">
             <div class="drawer-handle" aria-hidden="true"></div>
 
             <div class="drawer-top">
               <div class="mono micro muted">Scroll sideways • Click to preview • Double‑click opens link</div>
 
               <div class="drawer-controls">
-                <button class="nav-btn" type="button" id="projectsPrev" aria-label="Scroll left">←</button>
-                <button class="nav-btn" type="button" id="projectsNext" aria-label="Scroll right">→</button>
+                <button class="nav-btn" type="button" id="projectsPrev" aria-label="Previous">←</button>
+                <button class="nav-btn" type="button" id="projectsNext" aria-label="Next">→</button>
               </div>
             </div>
 
@@ -450,7 +449,7 @@
               <div class="detail-top">
                 <div>
                   <div id="projTitle" class="detail-title">Select a project</div>
-                  <div id="projMeta" class="detail-meta mono">Double‑click tile to open</div>
+                  <div id="projMeta" class="detail-meta mono">Auto-switching every 4 seconds</div>
                 </div>
 
                 <div class="detail-actions">
@@ -475,6 +474,6 @@
       </section>
     </main>
 
-    <script src="assets/js/main.js?v=8"></script>
+    <script src="assets/js/main.js?v=10"></script>
   </body>
 </html>
