@@ -21,13 +21,87 @@
     />
 
     <link rel="icon" href="assets/img/favicon.svg" />
-    <link rel="stylesheet" href="assets/css/main.css?v=7" />
+    <link rel="stylesheet" href="assets/css/main.css?v=8" />
   </head>
 
   <body class="min-h-screen">
     <!-- Ambient background layers -->
     <div class="bg-animated" aria-hidden="true"></div>
     <div class="bg-noise" aria-hidden="true"></div>
+    <div class="snowfall" aria-hidden="true"></div>
+
+    <!-- One floating snowflake model (global, NOT inside Projects) -->
+    <div class="snowflake-model" id="snowflakeModel" aria-hidden="true">
+      <svg viewBox="0 0 200 200" fill="none">
+        <defs>
+          <linearGradient id="sfGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="rgba(220, 245, 255, 0.95)" />
+            <stop offset="0.55" stop-color="rgba(160, 220, 255, 0.95)" />
+            <stop offset="1" stop-color="rgba(120, 180, 255, 0.95)" />
+          </linearGradient>
+
+          <filter id="sfGlow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="3.8" result="blur" />
+            <feColorMatrix
+              in="blur"
+              type="matrix"
+              values="
+                1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 18 -7"
+              result="glow"
+            />
+            <feMerge>
+              <feMergeNode in="glow" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        <!-- main snowflake -->
+        <g
+          stroke="url(#sfGrad)"
+          stroke-width="3.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          filter="url(#sfGlow)"
+          opacity="0.92"
+        >
+          <!-- spokes -->
+          <line x1="100" y1="18" x2="100" y2="182" />
+          <line x1="18" y1="100" x2="182" y2="100" />
+          <line x1="36" y1="36" x2="164" y2="164" />
+          <line x1="164" y1="36" x2="36" y2="164" />
+
+          <!-- tips -->
+          <line x1="100" y1="18" x2="88" y2="34" />
+          <line x1="100" y1="18" x2="112" y2="34" />
+          <line x1="100" y1="182" x2="88" y2="166" />
+          <line x1="100" y1="182" x2="112" y2="166" />
+
+          <line x1="18" y1="100" x2="34" y2="88" />
+          <line x1="18" y1="100" x2="34" y2="112" />
+          <line x1="182" y1="100" x2="166" y2="88" />
+          <line x1="182" y1="100" x2="166" y2="112" />
+
+          <!-- mid branches -->
+          <line x1="100" y1="58" x2="88" y2="72" />
+          <line x1="100" y1="58" x2="112" y2="72" />
+          <line x1="100" y1="142" x2="88" y2="128" />
+          <line x1="100" y1="142" x2="112" y2="128" />
+
+          <line x1="58" y1="100" x2="72" y2="88" />
+          <line x1="58" y1="100" x2="72" y2="112" />
+          <line x1="142" y1="100" x2="128" y2="88" />
+          <line x1="142" y1="100" x2="128" y2="112" />
+
+          <!-- center crystal -->
+          <circle cx="100" cy="100" r="9" />
+          <circle cx="100" cy="100" r="3.5" />
+        </g>
+      </svg>
+    </div>
 
     <!-- Top nav -->
     <header class="nav-shell" role="banner">
@@ -83,7 +157,7 @@
 
           <a
             class="contact-icon"
-            href="https://github.com/ghildiyalabhijeet"
+            href="https://github.com/ghildiyalabhjeet"
             target="_blank"
             rel="noopener"
             aria-label="GitHub"
@@ -226,7 +300,7 @@
             </div>
           </div>
 
-          <!-- Skills Studio (narrow + creative) -->
+          <!-- Skills Studio -->
           <div class="skills-studio glass card-strong" id="skillsStudio">
             <div class="skills-head">
               <div>
@@ -245,43 +319,24 @@
 
             <div class="skills-body">
               <div id="skillsCloud" class="skills-cloud" aria-label="Skills cloud">
-                <!-- Languages -->
-                <button class="skill-bubble" type="button" data-group="lang" data-size="lg"
-                  data-desc="Primary language for ML, analytics, and automation.">Python</button>
-                <button class="skill-bubble" type="button" data-group="lang" data-size="md"
-                  data-desc="Querying, joins, analytics, and reporting.">SQL</button>
-                <button class="skill-bubble" type="button" data-group="lang" data-size="sm"
-                  data-desc="Frontend markup for clean layouts.">HTML5</button>
-                <button class="skill-bubble" type="button" data-group="lang" data-size="sm"
-                  data-desc="Styling, responsive UI, component layouts.">CSS3</button>
+                <button class="skill-bubble" type="button" data-group="lang" data-size="lg" data-desc="Primary language for ML, analytics, and automation.">Python</button>
+                <button class="skill-bubble" type="button" data-group="lang" data-size="md" data-desc="Querying, joins, analytics, and reporting.">SQL</button>
+                <button class="skill-bubble" type="button" data-group="lang" data-size="sm" data-desc="Frontend markup for clean layouts.">HTML5</button>
+                <button class="skill-bubble" type="button" data-group="lang" data-size="sm" data-desc="Styling, responsive UI, component layouts.">CSS3</button>
 
-                <!-- Data -->
-                <button class="skill-bubble" type="button" data-group="data" data-size="md"
-                  data-desc="Dataframes, feature engineering, and ETL.">Pandas</button>
-                <button class="skill-bubble" type="button" data-group="data" data-size="md"
-                  data-desc="Numerical computing foundations.">NumPy</button>
-                <button class="skill-bubble" type="button" data-group="data" data-size="sm"
-                  data-desc="Charts and exploratory plotting.">Matplotlib</button>
-                <button class="skill-bubble" type="button" data-group="data" data-size="sm"
-                  data-desc="Statistical visualization and quick EDA.">Seaborn</button>
+                <button class="skill-bubble" type="button" data-group="data" data-size="md" data-desc="Dataframes, feature engineering, and ETL.">Pandas</button>
+                <button class="skill-bubble" type="button" data-group="data" data-size="md" data-desc="Numerical computing foundations.">NumPy</button>
+                <button class="skill-bubble" type="button" data-group="data" data-size="sm" data-desc="Charts and exploratory plotting.">Matplotlib</button>
+                <button class="skill-bubble" type="button" data-group="data" data-size="sm" data-desc="Statistical visualization and quick EDA.">Seaborn</button>
 
-                <!-- ML/DL -->
-                <button class="skill-bubble" type="button" data-group="ml" data-size="md"
-                  data-desc="Classic ML models and pipelines.">scikit‑learn</button>
-                <button class="skill-bubble" type="button" data-group="ml" data-size="lg"
-                  data-desc="Deep learning + custom training loops.">PyTorch</button>
-                <button class="skill-bubble" type="button" data-group="ml" data-size="lg"
-                  data-desc="Model training and deployment pipelines.">TensorFlow</button>
-                <button class="skill-bubble" type="button" data-group="ml" data-size="md"
-                  data-desc="Transformers, tokenizers, and model hub.">Hugging Face</button>
+                <button class="skill-bubble" type="button" data-group="ml" data-size="md" data-desc="Classic ML models and pipelines.">scikit‑learn</button>
+                <button class="skill-bubble" type="button" data-group="ml" data-size="lg" data-desc="Deep learning + custom training loops.">PyTorch</button>
+                <button class="skill-bubble" type="button" data-group="ml" data-size="lg" data-desc="Model training and deployment pipelines.">TensorFlow</button>
+                <button class="skill-bubble" type="button" data-group="ml" data-size="md" data-desc="Transformers, tokenizers, and model hub.">Hugging Face</button>
 
-                <!-- Tools -->
-                <button class="skill-bubble" type="button" data-group="tools" data-size="md"
-                  data-desc="Dashboards, DAX, KPI reporting.">Power BI</button>
-                <button class="skill-bubble" type="button" data-group="tools" data-size="sm"
-                  data-desc="Version control and collaboration.">Git</button>
-                <button class="skill-bubble" type="button" data-group="tools" data-size="sm"
-                  data-desc="Integrations, bots, and automation.">Slack API</button>
+                <button class="skill-bubble" type="button" data-group="tools" data-size="md" data-desc="Dashboards, DAX, KPI reporting.">Power BI</button>
+                <button class="skill-bubble" type="button" data-group="tools" data-size="sm" data-desc="Version control and collaboration.">Git</button>
+                <button class="skill-bubble" type="button" data-group="tools" data-size="sm" data-desc="Integrations, bots, and automation.">Slack API</button>
               </div>
 
               <div class="skills-side">
@@ -321,101 +376,6 @@
 
           <div class="drawer glass">
             <div class="drawer-handle" aria-hidden="true"></div>
-              <!-- Ambient neon background (snowflakes + roaming render model) -->
-  <div class="drawer-ambient" aria-hidden="true">
-    <svg class="neon-snowflake snowflake-a" viewBox="0 0 200 200">
-      <defs>
-        <linearGradient id="sfGradA" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="rgba(77,195,255,0.95)" />
-          <stop offset="0.5" stop-color="rgba(163,107,255,0.95)" />
-          <stop offset="1" stop-color="rgba(255,93,167,0.95)" />
-        </linearGradient>
-        <filter id="sfGlowA" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="3.5" result="blur" />
-          <feColorMatrix
-            in="blur"
-            type="matrix"
-            values="
-              1 0 0 0 0
-              0 1 0 0 0
-              0 0 1 0 0
-              0 0 0 18 -7"
-            result="glow"
-          />
-          <feMerge>
-            <feMergeNode in="glow" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-
-      <g stroke="url(#sfGradA)" stroke-width="4" stroke-linecap="round" filter="url(#sfGlowA)" opacity="0.95">
-        <line x1="100" y1="16" x2="100" y2="184" />
-        <line x1="16" y1="100" x2="184" y2="100" />
-        <line x1="36" y1="36" x2="164" y2="164" />
-        <line x1="164" y1="36" x2="36" y2="164" />
-
-        <!-- branches -->
-        <line x1="100" y1="16" x2="86" y2="34" />
-        <line x1="100" y1="16" x2="114" y2="34" />
-        <line x1="100" y1="184" x2="86" y2="166" />
-        <line x1="100" y1="184" x2="114" y2="166" />
-
-        <line x1="16" y1="100" x2="34" y2="86" />
-        <line x1="16" y1="100" x2="34" y2="114" />
-        <line x1="184" y1="100" x2="166" y2="86" />
-        <line x1="184" y1="100" x2="166" y2="114" />
-
-        <line x1="36" y1="36" x2="36" y2="60" />
-        <line x1="36" y1="36" x2="60" y2="36" />
-        <line x1="164" y1="164" x2="164" y2="140" />
-        <line x1="164" y1="164" x2="140" y2="164" />
-
-        <line x1="164" y1="36" x2="140" y2="36" />
-        <line x1="164" y1="36" x2="164" y2="60" />
-        <line x1="36" y1="164" x2="60" y2="164" />
-        <line x1="36" y1="164" x2="36" y2="140" />
-      </g>
-    </svg>
-
-    <svg class="neon-snowflake snowflake-b" viewBox="0 0 200 200">
-      <defs>
-        <linearGradient id="sfGradB" x1="1" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="rgba(94,234,212,0.95)" />
-          <stop offset="0.5" stop-color="rgba(59,130,246,0.95)" />
-          <stop offset="1" stop-color="rgba(244,114,182,0.95)" />
-        </linearGradient>
-        <filter id="sfGlowB" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="4.2" result="blur" />
-          <feColorMatrix
-            in="blur"
-            type="matrix"
-            values="
-              1 0 0 0 0
-              0 1 0 0 0
-              0 0 1 0 0
-              0 0 0 18 -7"
-            result="glow"
-          />
-          <feMerge>
-            <feMergeNode in="glow" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-
-      <g stroke="url(#sfGradB)" stroke-width="3.5" stroke-linecap="round" filter="url(#sfGlowB)" opacity="0.85">
-        <line x1="100" y1="16" x2="100" y2="184" />
-        <line x1="16" y1="100" x2="184" y2="100" />
-        <line x1="36" y1="36" x2="164" y2="164" />
-        <line x1="164" y1="36" x2="36" y2="164" />
-      </g>
-    </svg>
-
-    <div class="roamer roamer-a"></div>
-    <div class="roamer roamer-b"></div>
-    <div class="glitter"></div>
-  </div>
 
             <div class="drawer-top">
               <div class="mono micro muted">Scroll sideways • Click to preview • Double‑click opens link</div>
@@ -515,6 +475,6 @@
       </section>
     </main>
 
-    <script src="assets/js/main.js?v=7"></script>
+    <script src="assets/js/main.js?v=8"></script>
   </body>
 </html>
