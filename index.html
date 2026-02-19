@@ -21,7 +21,7 @@
     />
 
     <link rel="icon" href="assets/img/favicon.svg" />
-    <link rel="stylesheet" href="assets/css/main.css?v=12" />
+    <link rel="stylesheet" href="assets/css/main.css?v=13" />
   </head>
 
   <body class="min-h-screen">
@@ -30,73 +30,33 @@
     <div class="bg-noise" aria-hidden="true"></div>
     <div class="snowfall" aria-hidden="true"></div>
 
-    <!-- One neon snowflake model roaming globally -->
-    <div class="snowflake-model" id="snowflakeModel" aria-hidden="true">
-      <svg viewBox="0 0 200 200" fill="none">
-        <defs>
-          <linearGradient id="sfGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="rgba(77,195,255,0.98)" />
-            <stop offset="0.55" stop-color="rgba(163,107,255,0.98)" />
-            <stop offset="1" stop-color="rgba(255,93,167,0.98)" />
-          </linearGradient>
+    <!-- Multiple floating neon snowflakes -->
+    <div class="snowflakes" id="snowflakes" aria-hidden="true"></div>
 
-          <filter id="sfGlow" x="-70%" y="-70%" width="240%" height="240%">
-            <feGaussianBlur stdDeviation="4.4" result="blur" />
-            <feColorMatrix
-              in="blur"
-              type="matrix"
-              values="
-                1 0 0 0 0
-                0 1 0 0 0
-                0 0 1 0 0
-                0 0 0 20 -7"
-              result="glow"
-            />
-            <feMerge>
-              <feMergeNode in="glow" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
+    <!-- Snowflake template (cloned by JS) -->
+    <template id="snowflakeTpl">
+      <div class="snowflake">
+        <div class="snowflake-inner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20" />
+            <path d="M2 12h20" />
+            <path d="M4.5 4.5l15 15" />
+            <path d="M19.5 4.5l-15 15" />
 
-        <g
-          stroke="url(#sfGrad)"
-          stroke-width="3.6"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          filter="url(#sfGlow)"
-          opacity="0.96"
-        >
-          <line x1="100" y1="18" x2="100" y2="182" />
-          <line x1="18" y1="100" x2="182" y2="100" />
-          <line x1="36" y1="36" x2="164" y2="164" />
-          <line x1="164" y1="36" x2="36" y2="164" />
+            <!-- small branches -->
+            <path d="M12 6l-2 2" />
+            <path d="M12 6l2 2" />
+            <path d="M12 18l-2-2" />
+            <path d="M12 18l2-2" />
 
-          <line x1="100" y1="18" x2="88" y2="34" />
-          <line x1="100" y1="18" x2="112" y2="34" />
-          <line x1="100" y1="182" x2="88" y2="166" />
-          <line x1="100" y1="182" x2="112" y2="166" />
-
-          <line x1="18" y1="100" x2="34" y2="88" />
-          <line x1="18" y1="100" x2="34" y2="112" />
-          <line x1="182" y1="100" x2="166" y2="88" />
-          <line x1="182" y1="100" x2="166" y2="112" />
-
-          <line x1="100" y1="58" x2="88" y2="72" />
-          <line x1="100" y1="58" x2="112" y2="72" />
-          <line x1="100" y1="142" x2="88" y2="128" />
-          <line x1="100" y1="142" x2="112" y2="128" />
-
-          <line x1="58" y1="100" x2="72" y2="88" />
-          <line x1="58" y1="100" x2="72" y2="112" />
-          <line x1="142" y1="100" x2="128" y2="88" />
-          <line x1="142" y1="100" x2="128" y2="112" />
-
-          <circle cx="100" cy="100" r="9" />
-          <circle cx="100" cy="100" r="3.5" />
-        </g>
-      </svg>
-    </div>
+            <path d="M6 12l2-2" />
+            <path d="M6 12l2 2" />
+            <path d="M18 12l-2-2" />
+            <path d="M18 12l-2 2" />
+          </svg>
+        </div>
+      </div>
+    </template>
 
     <!-- Top nav -->
     <header class="nav-shell" role="banner">
@@ -108,7 +68,7 @@
     </header>
 
     <main>
-      <!-- WORK -->
+      <!-- WORK (hero only) -->
       <section id="work" class="screen" aria-label="Work">
         <div class="hero-card glass">
           <h1 class="hero-name">Abhijeet Ghildiyal</h1>
@@ -366,7 +326,7 @@
         <div class="panel glass panel-strong projects-panel">
           <div class="panel-head">
             <h2 class="panel-title">Projects</h2>
-            <p class="panel-sub">2-up card drawer · bigger 1:1 thumbnails · auto-switch every 4s</p>
+            <p class="panel-sub">2-up card drawer · capped width · smooth</p>
           </div>
 
           <div class="drawer glass" id="projectsDrawer">
@@ -470,6 +430,6 @@
       </section>
     </main>
 
-    <script src="assets/js/main.js?v=12"></script>
+    <script src="assets/js/main.js?v=13"></script>
   </body>
 </html>

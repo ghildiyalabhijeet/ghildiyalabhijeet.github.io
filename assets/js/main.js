@@ -2,74 +2,71 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
   // Years
   const y = String(new Date().getFullYear());
-  const year1 = $("#year");
-  const year2 = $("#year2");
-  if (year1) year1.textContent = y;
-  if (year2) year2.textContent = y;
+  $("#year") && ($("#year").textContent = y);
+  $("#year2") && ($("#year2").textContent = y);
 
   // ==============================
-  // Snowflake roam (FIXED: not static)
-  // - JS drives movement (CSS fallback stays if JS fails)
+  // MULTI snowflakes (lightweight)
+  // - CSS animation only (no RAF)
   // ==============================
-  const snowflake = $("#snowflakeModel");
-  if (snowflake) {
-    // Disable fallback animation when JS is active
-    snowflake.style.animation = "none";
+  const snowWrap = $("#snowflakes");
+  const snowTpl = $("#snowflakeTpl");
 
-    const clamp01 = (v) => Math.max(0, Math.min(1, v));
-    const lerp = (a, b, t) => a + (b - a) * t;
+  if (snowWrap && snowTpl && !prefersReduced) {
+    // avoid duplicates if script runs twice
+    snowWrap.innerHTML = "";
 
-    let t0 = performance.now();
-    let mouseX = 0.5;
-    let mouseY = 0.5;
+    const rand = (min, max) => Math.random() * (max - min) + min;
+    const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
-    // subtle mouse influence (makes it feel alive)
-    window.addEventListener(
-      "pointermove",
-      (e) => {
-        if (e.pointerType !== "mouse") return;
-        mouseX = e.clientX / Math.max(1, window.innerWidth);
-        mouseY = e.clientY / Math.max(1, window.innerHeight);
-      },
-      { passive: true }
-    );
+    // slightly adaptive count (kept small for perf)
+    const base = Math.round(window.innerWidth / 220);
+    const COUNT = clamp(base, 6, 12);
 
-    let fx = 0.5;
-    let fy = 0.5;
+    const COLORS = [
+      "rgba(77,195,255,0.42)",   // ice blue
+      "rgba(163,107,255,0.36)",  // violet
+      "rgba(255,93,167,0.28)",   // pink
+      "rgba(255,255,255,0.30)",  // white
+    ];
 
-    const tick = (t) => {
-      const time = (t - t0) / 1000;
+    for (let i = 0; i < COUNT; i++) {
+      const node = snowTpl.content.firstElementChild.cloneNode(true);
 
-      const size = snowflake.offsetWidth || 160;
-      const w = window.innerWidth;
-      const h = window.innerHeight;
+      const dur = rand(14, 28);
+      const spin = rand(10, 22);
+      const delay = -rand(0, dur);
 
-      // roam path (more obvious movement)
-      const nx = 0.5 + 0.36 * Math.sin(time / 7.8) + 0.12 * Math.sin(time / 2.9);
-      const ny = 0.5 + 0.32 * Math.cos(time / 9.2) + 0.12 * Math.sin(time / 3.6);
+      const size = rand(18, 46);
+      const opacity = rand(0.14, 0.30);
+      const scale = rand(0.75, 1.15);
 
-      // blend with mouse a bit
-      const tx = clamp01(lerp(nx, mouseX, 0.12));
-      const ty = clamp01(lerp(ny, mouseY, 0.10));
+      const sx = rand(-8, 108);
+      const sy = rand(-8, 108);
+      const ex = clamp(sx + rand(-34, 34), -12, 112);
+      const ey = clamp(sy + rand(-34, 34), -12, 112);
 
-      // smooth-follow (prevents jitter)
-      fx = lerp(fx, tx, 0.035);
-      fy = lerp(fy, ty, 0.032);
+      node.style.setProperty("--size", `${size.toFixed(0)}px`);
+      node.style.setProperty("--opacity", opacity.toFixed(2));
+      node.style.setProperty("--dur", `${dur.toFixed(1)}s`);
+      node.style.setProperty("--spin", `${spin.toFixed(1)}s`);
+      node.style.setProperty("--delay", `${delay.toFixed(1)}s`);
+      node.style.setProperty("--scale", scale.toFixed(2));
 
-      const x = (w - size) * fx;
-      const y = (h - size) * fy;
+      node.style.setProperty("--sx", `${sx.toFixed(1)}vw`);
+      node.style.setProperty("--sy", `${sy.toFixed(1)}vh`);
+      node.style.setProperty("--ex", `${ex.toFixed(1)}vw`);
+      node.style.setProperty("--ey", `${ey.toFixed(1)}vh`);
 
-      const rot = time * 22; // spin
-      const scale = 0.92 + 0.07 * Math.sin(time / 4.4);
+      // pick a soft neon color
+      node.style.color = COLORS[Math.floor(Math.random() * COLORS.length)];
 
-      snowflake.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${rot}deg) scale(${scale})`;
-
-      requestAnimationFrame(tick);
-    };
-
-    requestAnimationFrame(tick);
+      snowWrap.appendChild(node);
+    }
   }
 
   // ==============================
@@ -83,7 +80,8 @@
 
   const setActive = (id) => {
     navLinks.forEach((a) => {
-      a.classList.toggle("is-active", (a.getAttribute("href") || "") === `#${id}`);
+      const href = a.getAttribute("href") || "";
+      a.classList.toggle("is-active", href === `#${id}`);
     });
   };
 
@@ -136,7 +134,7 @@
   $$("[data-copy]").forEach((btn) => btn.addEventListener("click", () => copyText(btn.dataset.copy || "")));
 
   // ==============================
-  // Skills: filter + inspector + spotlight
+  // Skills: filter + inspector
   // ==============================
   const skillsCloud = $("#skillsCloud");
   const skillBubbles = $$(".skill-bubble");
@@ -156,9 +154,9 @@
     const group = bubble.dataset.group || "all";
     const desc = bubble.dataset.desc || "—";
 
-    if (skillName) skillName.textContent = name;
-    if (skillGroup) skillGroup.textContent = GROUP_LABEL[group] || "All";
-    if (skillText) skillText.textContent = desc;
+    skillName && (skillName.textContent = name);
+    skillGroup && (skillGroup.textContent = GROUP_LABEL[group] || "All");
+    skillText && (skillText.textContent = desc);
 
     skillBubbles.forEach((x) => x.classList.toggle("is-selected", x === bubble));
   };
@@ -184,7 +182,6 @@
   };
 
   filters.forEach((f) => f.addEventListener("click", () => applyFilter(f.dataset.filter || "all")));
-
   skillBubbles.forEach((b) => {
     b.addEventListener("mouseenter", () => setInspector(b));
     b.addEventListener("click", () => setInspector(b));
@@ -206,7 +203,7 @@
   applyFilter("all");
 
   // ==============================
-  // Projects: 2-up view + infinite loop + auto switch
+  // Projects: infinite loop + auto switch every 4s
   // ==============================
   const PROJECTS = {
     genai: {
@@ -268,6 +265,7 @@
   const bulletsEl = $("#projBullets");
   const openEl = $("#projOpen");
   const copyBtn = $("#projCopy");
+
   const prevBtn = $("#projectsPrev");
   const nextBtn = $("#projectsNext");
 
@@ -287,9 +285,9 @@
     const p = PROJECTS[key];
     if (!p) return;
 
-    if (titleEl) titleEl.textContent = p.title;
-    if (metaEl) metaEl.textContent = p.meta;
-    if (descEl) descEl.textContent = p.desc;
+    titleEl && (titleEl.textContent = p.title);
+    metaEl && (metaEl.textContent = p.meta);
+    descEl && (descEl.textContent = p.desc);
 
     if (bulletsEl) {
       bulletsEl.innerHTML = "";
@@ -348,9 +346,8 @@
     if (!row || !setWidth || !originals.length) return;
 
     const firstOrig = originals[0];
-    const start = firstOrig.offsetLeft; // typically ≈ setWidth
+    const start = firstOrig.offsetLeft;
 
-    // keep scroll in the middle band
     if (row.scrollLeft < start - setWidth * 0.25) row.scrollLeft += setWidth;
     else if (row.scrollLeft > start + setWidth * 1.25) row.scrollLeft -= setWidth;
   };
@@ -361,20 +358,16 @@
     originals = Array.from(row.querySelectorAll(".proj-square"));
     if (originals.length < 2) return;
 
-    // clone before
     const beforeFrag = document.createDocumentFragment();
     originals.forEach((t) => beforeFrag.appendChild(t.cloneNode(true)));
     row.insertBefore(beforeFrag, row.firstChild);
 
-    // clone after
     const afterFrag = document.createDocumentFragment();
     originals.forEach((t) => afterFrag.appendChild(t.cloneNode(true)));
     row.appendChild(afterFrag);
 
     requestAnimationFrame(() => {
       measureSetWidth();
-
-      // start at the original set (middle)
       selectTileElement(originals[0], { snap: true, smooth: false });
     });
 
@@ -383,7 +376,6 @@
       "scroll",
       () => {
         wrapInfinite();
-
         clearTimeout(scrollEndT);
         scrollEndT = window.setTimeout(() => {
           const t = nearestStartTile();
@@ -398,7 +390,6 @@
       () => {
         requestAnimationFrame(() => {
           measureSetWidth();
-          // keep the current tile snapped correctly after resize
           if (currentTile) snapTileToStart(currentTile, false);
         });
       },
@@ -421,7 +412,7 @@
   const stopAuto = () => {
     if (autoTimer) clearInterval(autoTimer);
     autoTimer = null;
-    if (drawer) drawer.classList.remove("is-cycle-out");
+    drawer && drawer.classList.remove("is-cycle-out");
   };
 
   const cycleOnce = () => {
@@ -429,23 +420,24 @@
     const next = getNextTile(1);
     if (!next) return;
 
-    if (drawer) drawer.classList.add("is-cycle-out");
+    drawer && drawer.classList.add("is-cycle-out");
 
     window.setTimeout(() => {
       selectTileElement(next, { snap: true, smooth: true });
     }, 260);
 
     window.setTimeout(() => {
-      if (drawer) drawer.classList.remove("is-cycle-out");
+      drawer && drawer.classList.remove("is-cycle-out");
     }, 520);
   };
 
   const startAuto = () => {
+    if (prefersReduced || !row) return;
     stopAuto();
     autoTimer = window.setInterval(cycleOnce, 4000);
   };
 
-  // Event delegation (works for clones)
+  // Event delegation
   if (row) {
     row.addEventListener("click", (e) => {
       const tile = e.target.closest(".proj-square");
@@ -461,18 +453,8 @@
       const p = PROJECTS[tile.dataset.project];
       if (p) window.open(p.link, "_blank", "noopener,noreferrer");
     });
-
-    row.addEventListener("keydown", (e) => {
-      const tile = e.target.closest(".proj-square");
-      if (!tile || !row.contains(tile)) return;
-      if (e.key === "Enter") {
-        const p = PROJECTS[tile.dataset.project];
-        if (p) window.open(p.link, "_blank", "noopener,noreferrer");
-      }
-    });
   }
 
-  // Copy link button
   if (copyBtn) {
     copyBtn.addEventListener("click", () => {
       const url = copyBtn.dataset.copy || (openEl ? openEl.href : "");
@@ -480,7 +462,6 @@
     });
   }
 
-  // Prev/Next buttons
   prevBtn?.addEventListener("click", () => {
     stopAuto();
     const prev = getNextTile(-1);
@@ -495,13 +476,11 @@
     startAuto();
   });
 
-  // Pause auto when hovering drawer
   drawer?.addEventListener("pointerenter", stopAuto);
   drawer?.addEventListener("pointerleave", startAuto);
   drawer?.addEventListener("focusin", stopAuto);
   drawer?.addEventListener("focusout", startAuto);
 
-  // Init
   setupInfinite();
   startAuto();
 })();
