@@ -10,66 +10,6 @@
   $("#year2") && ($("#year2").textContent = y);
 
   // ==============================
-  // MULTI snowflakes (lightweight)
-  // - CSS animation only (no RAF)
-  // ==============================
-  const snowWrap = $("#snowflakes");
-  const snowTpl = $("#snowflakeTpl");
-
-  if (snowWrap && snowTpl && !prefersReduced) {
-    // avoid duplicates if script runs twice
-    snowWrap.innerHTML = "";
-
-    const rand = (min, max) => Math.random() * (max - min) + min;
-    const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
-
-    // slightly adaptive count (kept small for perf)
-    const base = Math.round(window.innerWidth / 220);
-    const COUNT = clamp(base, 6, 12);
-
-    const COLORS = [
-      "rgba(77,195,255,0.42)",   // ice blue
-      "rgba(163,107,255,0.36)",  // violet
-      "rgba(255,93,167,0.28)",   // pink
-      "rgba(255,255,255,0.30)",  // white
-    ];
-
-    for (let i = 0; i < COUNT; i++) {
-      const node = snowTpl.content.firstElementChild.cloneNode(true);
-
-      const dur = rand(14, 28);
-      const spin = rand(10, 22);
-      const delay = -rand(0, dur);
-
-      const size = rand(18, 46);
-      const opacity = rand(0.14, 0.30);
-      const scale = rand(0.75, 1.15);
-
-      const sx = rand(-8, 108);
-      const sy = rand(-8, 108);
-      const ex = clamp(sx + rand(-34, 34), -12, 112);
-      const ey = clamp(sy + rand(-34, 34), -12, 112);
-
-      node.style.setProperty("--size", `${size.toFixed(0)}px`);
-      node.style.setProperty("--opacity", opacity.toFixed(2));
-      node.style.setProperty("--dur", `${dur.toFixed(1)}s`);
-      node.style.setProperty("--spin", `${spin.toFixed(1)}s`);
-      node.style.setProperty("--delay", `${delay.toFixed(1)}s`);
-      node.style.setProperty("--scale", scale.toFixed(2));
-
-      node.style.setProperty("--sx", `${sx.toFixed(1)}vw`);
-      node.style.setProperty("--sy", `${sy.toFixed(1)}vh`);
-      node.style.setProperty("--ex", `${ex.toFixed(1)}vw`);
-      node.style.setProperty("--ey", `${ey.toFixed(1)}vh`);
-
-      // pick a soft neon color
-      node.style.color = COLORS[Math.floor(Math.random() * COLORS.length)];
-
-      snowWrap.appendChild(node);
-    }
-  }
-
-  // ==============================
   // Nav active state (scroll spy)
   // ==============================
   const navLinks = $$(".nav-item");
@@ -216,7 +156,7 @@
         "Tuned model pipeline/architecture for better throughput.",
         "Team collaboration focused on speed while keeping outputs sharp.",
       ],
-      link: "https://github.com/ghildiyalabhijeet/GenAIProject",
+      link: "https://github.com/ghildiyalabhjeet/GenAIProject",
     },
     pollution: {
       title: "Particle Pollution (Research Paper)",
@@ -229,7 +169,7 @@
         "Compiled findings into a research paper deliverable.",
       ],
       link:
-        "https://github.com/ghildiyalabhijeet/MachineLearning_Particle_Pollution/blob/main/Research_Paper_Particle_Pollution.pdf",
+        "https://github.com/ghildiyalabhjeet/MachineLearning_Particle_Pollution/blob/main/Research_Paper_Particle_Pollution.pdf",
     },
     pipeline: {
       title: "Digital Assets Analytics Pipeline",
@@ -259,6 +199,7 @@
 
   const row = $("#projectsRow");
   const drawer = $("#projectsDrawer");
+
   const titleEl = $("#projTitle");
   const metaEl = $("#projMeta");
   const descEl = $("#projDesc");
@@ -412,23 +353,13 @@
   const stopAuto = () => {
     if (autoTimer) clearInterval(autoTimer);
     autoTimer = null;
-    drawer && drawer.classList.remove("is-cycle-out");
   };
 
   const cycleOnce = () => {
     if (!row) return;
     const next = getNextTile(1);
     if (!next) return;
-
-    drawer && drawer.classList.add("is-cycle-out");
-
-    window.setTimeout(() => {
-      selectTileElement(next, { snap: true, smooth: true });
-    }, 260);
-
-    window.setTimeout(() => {
-      drawer && drawer.classList.remove("is-cycle-out");
-    }, 520);
+    selectTileElement(next, { snap: true, smooth: true });
   };
 
   const startAuto = () => {
@@ -437,7 +368,6 @@
     autoTimer = window.setInterval(cycleOnce, 4000);
   };
 
-  // Event delegation
   if (row) {
     row.addEventListener("click", (e) => {
       const tile = e.target.closest(".proj-square");
@@ -478,8 +408,6 @@
 
   drawer?.addEventListener("pointerenter", stopAuto);
   drawer?.addEventListener("pointerleave", startAuto);
-  drawer?.addEventListener("focusin", stopAuto);
-  drawer?.addEventListener("focusout", startAuto);
 
   setupInfinite();
   startAuto();

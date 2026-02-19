@@ -21,42 +21,13 @@
     />
 
     <link rel="icon" href="assets/img/favicon.svg" />
-    <link rel="stylesheet" href="assets/css/main.css?v=13" />
+    <link rel="stylesheet" href="assets/css/main.css?v=15" />
   </head>
 
   <body class="min-h-screen">
     <!-- Ambient background layers -->
     <div class="bg-animated" aria-hidden="true"></div>
     <div class="bg-noise" aria-hidden="true"></div>
-    <div class="snowfall" aria-hidden="true"></div>
-
-    <!-- Multiple floating neon snowflakes -->
-    <div class="snowflakes" id="snowflakes" aria-hidden="true"></div>
-
-    <!-- Snowflake template (cloned by JS) -->
-    <template id="snowflakeTpl">
-      <div class="snowflake">
-        <div class="snowflake-inner">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2v20" />
-            <path d="M2 12h20" />
-            <path d="M4.5 4.5l15 15" />
-            <path d="M19.5 4.5l-15 15" />
-
-            <!-- small branches -->
-            <path d="M12 6l-2 2" />
-            <path d="M12 6l2 2" />
-            <path d="M12 18l-2-2" />
-            <path d="M12 18l2-2" />
-
-            <path d="M6 12l2-2" />
-            <path d="M6 12l2 2" />
-            <path d="M18 12l-2-2" />
-            <path d="M18 12l-2 2" />
-          </svg>
-        </div>
-      </div>
-    </template>
 
     <!-- Top nav -->
     <header class="nav-shell" role="banner">
@@ -68,7 +39,7 @@
     </header>
 
     <main>
-      <!-- WORK (hero only) -->
+      <!-- WORK -->
       <section id="work" class="screen" aria-label="Work">
         <div class="hero-card glass">
           <h1 class="hero-name">Abhijeet Ghildiyal</h1>
@@ -112,7 +83,7 @@
 
           <a
             class="contact-icon"
-            href="https://github.com/ghildiyalabhijeet"
+            href="https://github.com/ghildiyalabhjeet"
             target="_blank"
             rel="noopener"
             aria-label="GitHub"
@@ -128,15 +99,6 @@
         </div>
 
         <div class="scroll-hint mono" aria-hidden="true">Scroll ↓</div>
-
-        <div class="corner-sparkle" aria-hidden="true">
-          <svg viewBox="0 0 64 64" fill="none">
-            <path
-              d="M32 6l4.3 15.8L52 26l-15.7 4.2L32 46l-4.3-15.8L12 26l15.7-4.2L32 6z"
-              fill="rgba(255,255,255,0.55)"
-            />
-          </svg>
-        </div>
       </section>
 
       <!-- ABOUT -->
@@ -322,100 +284,106 @@
       </section>
 
       <!-- PROJECTS -->
-      <section id="projects" class="screen" aria-label="Projects">
+      <section id="projects" class="screen screen-projects" aria-label="Projects">
         <div class="panel glass panel-strong projects-panel">
           <div class="panel-head">
             <h2 class="panel-title">Projects</h2>
-            <p class="panel-sub">2-up card drawer · capped width · smooth</p>
+            <p class="panel-sub">2-up tiles · fits screen · auto-switch every 4s</p>
           </div>
 
-          <div class="drawer glass" id="projectsDrawer">
-            <div class="drawer-handle" aria-hidden="true"></div>
-
+          <!-- drawer itself has NO border (borderless container) -->
+          <div class="drawer" id="projectsDrawer">
             <div class="drawer-top">
               <div class="mono micro muted">Scroll sideways • Click to preview • Double‑click opens link</div>
-
               <div class="drawer-controls">
                 <button class="nav-btn" type="button" id="projectsPrev" aria-label="Previous">←</button>
                 <button class="nav-btn" type="button" id="projectsNext" aria-label="Next">→</button>
               </div>
             </div>
 
-            <div id="projectsRow" class="projects-row" role="list" aria-label="Project tiles">
-              <button class="proj-square" type="button" role="listitem" data-project="genai">
-                <div class="sq-thumb thumb-genai">
-                  <div class="sq-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M12 2l1.2 3.8L17 7l-3.8 1.2L12 12l-1.2-3.8L7 7l3.8-1.2L12 2z" />
-                      <path d="M19 12l.9 2.9L23 16l-3.1 1.1L19 20l-.9-2.9L15 16l3.1-1.1L19 12z" />
-                    </svg>
-                  </div>
-                </div>
-                <div class="sq-title">Faster Diffusion</div>
-                <div class="sq-meta mono">GenAI · Optimization</div>
-              </button>
+            <!-- New: tiles + preview side-by-side (desktop), stacked (mobile) -->
+            <div class="drawer-grid">
+              <div class="drawer-left">
+                <div id="projectsRow" class="projects-row" role="list" aria-label="Project tiles">
+                  <button class="proj-square" type="button" role="listitem" data-project="genai">
+                    <div class="sq-thumb thumb-genai">
+                      <div class="sq-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M12 2l1.2 3.8L17 7l-3.8 1.2L12 12l-1.2-3.8L7 7l3.8-1.2L12 2z" />
+                          <path d="M19 12l.9 2.9L23 16l-3.1 1.1L19 20l-.9-2.9L15 16l3.1-1.1L19 12z" />
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="sq-title">Faster Diffusion</div>
+                    <div class="sq-meta mono">GenAI · Optimization</div>
+                  </button>
 
-              <button class="proj-square" type="button" role="listitem" data-project="pollution">
-                <div class="sq-thumb thumb-pollution">
-                  <div class="sq-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <path d="M2 12h20"></path>
-                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                    </svg>
-                  </div>
-                </div>
-                <div class="sq-title">Particle Pollution</div>
-                <div class="sq-meta mono">Research Paper · PM2.5</div>
-              </button>
+                  <button class="proj-square" type="button" role="listitem" data-project="pollution">
+                    <div class="sq-thumb thumb-pollution">
+                      <div class="sq-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <path d="M2 12h20"></path>
+                          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="sq-title">Particle Pollution</div>
+                    <div class="sq-meta mono">Research Paper · PM2.5</div>
+                  </button>
 
-              <button class="proj-square" type="button" role="listitem" data-project="pipeline">
-                <div class="sq-thumb thumb-pipeline">
-                  <div class="sq-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M4 6h16v4H4z"></path>
-                      <path d="M6 10v8"></path>
-                      <path d="M10 10v8"></path>
-                      <path d="M14 10v8"></path>
-                      <path d="M18 10v8"></path>
-                      <path d="M4 18h16"></path>
-                    </svg>
-                  </div>
-                </div>
-                <div class="sq-title">Digital Assets Pipeline</div>
-                <div class="sq-meta mono">Analytics · ETL</div>
-              </button>
+                  <button class="proj-square" type="button" role="listitem" data-project="pipeline">
+                    <div class="sq-thumb thumb-pipeline">
+                      <div class="sq-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M4 6h16v4H4z"></path>
+                          <path d="M6 10v8"></path>
+                          <path d="M10 10v8"></path>
+                          <path d="M14 10v8"></path>
+                          <path d="M18 10v8"></path>
+                          <path d="M4 18h16"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="sq-title">Digital Assets Pipeline</div>
+                    <div class="sq-meta mono">Analytics · ETL</div>
+                  </button>
 
-              <button class="proj-square" type="button" role="listitem" data-project="slackbot">
-                <div class="sq-thumb thumb-slack">
-                  <div class="sq-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
-                      <path d="M8 9h8"></path>
-                      <path d="M8 13h5"></path>
-                    </svg>
-                  </div>
-                </div>
-                <div class="sq-title">Slack Python Q&amp;A Bot</div>
-                <div class="sq-meta mono">Python · Slack API</div>
-              </button>
-            </div>
-
-            <div class="project-detail glass" aria-live="polite">
-              <div class="detail-top">
-                <div>
-                  <div id="projTitle" class="detail-title">Select a project</div>
-                  <div id="projMeta" class="detail-meta mono">Auto-switching every 4 seconds</div>
-                </div>
-
-                <div class="detail-actions">
-                  <a id="projOpen" class="primary-btn" href="#" target="_blank" rel="noopener">Open</a>
-                  <button id="projCopy" class="secondary-btn" type="button">Copy link</button>
+                  <button class="proj-square" type="button" role="listitem" data-project="slackbot">
+                    <div class="sq-thumb thumb-slack">
+                      <div class="sq-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
+                          <path d="M8 9h8"></path>
+                          <path d="M8 13h5"></path>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="sq-title">Slack Python Q&amp;A Bot</div>
+                    <div class="sq-meta mono">Python · Slack API</div>
+                  </button>
                 </div>
               </div>
 
-              <p id="projDesc" class="detail-desc">Click a card to preview details here.</p>
-              <ul id="projBullets" class="detail-bullets"></ul>
+              <div class="drawer-right">
+                <!-- softer edge (no big rainbow border) -->
+                <div class="project-detail glass no-rainbow" aria-live="polite">
+                  <div class="detail-top">
+                    <div>
+                      <div id="projTitle" class="detail-title">Select a project</div>
+                      <div id="projMeta" class="detail-meta mono">Auto-switching every 4 seconds</div>
+                    </div>
+
+                    <div class="detail-actions">
+                      <a id="projOpen" class="primary-btn" href="#" target="_blank" rel="noopener">Open</a>
+                      <button id="projCopy" class="secondary-btn" type="button">Copy link</button>
+                    </div>
+                  </div>
+
+                  <p id="projDesc" class="detail-desc">Click a card to preview details here.</p>
+                  <ul id="projBullets" class="detail-bullets"></ul>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -430,6 +398,6 @@
       </section>
     </main>
 
-    <script src="assets/js/main.js?v=13"></script>
+    <script src="assets/js/main.js?v=15"></script>
   </body>
 </html>
