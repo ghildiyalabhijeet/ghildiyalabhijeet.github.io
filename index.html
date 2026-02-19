@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Abhijeet Ghildiyal | Data Science</title>
+    <meta
+      name="description"
+      content="Abhijeet Ghildiyal — M.S. Data Science candidate at Arizona State University. Machine learning, GenAI, analytics, and data products."
+    />
+
+    <!-- Tailwind CDN (no build step) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" href="assets/img/favicon.svg" />
+    <link rel="stylesheet" href="assets/css/main.css?v=1" />
+  </head>
+
+  <body class="min-h-screen">
+    <!-- Ambient background layers -->
+    <div class="bg-animated" aria-hidden="true"></div>
+    <div class="bg-noise" aria-hidden="true"></div>
+
+    <!-- Top nav -->
+    <header class="nav-shell" role="banner">
+      <nav class="nav-glass glass" aria-label="Primary">
+        <a class="nav-item" href="#work">Work</a>
+        <a class="nav-item" href="#about">About</a>
+        <a class="nav-item" href="#resume">Resume</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- WORK -->
+      <section id="work" class="screen" aria-label="Work">
+        <div class="hero-card glass">
+          <h1 class="hero-name">Abhijeet Ghildiyal</h1>
+          <p class="hero-tagline">Building data products &amp; GenAI systems.</p>
+
+          <div class="hero-meta mono">
+            <span>M.S. Data Science @ ASU</span>
+            <span class="dot">•</span>
+            <span>Python · SQL · ML</span>
+          </div>
+        </div>
+
+        <div class="dock glass" aria-label="Projects dock">
+          <div id="projectDock" class="dock-track" role="list">
+            <!-- Project tiles (populated in HTML for SEO; enhanced via JS) -->
+            <button class="project-tile" type="button" role="listitem" data-project="slackbot">
+              <div class="tile-header">
+                <div class="app-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 8h10" />
+                    <path d="M7 12h7" />
+                    <path d="M9 20h6" />
+                    <path d="M9 20c-4 0-6-2-6-6V8c0-4 2-6 6-6h6c4 0 6 2 6 6v6c0 4-2 6-6 6" />
+                  </svg>
+                </div>
+              </div>
+              <div class="tile-title">Slack Python Q&amp;A Bot</div>
+              <div class="tile-stack mono">Python <span class="sep">|</span> Slack API</div>
+            </button>
+
+            <button class="project-tile" type="button" role="listitem" data-project="diffusion">
+              <div class="tile-header">
+                <div class="app-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2l1.2 3.8L17 7l-3.8 1.2L12 12l-1.2-3.8L7 7l3.8-1.2L12 2z" />
+                    <path d="M19 12l.9 2.9L23 16l-3.1 1.1L19 20l-.9-2.9L15 16l3.1-1.1L19 12z" />
+                    <path d="M5 13l.9 2.9L9 17l-3.1 1.1L5 21l-.9-2.9L1 17l3.1-1.1L5 13z" />
+                  </svg>
+                </div>
+              </div>
+              <div class="tile-title">Faster Diffusion</div>
+              <div class="tile-stack mono">PyTorch <span class="sep">|</span> Optimization</div>
+            </button>
+
+            <button class="project-tile" type="button" role="listitem" data-project="sentiment">
+              <div class="tile-header">
+                <div class="app-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
+                    <path d="M8 8h8" />
+                    <path d="M8 12h5" />
+                  </svg>
+                </div>
+              </div>
+              <div class="tile-title">Tweet Sentiment Analysis</div>
+              <div class="tile-stack mono">ALBERT <span class="sep">|</span> TensorFlow</div>
+            </button>
+
+            <button class="project-tile" type="button" role="listitem" data-project="pollution">
+              <div class="tile-header">
+                <div class="app-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 12c0 6-4 10-8 10S4 18 4 12 8 2 12 2s8 4 8 10z" />
+                    <path d="M12 22c0-6 4-10 8-10" />
+                    <path d="M12 22c0-6-4-10-8-10" />
+                  </svg>
+                </div>
+              </div>
+              <div class="tile-title">Particle Pollution (Research)</div>
+              <div class="tile-stack mono">ML <span class="sep">|</span> PM2.5</div>
+            </button>
+          </div>
+        </div>
+
+        <div class="hint mono" aria-hidden="true">Tip: hover the dock · click a project</div>
+
+        <div class="contact-bar glass" role="navigation" aria-label="Contact links">
+          <a class="contact-icon" href="mailto:aghildiy@asu.edu" aria-label="Email" title="Email">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 6h16v12H4z"></path>
+              <path d="M4 7l8 6 8-6"></path>
+            </svg>
+          </a>
+          <a
+            class="contact-icon"
+            href="https://www.linkedin.com/in/abhijeet928"
+            target="_blank"
+            rel="noopener"
+            aria-label="LinkedIn"
+            title="LinkedIn"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6.5 9.5v9"></path>
+              <path d="M6.5 6.5h.01"></path>
+              <path d="M10 18.5v-5.2c0-2.8 4-3 4 0v5.2"></path>
+              <path d="M14 13.3c0-1.3.9-2.3 2.3-2.3 1.2 0 2.2.9 2.2 2.4v5.1"></path>
+            </svg>
+          </a>
+          <a
+            class="contact-icon"
+            href="https://github.com/ghildiyalabhijeet"
+            target="_blank"
+            rel="noopener"
+            aria-label="GitHub"
+            title="GitHub"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 19c-4 1.2-4-2-5-2"></path>
+              <path
+                d="M15 19v-2.2c0-.7.2-1.2.6-1.6-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.8-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.5 9.5 0 0 1 5 0c2-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.8 1 1.7 1 2.8 0 3.9-2.4 4.7-4.6 5 .4.4.7 1 .7 2v2.8"
+              ></path>
+            </svg>
+          </a>
+          <a class="contact-icon" href="tel:+14803285875" aria-label="Phone" title="Phone">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.8 12.8 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.8 12.8 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+          </a>
+        </div>
+
+        <div class="corner-sparkle" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none">
+            <path
+              d="M32 6l4.3 15.8L52 26l-15.7 4.2L32 46l-4.3-15.8L12 26l15.7-4.2L32 6z"
+              fill="rgba(255,255,255,0.55)"
+            />
+          </svg>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about" class="screen" aria-label="About">
+        <div class="panel glass about-panel">
+          <div class="panel-head">
+            <h2 class="panel-title">About</h2>
+            <p class="panel-sub">Data Science · Machine Learning · Analytics</p>
+          </div>
+
+          <div class="about-grid">
+            <div class="about-block">
+              <h3 class="block-title">Summary</h3>
+              <p class="block-body">
+                Master of Science in Data Science candidate with a strong Computer Science foundation and hands-on
+                experience across the full data lifecycle — preprocessing, modeling, and dashboards.
+              </p>
+              <div class="mini-row mono">
+                <span class="chip">Part-time: available now</span>
+                <span class="chip">Full-time: May 2026</span>
+              </div>
+            </div>
+
+            <div class="about-block">
+              <h3 class="block-title">Education</h3>
+              <div class="edu-item">
+                <div class="edu-top">
+                  <div class="edu-degree">M.S. Data Science</div>
+                  <div class="edu-meta mono">Arizona State University · Tempe, AZ</div>
+                </div>
+                <div class="edu-bottom">
+                  <span class="edu-date mono">Graduating May 2026</span>
+                  <span class="edu-gpa mono">CGPA 3.67</span>
+                </div>
+                <div class="edu-courses mono">Coursework: Statistical ML · Generative AI · Data Mining · Optimization</div>
+              </div>
+
+              <div class="edu-item mt-4">
+                <div class="edu-top">
+                  <div class="edu-degree">B.Tech Computer Science &amp; Engineering</div>
+                  <div class="edu-meta mono">DIT University · Uttarakhand, India</div>
+                </div>
+                <div class="edu-bottom">
+                  <span class="edu-date mono">Aug 2018 — Jun 2022</span>
+                  <span class="edu-gpa mono">CGPA 3.33</span>
+                </div>
+                <div class="edu-courses mono">Coursework: Data Structures · System Design · RDBMS · AI</div>
+              </div>
+            </div>
+
+            <div class="about-block about-span">
+              <h3 class="block-title">Skills</h3>
+              <div class="skills-wrap">
+                <span class="skill-pill">Python</span>
+                <span class="skill-pill">SQL</span>
+                <span class="skill-pill">Pandas</span>
+                <span class="skill-pill">NumPy</span>
+                <span class="skill-pill">Matplotlib</span>
+                <span class="skill-pill">Seaborn</span>
+                <span class="skill-pill">scikit-learn</span>
+                <span class="skill-pill">PyTorch</span>
+                <span class="skill-pill">TensorFlow</span>
+                <span class="skill-pill">Hugging Face</span>
+                <span class="skill-pill">Power BI</span>
+                <span class="skill-pill">Git</span>
+                <span class="skill-pill">Slack API</span>
+                <span class="skill-pill">HTML5</span>
+                <span class="skill-pill">CSS3</span>
+              </div>
+
+              <h3 class="block-title mt-6">Experience</h3>
+              <div class="exp-list">
+                <div class="exp-item">
+                  <div class="exp-top">
+                    <div class="exp-role">Data Analyst Intern · BTP ECO Products</div>
+                    <div class="exp-date mono">Jul 2022 — Aug 2024</div>
+                  </div>
+                  <ul class="exp-bullets">
+                    <li>Designed and deployed 5+ Power BI dashboards to automate reporting.</li>
+                    <li>Translated data patterns into actionable strategies for leadership decisions.</li>
+                  </ul>
+                </div>
+
+                <div class="exp-item">
+                  <div class="exp-top">
+                    <div class="exp-role">SDE Intern · BTP ECO Products</div>
+                    <div class="exp-date mono">Jul 2021 — Sep 2021</div>
+                  </div>
+                  <ul class="exp-bullets">
+                    <li>Built responsive user interfaces using HTML and CSS.</li>
+                    <li>Improved cross-browser compatibility for consistent UI performance.</li>
+                  </ul>
+                </div>
+
+                <div class="exp-item">
+                  <div class="exp-top">
+                    <div class="exp-role">Cyber Security Intern · Virtually Testing Foundation</div>
+                    <div class="exp-date mono">Jan 2021 — Mar 2021</div>
+                  </div>
+                  <ul class="exp-bullets">
+                    <li>Assisted with security testing in virtual environments.</li>
+                    <li>Drafted structured guidelines to improve project accountability.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <h3 class="block-title mt-6">Certifications</h3>
+              <div class="certs-wrap">
+                <span class="cert-pill">Python for Data Science · Sololearn</span>
+                <span class="cert-pill">Power BI · Great Learning</span>
+                <span class="cert-pill">Data Scientist · Simplilearn</span>
+                <span class="cert-pill">AI · Simplilearn</span>
+                <span class="cert-pill">Machine Learning · Simplilearn</span>
+                <span class="cert-pill">MTA Security Fundamentals · Microsoft</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-foot">
+            <div class="mono small-muted">More details in the Resume tab.</div>
+            <div class="mini-actions">
+              <a class="mini-btn" href="#work">Back to Work</a>
+              <a class="mini-btn" href="#resume">Open Resume</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESUME -->
+      <section id="resume" class="screen" aria-label="Resume">
+        <div class="panel glass resume-panel">
+          <div class="panel-head">
+            <h2 class="panel-title">Resume</h2>
+            <p class="panel-sub">One page PDF · always up to date</p>
+          </div>
+
+          <div class="resume-actions">
+            <a class="primary-btn" href="resume/resume.pdf" target="_blank" rel="noopener">View PDF</a>
+            <a class="secondary-btn" href="resume/resume.pdf" download>Download</a>
+          </div>
+
+          <div class="resume-frame">
+            <iframe title="Resume PDF" src="resume/resume.pdf#view=FitH" loading="lazy"></iframe>
+          </div>
+
+          <div class="panel-foot">
+            <div class="mono small-muted">© <span id="year"></span> Abhijeet Ghildiyal</div>
+            <div class="mini-actions">
+              <a class="mini-btn" href="#about">About</a>
+              <a class="mini-btn" href="#work">Work</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Project modal -->
+    <div id="projectModal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Project details">
+      <div class="modal-backdrop" data-close="true"></div>
+      <div class="modal-card glass" role="document">
+        <button class="modal-close" type="button" aria-label="Close" data-close="true">✕</button>
+
+        <div class="modal-top">
+          <div class="modal-icon" aria-hidden="true"></div>
+          <div>
+            <div id="modalTitle" class="modal-title">Project</div>
+            <div id="modalMeta" class="modal-meta mono">Tech</div>
+          </div>
+        </div>
+
+        <p id="modalDesc" class="modal-desc">Description</p>
+        <ul id="modalBullets" class="modal-bullets"></ul>
+
+        <div class="modal-actions">
+          <a id="modalLink" class="primary-btn" href="#" target="_blank" rel="noopener">View</a>
+          <button id="modalCopy" class="secondary-btn" type="button">Copy link</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="assets/js/main.js?v=1"></script>
+  </body>
+</html>
