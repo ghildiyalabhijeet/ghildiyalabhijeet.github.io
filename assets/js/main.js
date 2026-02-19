@@ -2,9 +2,12 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-  // Footer year
-  const yearEl = $("#year");
-  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+  // Years
+  const y = String(new Date().getFullYear());
+  const year1 = $("#year");
+  const year2 = $("#year2");
+  if (year1) year1.textContent = y;
+  if (year2) year2.textContent = y;
 
   // ==============================
   // Nav active state (scroll spy)
@@ -44,221 +47,223 @@
     else setActive(sections[0].id);
   }
 
-  // ====================================
-  // Projects (dock hover + modal)
-  // ====================================
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // ==============================
+  // Copy helpers (About)
+  // ==============================
+  const toast = $("#toast");
+  const showToast = (msg) => {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.style.opacity = "1";
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => {
+      toast.textContent = "";
+    }, 1200);
+  };
 
-  // Edit these whenever you want:
-  // - title/meta/desc/bullets control the modal
-  // - link controls the "View" button
+  const copyText = async (value) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      showToast(`Copied: ${value}`);
+    } catch (_) {
+      // fallback
+      const temp = document.createElement("input");
+      temp.value = value;
+      document.body.appendChild(temp);
+      temp.select();
+      try {
+        document.execCommand("copy");
+        showToast(`Copied: ${value}`);
+      } finally {
+        document.body.removeChild(temp);
+      }
+    }
+  };
+
+  $$("[data-copy]").forEach((btn) => {
+    btn.addEventListener("click", () => copyText(btn.getAttribute("data-copy") || ""));
+  });
+
+  // ==============================
+  // Skills: filter + inspector
+  // ==============================
+  const skillText = $("#skillText");
+  const skillBubbles = $$(".skill-bubble");
+  const filters = $$(".filter");
+
+  const setSkillInspector = (text) => {
+    if (!skillText) return;
+    skillText.textContent = text;
+  };
+
+  skillBubbles.forEach((b) => {
+    b.addEventListener("mouseenter", () => {
+      const desc = b.getAttribute("data-desc") || "—";
+      setSkillInspector(desc);
+    });
+    b.addEventListener("click", () => {
+      const desc = b.getAttribute("data-desc") || "—";
+      setSkillInspector(desc);
+    });
+  });
+
+  const applyFilter = (group) => {
+    filters.forEach((f) => f.classList.toggle("is-active", f.dataset.filter === group));
+    skillBubbles.forEach((b) => {
+      const g = b.getAttribute("data-group");
+      const dim = !(group === "all" || g === group);
+      b.classList.toggle("is-dim", dim);
+      b.setAttribute("aria-hidden", dim ? "true" : "false");
+    });
+  };
+
+  filters.forEach((f) => {
+    f.addEventListener("click", () => applyFilter(f.dataset.filter || "all"));
+  });
+
+  // default filter
+  applyFilter("all");
+
+  // ==============================
+  // Projects Drawer (select + dblclick open)
+  // ==============================
   const PROJECTS = {
-    slackbot: {
-      title: "Slack Python Q&A Bot",
-      meta: "Python · Flask · Slack API · Celery · RabbitMQ · PostgreSQL",
-      desc:
-        "An intelligent Slack bot that answers Python-related questions with an async backend for responsiveness.",
-      bullets: [
-        "Decoupled architecture: Slack webhook → Flask → RabbitMQ queue → Celery worker → Slack response.",
-        "Logs requests/answers and usage stats to PostgreSQL via SQLAlchemy.",
-        "Containerized local setup using Docker Compose.",
-      ],
-      link: "https://github.com/AII-projects/slackbot",
-      icon: "chat",
-    },
-    diffusion: {
+    genai: {
       title: "Faster Diffusion",
-      meta: "Stable Diffusion · Diffusers · PyTorch · Sampler evaluation",
+      meta: "GenAI · Diffusion · Optimization · Python",
       desc:
-        "Acceleration of Stable Diffusion inference by caching/reusing encoder features at key timesteps.",
+        "Performance-focused diffusion work aimed at improving image generation efficiency while maintaining quality.",
       bullets: [
-        "Implements the Faster Diffusion technique (encoder propagation) for faster sampling.",
-        "Evaluates multiple samplers (e.g., DDIM / DPM-Solver variants) with speed–quality tradeoffs.",
-        "Measures quality with metrics like FID/CLIP score and compares wall-clock sampling time.",
+        "Implemented optimization techniques to increase generation speed and efficiency.",
+        "Tuned model pipeline/architecture for better throughput.",
+        "Collaborated in a team setting to improve runtime while keeping results sharp.",
       ],
       link: "https://github.com/ghildiyalabhijeet/GenAIProject",
-      icon: "spark",
-    },
-    sentiment: {
-      title: "Tweet Sentiment Analysis",
-      meta: "ALBERT · TensorFlow/Keras · NLP preprocessing",
-      desc:
-        "Sentiment classification on Twitter data using ALBERT fine-tuning and a clean preprocessing/training pipeline.",
-      bullets: [
-        "Preprocessing includes URL/mention/hashtag removal, emoji conversion, lemmatization, etc.",
-        "Uses ALBERT tokenizer (albert-base-v2) with padding/truncation for model input.",
-        "Includes evaluation artifacts like classification metrics, confusion matrix, and training curves.",
-      ],
-      link: "https://github.com/ghildiyalabhijeet/Tweet-Sentiment-Analysis",
-      icon: "message",
     },
     pollution: {
-      title: "Particle Pollution (Research)",
-      meta: "Machine Learning · PM2.5 · Environmental analytics",
+      title: "Particle Pollution (Research Paper)",
+      meta: "ML · PM2.5 · Environmental analytics · PDF",
       desc:
-        "ML-based analysis of atmospheric particle pollution datasets with a research-paper deliverable.",
+        "Research on ML applicability for modeling atmospheric particle pollution using PM2.5 and carbon emissions patterns.",
       bullets: [
-        "Analyzes PM2.5 / emissions patterns to predict environmental impact and air-quality trends.",
-        "Implements an end-to-end ML workflow in a Jupyter notebook (prep → modeling → interpretation).",
-        "Repository includes the research paper PDF alongside the notebook and dataset artifacts.",
+        "Analyzed PM2.5 and carbon emission patterns to model environmental impact.",
+        "Ran ML models on pollutant datasets in a small research team.",
+        "Compiled results into a formal research paper deliverable.",
       ],
-      link: "https://github.com/ghildiyalabhijeet/MachineLearning_Particle_Pollution",
-      icon: "globe",
+      link:
+        "https://github.com/ghildiyalabhijeet/MachineLearning_Particle_Pollution/blob/main/Research_Paper_Particle_Pollution.pdf",
+    },
+    pipeline: {
+      title: "Digital Assets Analytics Pipeline",
+      meta: "Analytics · Data pipeline · Repo",
+      desc:
+        "An analytics pipeline repository for digital asset data — open the repo for the full README, code, and architecture details.",
+      bullets: [
+        "End-to-end pipeline structure for ingest → transform → analyze.",
+        "Designed for reproducible analytics workflows.",
+        "See repository documentation for setup and usage.",
+      ],
+      link: "https://github.com/AII-projects/DigitalAssetsAnalyticsPipeline",
+    },
+    slackbot: {
+      title: "Slack Python Q&A Bot",
+      meta: "Python · Slack API · Automation",
+      desc:
+        "A Slack bot that delivers quick, real-time help for Python programming questions via a streamlined interface.",
+      bullets: [
+        "Integrated Python with the Slack API for a smooth Q&A workflow.",
+        "Built for fast troubleshooting and reduced context-switching.",
+        "Optimized for real-time interaction and rapid response loops.",
+      ],
+      link: "https://github.com/AII-projects/slackbot",
     },
   };
 
-  const dock = $("#projectDock");
-  const tiles = dock ? $$(".project-tile", dock) : [];
+  const row = $("#projectsRow");
+  const tiles = row ? $$(".proj-square", row) : [];
+  const titleEl = $("#projTitle");
+  const metaEl = $("#projMeta");
+  const descEl = $("#projDesc");
+  const bulletsEl = $("#projBullets");
+  const openEl = $("#projOpen");
+  const copyBtn = $("#projCopy");
 
-  // Dock scaling effect (desktop only)
-  if (dock && tiles.length && !reduceMotion) {
-    const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
-
-    if (!isCoarsePointer) {
-      const MAX_RANGE = 240;
-      const MAX_SCALE = 0.26;
-      const MAX_LIFT = 14;
-
-      const apply = (clientX) => {
-        const dockRect = dock.getBoundingClientRect();
-        const x = clientX - dockRect.left;
-
-        tiles.forEach((tile) => {
-          const r = tile.getBoundingClientRect();
-          const cx = (r.left - dockRect.left) + r.width / 2;
-          const d = Math.abs(cx - x);
-          const p = Math.max(0, 1 - d / MAX_RANGE);
-          const scale = 1 + MAX_SCALE * (p * p);
-          const lift = -MAX_LIFT * (p * p);
-
-          tile.style.setProperty("--dock-s", scale.toFixed(3));
-          tile.style.setProperty("--dock-y", `${lift.toFixed(2)}px`);
-        });
-      };
-
-      const reset = () => {
-        tiles.forEach((tile) => {
-          tile.style.setProperty("--dock-s", "1");
-          tile.style.setProperty("--dock-y", "0px");
-        });
-      };
-
-      dock.addEventListener(
-        "pointermove",
-        (e) => {
-          if (e.pointerType !== "mouse") return;
-          apply(e.clientX);
-        },
-        { passive: true }
-      );
-
-      dock.addEventListener("pointerleave", reset, { passive: true });
-      reset();
-    }
-  }
-
-  // Modal
-  const modal = $("#projectModal");
-  const modalTitle = $("#modalTitle");
-  const modalMeta = $("#modalMeta");
-  const modalDesc = $("#modalDesc");
-  const modalBullets = $("#modalBullets");
-  const modalLink = $("#modalLink");
-  const modalCopy = $("#modalCopy");
-  const modalIcon = $(".modal-icon");
-
-  const icons = {
-    chat: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg>`,
-    spark: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.2 3.8L17 7l-3.8 1.2L12 12l-1.2-3.8L7 7l3.8-1.2L12 2z"/><path d="M19 12l.9 2.9L23 16l-3.1 1.1L19 20l-.9-2.9L15 16l3.1-1.1L19 12z"/></svg>`,
-    message: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H7l-3 3V4z"/><path d="M8 8h8"/><path d="M8 12h6"/></svg>`,
-    globe: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
-  };
-
-  const openModal = (key) => {
+  const selectTile = (key) => {
     const p = PROJECTS[key];
-    if (!p || !modal) return;
+    if (!p) return;
 
-    modalTitle.textContent = p.title;
-    modalMeta.textContent = p.meta;
-    modalDesc.textContent = p.desc;
+    tiles.forEach((t) => t.classList.toggle("is-selected", t.dataset.project === key));
 
-    modalBullets.innerHTML = "";
-    p.bullets.forEach((b) => {
-      const li = document.createElement("li");
-      li.textContent = b;
-      modalBullets.appendChild(li);
-    });
+    if (titleEl) titleEl.textContent = p.title;
+    if (metaEl) metaEl.textContent = p.meta;
+    if (descEl) descEl.textContent = p.desc;
 
-    if (modalLink) {
-      modalLink.href = p.link;
-      modalLink.setAttribute("aria-label", `View ${p.title}`);
+    if (bulletsEl) {
+      bulletsEl.innerHTML = "";
+      p.bullets.forEach((b) => {
+        const li = document.createElement("li");
+        li.textContent = b;
+        bulletsEl.appendChild(li);
+      });
     }
 
-    if (modalIcon) {
-      modalIcon.innerHTML = icons[p.icon] || icons.chat;
-    }
-
-    modal.classList.remove("hidden");
-
-    const closeBtn = $(".modal-close", modal);
-    closeBtn?.focus();
-    document.body.style.overflow = "hidden";
+    if (openEl) openEl.href = p.link;
+    if (copyBtn) copyBtn.dataset.copy = p.link;
   };
 
-  const closeModal = () => {
-    if (!modal) return;
-    modal.classList.add("hidden");
-    document.body.style.overflow = "";
+  const openProject = (key) => {
+    const p = PROJECTS[key];
+    if (!p) return;
+    window.open(p.link, "_blank", "noopener,noreferrer");
   };
 
-  // Tile click
   tiles.forEach((t) => {
     const key = t.dataset.project;
-    t.addEventListener("click", () => openModal(key));
+
+    // single click selects (preview)
+    t.addEventListener("click", () => selectTile(key));
+
+    // double click opens (your requirement)
+    t.addEventListener("dblclick", () => openProject(key));
+
+    // keyboard: Enter opens, Space selects
     t.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
+      if (e.key === "Enter") openProject(key);
+      if (e.key === " ") {
         e.preventDefault();
-        openModal(key);
+        selectTile(key);
       }
     });
   });
 
-  // Close handlers
-  if (modal) {
-    modal.addEventListener("click", (e) => {
-      const target = e.target;
-      if (!(target instanceof HTMLElement)) return;
-      if (target.dataset.close === "true") closeModal();
-    });
+  // Default select first tile
+  if (tiles[0]?.dataset.project) selectTile(tiles[0].dataset.project);
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && !modal.classList.contains("hidden")) closeModal();
+  // Copy link button (Projects)
+  if (copyBtn) {
+    copyBtn.addEventListener("click", () => {
+      const url = copyBtn.dataset.copy || (openEl ? openEl.href : "");
+      if (url) copyText(url);
     });
   }
 
-  // Copy link
-  if (modalCopy && modalLink) {
-    modalCopy.addEventListener("click", async () => {
-      const url = modalLink.href;
-      try {
-        await navigator.clipboard.writeText(url);
-        const prev = modalCopy.textContent;
-        modalCopy.textContent = "Copied";
-        setTimeout(() => (modalCopy.textContent = prev), 1200);
-      } catch (_) {
-        const temp = document.createElement("input");
-        temp.value = url;
-        document.body.appendChild(temp);
-        temp.select();
-        try {
-          document.execCommand("copy");
-          const prev = modalCopy.textContent;
-          modalCopy.textContent = "Copied";
-          setTimeout(() => (modalCopy.textContent = prev), 1200);
-        } finally {
-          document.body.removeChild(temp);
-        }
-      }
-    });
-  }
+  // Drawer scroll buttons
+  const prevBtn = $("#projectsPrev");
+  const nextBtn = $("#projectsNext");
+
+  const scrollByAmount = () => {
+    if (!row) return 0;
+    // approx 1 tile + gap
+    return Math.max(240, Math.round(row.clientWidth * 0.62));
+  };
+
+  prevBtn?.addEventListener("click", () => {
+    if (!row) return;
+    row.scrollBy({ left: -scrollByAmount(), behavior: "smooth" });
+  });
+
+  nextBtn?.addEventListener("click", () => {
+    if (!row) return;
+    row.scrollBy({ left: scrollByAmount(), behavior: "smooth" });
+  });
 })();
