@@ -768,7 +768,10 @@ body::before {
 .drawer {
   border-radius: var(--radius-xl);
   padding: 18px 16px 16px;
+  position: relative;
+  overflow: hidden;
 }
+
 
 .drawer-handle {
   width: 56px;
@@ -788,6 +791,150 @@ body::before {
 }
 
 .drawer-controls { display: flex; gap: 8px; }
+/* =========================
+   Projects: Neon ambient layer
+========================= */
+
+.drawer-ambient{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+
+/* ensure real content stays above the ambient layer */
+.drawer > *:not(.drawer-ambient){
+  position:relative;
+  z-index:1;
+}
+
+/* Neon snowflakes */
+.neon-snowflake{
+  position:absolute;
+  width: 520px;
+  height: 520px;
+  opacity: 0.22;
+  mix-blend-mode: screen;
+  filter:
+    drop-shadow(0 0 16px rgba(59,130,246,0.30))
+    drop-shadow(0 0 34px rgba(244,114,182,0.22));
+}
+
+.snowflake-a{
+  left:-160px;
+  top:-180px;
+  opacity: 0.30;
+  animation: snowA 26s ease-in-out infinite;
+}
+
+.snowflake-b{
+  right:-220px;
+  bottom:-240px;
+  width: 660px;
+  height: 660px;
+  opacity: 0.20;
+  animation: snowB 34s ease-in-out infinite;
+}
+
+@keyframes snowA{
+  0%   { transform: translate3d(0,0,0) rotate(0deg); }
+  50%  { transform: translate3d(26px,18px,0) rotate(14deg); }
+  100% { transform: translate3d(0,0,0) rotate(0deg); }
+}
+
+@keyframes snowB{
+  0%   { transform: translate3d(0,0,0) rotate(0deg); }
+  50%  { transform: translate3d(-18px,-12px,0) rotate(-10deg); }
+  100% { transform: translate3d(0,0,0) rotate(0deg); }
+}
+
+/* "Render model" roaming object (neon glass orb) */
+.roamer{
+  position:absolute;
+  width: 240px;
+  height: 240px;
+  border-radius: 48% 52% 55% 45% / 55% 45% 55% 45%;
+  opacity: 0.55;
+  mix-blend-mode: screen;
+  filter: saturate(1.18);
+  background:
+    radial-gradient(60% 60% at 30% 30%, rgba(255,255,255,0.55), rgba(255,255,255,0) 62%),
+    radial-gradient(60% 60% at 70% 70%, rgba(59,130,246,0.38), rgba(59,130,246,0) 62%),
+    radial-gradient(80% 80% at 50% 40%, rgba(244,114,182,0.26), rgba(244,114,182,0) 70%),
+    conic-gradient(from 180deg,
+      rgba(77,195,255,0.20),
+      rgba(163,107,255,0.20),
+      rgba(255,93,167,0.20),
+      rgba(77,195,255,0.20)
+    );
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.18) inset,
+    0 24px 80px rgba(15,23,42,0.16),
+    0 0 34px rgba(59,130,246,0.24),
+    0 0 50px rgba(244,114,182,0.18);
+}
+
+.roamer::after{
+  content:"";
+  position:absolute;
+  inset: 18%;
+  border-radius: inherit;
+  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.75), rgba(255,255,255,0) 55%);
+  opacity: 0.55;
+  filter: blur(0.3px);
+}
+
+.roamer-a{
+  top: 10%;
+  left: 60%;
+  animation: roamA 22s ease-in-out infinite;
+}
+
+.roamer-b{
+  width: 180px;
+  height: 180px;
+  top: 62%;
+  left: 6%;
+  opacity: 0.42;
+  animation: roamB 28s ease-in-out infinite;
+}
+
+@keyframes roamA{
+  0%   { transform: translate3d(-240px, 40px,0) rotate(0deg); }
+  50%  { transform: translate3d(-60px, -18px,0) rotate(22deg); }
+  100% { transform: translate3d(140px, 86px,0) rotate(-8deg); }
+}
+
+@keyframes roamB{
+  0%   { transform: translate3d(120px, -70px,0) rotate(0deg); }
+  50%  { transform: translate3d(260px, 20px,0) rotate(-18deg); }
+  100% { transform: translate3d(160px, 120px,0) rotate(10deg); }
+}
+
+/* Glitter particles (subtle) */
+.glitter{
+  position:absolute;
+  inset:-40%;
+  opacity:0.18;
+  background:
+    radial-gradient(2px 2px at 12% 18%, rgba(255,255,255,0.80), transparent 60%),
+    radial-gradient(1.5px 1.5px at 22% 74%, rgba(255,255,255,0.70), transparent 60%),
+    radial-gradient(2px 2px at 38% 44%, rgba(255,255,255,0.65), transparent 60%),
+    radial-gradient(1.5px 1.5px at 62% 26%, rgba(255,255,255,0.65), transparent 60%),
+    radial-gradient(2px 2px at 78% 64%, rgba(255,255,255,0.70), transparent 60%),
+    radial-gradient(1.5px 1.5px at 88% 34%, rgba(255,255,255,0.75), transparent 60%);
+  animation: glitterDrift 18s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(59,130,246,0.12));
+}
+
+@keyframes glitterDrift{
+  0%,100% { transform: translate3d(0,0,0); }
+  50%     { transform: translate3d(24px,-18px,0); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .snowflake-a, .snowflake-b, .roamer-a, .roamer-b, .glitter { animation: none !important; }
+}
 
 .nav-btn {
   width: 42px;
@@ -814,6 +961,9 @@ body::before {
 .projects-row::-webkit-scrollbar { height: 0; }
 
 .proj-square {
+  --dockScale: 1;
+  --dockY: 0px;
+
   width: 240px;
   min-width: 240px;
   border-radius: var(--radius-lg);
@@ -824,10 +974,17 @@ body::before {
   text-align: left;
   cursor: pointer;
   scroll-snap-align: center;
-  transition: transform 160ms cubic-bezier(.2,.8,.2,1), box-shadow 160ms ease, background 160ms ease;
+
+  transform: translate3d(0, var(--dockY), 0) scale(var(--dockScale));
+  transform-origin: 50% 85%;
+  transition: transform 140ms cubic-bezier(.2,.8,.2,1), box-shadow 160ms ease, background 160ms ease;
 }
 
-.proj-square:hover { transform: translateY(-2px); background: rgba(255,255,255,0.32); }
+.proj-square:hover {
+  --dockScale: 1.06;
+  --dockY: -10px;
+  background: rgba(255,255,255,0.32);
+}
 
 .proj-square.is-selected {
   box-shadow:

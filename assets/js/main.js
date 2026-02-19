@@ -297,4 +297,50 @@
 
   prevBtn?.addEventListener("click", () => row?.scrollBy({ left: -scrollByAmount(), behavior: "smooth" }));
   nextBtn?.addEventListener("click", () => row?.scrollBy({ left: scrollByAmount(), behavior: "smooth" }));
+    // ==============================
+  // Projects dock hover scaling (Apple-like)
+  // ==============================
+  const projectsRowDock = $("#projectsRow");
+  if (projectsRowDock && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const cards = Array.from(projectsRowDock.querySelectorAll(".proj-square"));
+    let raf = 0;
+
+    const resetDock = () => {
+      cards.forEach((c) => {
+        c.style.setProperty("--dockScale", "1");
+        c.style.setProperty("--dockY", "0px");
+      });
+    };
+
+    const onDockMove = (ev) => {
+      if (ev.pointerType && ev.pointerType !== "mouse") return;
+
+      const rect = projectsRowDock.getBoundingClientRect();
+      const x = ev.clientX - rect.left + projectsRowDock.scrollLeft;
+
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const sigma = 220;   // smoothness radius
+        const max = 0.18;    // max extra scale
+
+        cards.forEach((card) => {
+          const center = card.offsetLeft + card.offsetWidth / 2;
+          const d = Math.abs(center - x);
+          const g = Math.exp(-(d * d) / (2 * sigma * sigma));
+          const scale = 1 + max * g;
+          const y = -(scale - 1) * 70; // lift amount
+
+          card.style.setProperty("--dockScale", scale.toFixed(3));
+          card.style.setProperty("--dockY", `${y.toFixed(1)}px`);
+        });
+      });
+    };
+
+    projectsRowDock.addEventListener("pointermove", onDockMove, { passive: true });
+    projectsRowDock.addEventListener("pointerleave", resetDock, { passive: true });
+    projectsRowDock.addEventListener("scroll", resetDock, { passive: true });
+
+    resetDock();
+  }
+
 })();

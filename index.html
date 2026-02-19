@@ -21,7 +21,7 @@
     />
 
     <link rel="icon" href="assets/img/favicon.svg" />
-    <link rel="stylesheet" href="assets/css/main.css?v=6" />
+    <link rel="stylesheet" href="assets/css/main.css?v=7" />
   </head>
 
   <body class="min-h-screen">
@@ -321,6 +321,101 @@
 
           <div class="drawer glass">
             <div class="drawer-handle" aria-hidden="true"></div>
+              <!-- Ambient neon background (snowflakes + roaming render model) -->
+  <div class="drawer-ambient" aria-hidden="true">
+    <svg class="neon-snowflake snowflake-a" viewBox="0 0 200 200">
+      <defs>
+        <linearGradient id="sfGradA" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="rgba(77,195,255,0.95)" />
+          <stop offset="0.5" stop-color="rgba(163,107,255,0.95)" />
+          <stop offset="1" stop-color="rgba(255,93,167,0.95)" />
+        </linearGradient>
+        <filter id="sfGlowA" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3.5" result="blur" />
+          <feColorMatrix
+            in="blur"
+            type="matrix"
+            values="
+              1 0 0 0 0
+              0 1 0 0 0
+              0 0 1 0 0
+              0 0 0 18 -7"
+            result="glow"
+          />
+          <feMerge>
+            <feMergeNode in="glow" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <g stroke="url(#sfGradA)" stroke-width="4" stroke-linecap="round" filter="url(#sfGlowA)" opacity="0.95">
+        <line x1="100" y1="16" x2="100" y2="184" />
+        <line x1="16" y1="100" x2="184" y2="100" />
+        <line x1="36" y1="36" x2="164" y2="164" />
+        <line x1="164" y1="36" x2="36" y2="164" />
+
+        <!-- branches -->
+        <line x1="100" y1="16" x2="86" y2="34" />
+        <line x1="100" y1="16" x2="114" y2="34" />
+        <line x1="100" y1="184" x2="86" y2="166" />
+        <line x1="100" y1="184" x2="114" y2="166" />
+
+        <line x1="16" y1="100" x2="34" y2="86" />
+        <line x1="16" y1="100" x2="34" y2="114" />
+        <line x1="184" y1="100" x2="166" y2="86" />
+        <line x1="184" y1="100" x2="166" y2="114" />
+
+        <line x1="36" y1="36" x2="36" y2="60" />
+        <line x1="36" y1="36" x2="60" y2="36" />
+        <line x1="164" y1="164" x2="164" y2="140" />
+        <line x1="164" y1="164" x2="140" y2="164" />
+
+        <line x1="164" y1="36" x2="140" y2="36" />
+        <line x1="164" y1="36" x2="164" y2="60" />
+        <line x1="36" y1="164" x2="60" y2="164" />
+        <line x1="36" y1="164" x2="36" y2="140" />
+      </g>
+    </svg>
+
+    <svg class="neon-snowflake snowflake-b" viewBox="0 0 200 200">
+      <defs>
+        <linearGradient id="sfGradB" x1="1" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="rgba(94,234,212,0.95)" />
+          <stop offset="0.5" stop-color="rgba(59,130,246,0.95)" />
+          <stop offset="1" stop-color="rgba(244,114,182,0.95)" />
+        </linearGradient>
+        <filter id="sfGlowB" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="4.2" result="blur" />
+          <feColorMatrix
+            in="blur"
+            type="matrix"
+            values="
+              1 0 0 0 0
+              0 1 0 0 0
+              0 0 1 0 0
+              0 0 0 18 -7"
+            result="glow"
+          />
+          <feMerge>
+            <feMergeNode in="glow" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      <g stroke="url(#sfGradB)" stroke-width="3.5" stroke-linecap="round" filter="url(#sfGlowB)" opacity="0.85">
+        <line x1="100" y1="16" x2="100" y2="184" />
+        <line x1="16" y1="100" x2="184" y2="100" />
+        <line x1="36" y1="36" x2="164" y2="164" />
+        <line x1="164" y1="36" x2="36" y2="164" />
+      </g>
+    </svg>
+
+    <div class="roamer roamer-a"></div>
+    <div class="roamer roamer-b"></div>
+    <div class="glitter"></div>
+  </div>
 
             <div class="drawer-top">
               <div class="mono micro muted">Scroll sideways • Click to preview • Double‑click opens link</div>
@@ -420,6 +515,6 @@
       </section>
     </main>
 
-    <script src="assets/js/main.js?v=6"></script>
+    <script src="assets/js/main.js?v=7"></script>
   </body>
 </html>
