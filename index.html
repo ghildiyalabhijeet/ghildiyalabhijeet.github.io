@@ -16,12 +16,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
 
     <link rel="icon" href="assets/img/favicon.svg" />
-    <link rel="stylesheet" href="assets/css/main.css?v=3" />
+    <link rel="stylesheet" href="assets/css/main.css?v=6" />
   </head>
 
   <body class="min-h-screen">
@@ -39,7 +39,7 @@
     </header>
 
     <main>
-      <!-- WORK (NO PROJECTS HERE anymore) -->
+      <!-- WORK (hero only) -->
       <section id="work" class="screen" aria-label="Work">
         <div class="hero-card glass">
           <h1 class="hero-name">Abhijeet Ghildiyal</h1>
@@ -64,6 +64,7 @@
               <path d="M4 7l8 6 8-6"></path>
             </svg>
           </a>
+
           <a
             class="contact-icon"
             href="https://www.linkedin.com/in/abhijeet928"
@@ -79,6 +80,7 @@
               <path d="M14 13.3c0-1.3.9-2.3 2.3-2.3 1.2 0 2.2.9 2.2 2.4v5.1"></path>
             </svg>
           </a>
+
           <a
             class="contact-icon"
             href="https://github.com/ghildiyalabhijeet"
@@ -92,11 +94,6 @@
               <path
                 d="M15 19v-2.2c0-.7.2-1.2.6-1.6-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.8-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.5 9.5 0 0 1 5 0c2-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.8 1 1.7 1 2.8 0 3.9-2.4 4.7-4.6 5 .4.4.7 1 .7 2v2.8"
               ></path>
-            </svg>
-          </a>
-          <a class="contact-icon" href="tel:+14803285875" aria-label="Phone" title="Phone">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.8 12.8 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.8 12.8 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
             </svg>
           </a>
         </div>
@@ -113,7 +110,7 @@
         </div>
       </section>
 
-      <!-- ABOUT (more space + better readability + interactive accordions) -->
+      <!-- ABOUT (vertical stacking) -->
       <section id="about" class="screen" aria-label="About">
         <div class="panel glass panel-strong about-panel">
           <div class="panel-head">
@@ -122,159 +119,119 @@
           </div>
 
           <div class="about-layout">
-  <!-- 1) Summary -->
-  <div class="card glass card-strong lift">
-    <div class="card-head">
-      <h3 class="card-title">Summary</h3>
-      <div class="mono micro">Tempe, AZ · ASU</div>
-    </div>
+            <!-- 1) Summary -->
+            <div class="card glass card-strong lift">
+              <div class="card-head">
+                <h3 class="card-title">Summary</h3>
+                <div class="mono micro">Tempe, AZ · ASU</div>
+              </div>
 
-    <p class="readable">
-      Master of Science in Data Science candidate with a strong Computer Science foundation and proficiency in
-      Python, SQL, and machine learning. Experienced across the full data lifecycle — from preprocessing and
-      modeling to interactive dashboards.
-    </p>
+              <p class="readable">
+                Master of Science in Data Science candidate with a strong Computer Science foundation and proficiency in
+                Python, SQL, and machine learning. Experienced across the full data lifecycle — from preprocessing and
+                modeling to interactive dashboards.
+              </p>
 
-    <div class="chips-row mono">
-      <span class="chip">Part‑time: available now</span>
-      <span class="chip">Full‑time: May 2026</span>
-    </div>
+              <div class="chips-row mono">
+                <span class="chip">Part‑time: available now</span>
+                <span class="chip">Full‑time: May 2026</span>
+              </div>
 
-    <div class="quick-actions">
-      <button class="mini-action" type="button" data-copy="aghildiy@asu.edu">
-        Copy email
-      </button>
-    </div>
+              <div class="quick-actions">
+                <button class="mini-action" type="button" data-copy="aghildiy@asu.edu">Copy email</button>
+              </div>
 
-    <div class="toast mono" id="toast" aria-live="polite" aria-atomic="true"></div>
-  </div>
+              <div class="toast mono" id="toast" aria-live="polite" aria-atomic="true"></div>
+            </div>
 
-  <!-- 2) Education -->
-  <div class="card glass card-strong lift">
-    <div class="card-head">
-      <h3 class="card-title">Education</h3>
-      <div class="mono micro">CGPA highlights</div>
-    </div>
+            <!-- 2) Education -->
+            <div class="card glass card-strong lift">
+              <div class="card-head">
+                <h3 class="card-title">Education</h3>
+                <div class="mono micro">CGPA highlights</div>
+              </div>
 
-    <div class="edu-grid">
-      <div class="edu-card">
-        <div class="edu-top">
-          <div>
-            <div class="edu-degree">M.S. Data Science</div>
-            <div class="mono micro muted">Arizona State University · Tempe, AZ</div>
-          </div>
-          <span class="badge mono">CGPA 3.67</span>
-        </div>
-        <div class="mono micro muted">Graduating May 2026</div>
-        <div class="mono micro muted mt-6">
-          Coursework: Statistical ML · Generative AI · Data Mining · Optimization
-        </div>
-      </div>
-
-      <div class="edu-card">
-        <div class="edu-top">
-          <div>
-            <div class="edu-degree">B.Tech Computer Science &amp; Engineering</div>
-            <div class="mono micro muted">DIT University · Uttarakhand, India</div>
-          </div>
-          <span class="badge mono">CGPA 3.33</span>
-        </div>
-        <div class="mono micro muted">Aug 2018 — Jun 2022</div>
-        <div class="mono micro muted mt-6">
-          Coursework: Data Structures · System Design · RDBMS · AI
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3) Experience -->
-  <div class="card glass card-strong lift">
-    <div class="card-head">
-      <h3 class="card-title">Experience</h3>
-      <div class="mono micro">Tap to expand</div>
-    </div>
-
-    <div class="accordion">
-      <details class="acc-item" open>
-        <summary>
-          <span class="acc-title">Data Analyst Intern · BTP ECO Products</span>
-          <span class="acc-meta mono">Jul 2022 — Aug 2024</span>
-        </summary>
-        <ul class="acc-body">
-          <li>Designed and deployed 5+ Power BI dashboards to automate reporting and clarify key metrics.</li>
-          <li>Translated complex patterns into actionable strategies supporting leadership decisions.</li>
-        </ul>
-      </details>
-
-      <details class="acc-item">
-        <summary>
-          <span class="acc-title">SDE Intern · BTP ECO Products</span>
-          <span class="acc-meta mono">Jul 2021 — Sep 2021</span>
-        </summary>
-        <ul class="acc-body">
-          <li>Built responsive, user-friendly interfaces using HTML and CSS.</li>
-          <li>Improved cross-browser compatibility for consistent UI performance.</li>
-        </ul>
-      </details>
-
-      <details class="acc-item">
-        <summary>
-          <span class="acc-title">Cyber Security Intern · Virtually Testing Foundation</span>
-          <span class="acc-meta mono">Jan 2021 — Mar 2021</span>
-        </summary>
-        <ul class="acc-body">
-          <li>Assisted with security testing in virtual environments; managed technical social content.</li>
-          <li>Drafted guidelines that improved accountability and consistency in project processes.</li>
-        </ul>
-      </details>
-    </div>
-  </div>
-</div>
-
-                <div class="accordion">
-                  <details class="acc-item" open>
-                    <summary>
-                      <span class="acc-title">Data Analyst Intern · BTP ECO Products</span>
-                      <span class="acc-meta mono">Jul 2022 — Aug 2024</span>
-                    </summary>
-                    <ul class="acc-body">
-                      <li>Designed and deployed 5+ Power BI dashboards to automate reporting and clarify key metrics.</li>
-                      <li>Translated complex patterns into actionable strategies supporting leadership decisions.</li>
-                    </ul>
-                  </details>
-
-                  <details class="acc-item">
-                    <summary>
-                      <span class="acc-title">SDE Intern · BTP ECO Products</span>
-                      <span class="acc-meta mono">Jul 2021 — Sep 2021</span>
-                    </summary>
-                    <ul class="acc-body">
-                      <li>Built responsive, user-friendly interfaces using HTML and CSS.</li>
-                      <li>Improved cross-browser compatibility for consistent UI performance.</li>
-                    </ul>
-                  </details>
-
-                  <details class="acc-item">
-                    <summary>
-                      <span class="acc-title">Cyber Security Intern · Virtually Testing Foundation</span>
-                      <span class="acc-meta mono">Jan 2021 — Mar 2021</span>
-                    </summary>
-                    <ul class="acc-body">
-                      <li>Assisted with security testing in virtual environments; managed technical social content.</li>
-                      <li>Drafted guidelines that improved accountability and consistency in project processes.</li>
-                    </ul>
-                  </details>
+              <div class="edu-grid">
+                <div class="edu-card">
+                  <div class="edu-top">
+                    <div>
+                      <div class="edu-degree">M.S. Data Science</div>
+                      <div class="mono micro muted">Arizona State University · Tempe, AZ</div>
+                    </div>
+                    <span class="badge mono">CGPA 3.67</span>
+                  </div>
+                  <div class="mono micro muted">Graduating May 2026</div>
+                  <div class="mono micro muted mt-6">
+                    Coursework: Statistical ML · Generative AI · Data Mining · Optimization
+                  </div>
                 </div>
+
+                <div class="edu-card">
+                  <div class="edu-top">
+                    <div>
+                      <div class="edu-degree">B.Tech Computer Science &amp; Engineering</div>
+                      <div class="mono micro muted">DIT University · Uttarakhand, India</div>
+                    </div>
+                    <span class="badge mono">CGPA 3.33</span>
+                  </div>
+                  <div class="mono micro muted">Aug 2018 — Jun 2022</div>
+                  <div class="mono micro muted mt-6">
+                    Coursework: Data Structures · System Design · RDBMS · AI
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3) Experience (ONLY ONCE) -->
+            <div class="card glass card-strong lift">
+              <div class="card-head">
+                <h3 class="card-title">Experience</h3>
+                <div class="mono micro">Tap to expand</div>
+              </div>
+
+              <div class="accordion">
+                <details class="acc-item" open>
+                  <summary>
+                    <span class="acc-title">Data Analyst Intern · BTP ECO Products</span>
+                    <span class="acc-meta mono">Jul 2022 — Aug 2024</span>
+                  </summary>
+                  <ul class="acc-body">
+                    <li>Designed and deployed 5+ Power BI dashboards to automate reporting and clarify key metrics.</li>
+                    <li>Translated complex patterns into actionable strategies supporting leadership decisions.</li>
+                  </ul>
+                </details>
+
+                <details class="acc-item">
+                  <summary>
+                    <span class="acc-title">SDE Intern · BTP ECO Products</span>
+                    <span class="acc-meta mono">Jul 2021 — Sep 2021</span>
+                  </summary>
+                  <ul class="acc-body">
+                    <li>Built responsive, user-friendly interfaces using HTML and CSS.</li>
+                    <li>Improved cross-browser compatibility for consistent UI performance.</li>
+                  </ul>
+                </details>
+
+                <details class="acc-item">
+                  <summary>
+                    <span class="acc-title">Cyber Security Intern · Virtually Testing Foundation</span>
+                    <span class="acc-meta mono">Jan 2021 — Mar 2021</span>
+                  </summary>
+                  <ul class="acc-body">
+                    <li>Assisted with security testing in virtual environments; managed technical social content.</li>
+                    <li>Drafted guidelines that improved accountability and consistency in project processes.</li>
+                  </ul>
+                </details>
               </div>
             </div>
           </div>
 
-          <!-- Skills (creative + filterable) -->
-          <div class="skills-lab glass card-strong">
+          <!-- Skills Studio (narrow + creative) -->
+          <div class="skills-studio glass card-strong" id="skillsStudio">
             <div class="skills-head">
               <div>
                 <h3 class="card-title">Skills</h3>
-                <div class="mono micro muted">Filter the cloud</div>
+                <div class="mono micro muted">Filter + hover a bubble</div>
               </div>
 
               <div class="filters" role="tablist" aria-label="Skill categories">
@@ -286,64 +243,61 @@
               </div>
             </div>
 
-            <div id="skillsCloud" class="skills-cloud" aria-label="Skills cloud">
-              <!-- Languages -->
-              <button class="skill-bubble" type="button" data-group="lang" data-desc="Primary language for ML, analytics, and automation.">
-                Python
-              </button>
-              <button class="skill-bubble" type="button" data-group="lang" data-desc="Querying, joins, analytics, and reporting.">
-                SQL
-              </button>
-              <button class="skill-bubble" type="button" data-group="lang" data-desc="Frontend markup for clean layouts.">
-                HTML5
-              </button>
-              <button class="skill-bubble" type="button" data-group="lang" data-desc="Styling, responsive UI, and component layouts.">
-                CSS3
-              </button>
+            <div class="skills-body">
+              <div id="skillsCloud" class="skills-cloud" aria-label="Skills cloud">
+                <!-- Languages -->
+                <button class="skill-bubble" type="button" data-group="lang" data-size="lg"
+                  data-desc="Primary language for ML, analytics, and automation.">Python</button>
+                <button class="skill-bubble" type="button" data-group="lang" data-size="md"
+                  data-desc="Querying, joins, analytics, and reporting.">SQL</button>
+                <button class="skill-bubble" type="button" data-group="lang" data-size="sm"
+                  data-desc="Frontend markup for clean layouts.">HTML5</button>
+                <button class="skill-bubble" type="button" data-group="lang" data-size="sm"
+                  data-desc="Styling, responsive UI, component layouts.">CSS3</button>
 
-              <!-- Data -->
-              <button class="skill-bubble" type="button" data-group="data" data-desc="Dataframes, feature engineering, and ETL.">
-                Pandas
-              </button>
-              <button class="skill-bubble" type="button" data-group="data" data-desc="Numerical computing foundations.">
-                NumPy
-              </button>
-              <button class="skill-bubble" type="button" data-group="data" data-desc="Charts and exploratory plotting.">
-                Matplotlib
-              </button>
-              <button class="skill-bubble" type="button" data-group="data" data-desc="Statistical visualization and quick EDA.">
-                Seaborn
-              </button>
+                <!-- Data -->
+                <button class="skill-bubble" type="button" data-group="data" data-size="md"
+                  data-desc="Dataframes, feature engineering, and ETL.">Pandas</button>
+                <button class="skill-bubble" type="button" data-group="data" data-size="md"
+                  data-desc="Numerical computing foundations.">NumPy</button>
+                <button class="skill-bubble" type="button" data-group="data" data-size="sm"
+                  data-desc="Charts and exploratory plotting.">Matplotlib</button>
+                <button class="skill-bubble" type="button" data-group="data" data-size="sm"
+                  data-desc="Statistical visualization and quick EDA.">Seaborn</button>
 
-              <!-- ML/DL -->
-              <button class="skill-bubble" type="button" data-group="ml" data-desc="Classic ML models and pipelines.">
-                scikit‑learn
-              </button>
-              <button class="skill-bubble" type="button" data-group="ml" data-desc="Deep learning + custom training loops.">
-                PyTorch
-              </button>
-              <button class="skill-bubble" type="button" data-group="ml" data-desc="Model training and deployment pipelines.">
-                TensorFlow
-              </button>
-              <button class="skill-bubble" type="button" data-group="ml" data-desc="Transformers, tokenizers, and model hub.">
-                Hugging Face
-              </button>
+                <!-- ML/DL -->
+                <button class="skill-bubble" type="button" data-group="ml" data-size="md"
+                  data-desc="Classic ML models and pipelines.">scikit‑learn</button>
+                <button class="skill-bubble" type="button" data-group="ml" data-size="lg"
+                  data-desc="Deep learning + custom training loops.">PyTorch</button>
+                <button class="skill-bubble" type="button" data-group="ml" data-size="lg"
+                  data-desc="Model training and deployment pipelines.">TensorFlow</button>
+                <button class="skill-bubble" type="button" data-group="ml" data-size="md"
+                  data-desc="Transformers, tokenizers, and model hub.">Hugging Face</button>
 
-              <!-- Tools -->
-              <button class="skill-bubble" type="button" data-group="tools" data-desc="Dashboards, DAX, KPI reporting.">
-                Power BI
-              </button>
-              <button class="skill-bubble" type="button" data-group="tools" data-desc="Version control and collaboration.">
-                Git
-              </button>
-              <button class="skill-bubble" type="button" data-group="tools" data-desc="Integrations, bots, and automation.">
-                Slack API
-              </button>
-            </div>
+                <!-- Tools -->
+                <button class="skill-bubble" type="button" data-group="tools" data-size="md"
+                  data-desc="Dashboards, DAX, KPI reporting.">Power BI</button>
+                <button class="skill-bubble" type="button" data-group="tools" data-size="sm"
+                  data-desc="Version control and collaboration.">Git</button>
+                <button class="skill-bubble" type="button" data-group="tools" data-size="sm"
+                  data-desc="Integrations, bots, and automation.">Slack API</button>
+              </div>
 
-            <div class="skill-inspector glass" aria-live="polite">
-              <div class="mono micro muted">Tip: hover or click a bubble</div>
-              <div id="skillText" class="skill-text">Pick a skill to preview a quick note here.</div>
+              <div class="skills-side">
+                <div class="skill-inspector glass" aria-live="polite">
+                  <div class="inspector-top">
+                    <div id="skillName" class="inspector-name">Hover a skill</div>
+                    <div id="skillGroup" class="inspector-pill mono">—</div>
+                  </div>
+                  <div id="skillText" class="skill-text">Move your cursor over a bubble to see a quick note.</div>
+                </div>
+
+                <div class="skills-stats glass">
+                  <div class="mono micro muted">Visible skills</div>
+                  <div id="skillsCount" class="skills-count">—</div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -357,7 +311,7 @@
         </div>
       </section>
 
-      <!-- PROJECTS (replaces Resume section) -->
+      <!-- PROJECTS -->
       <section id="projects" class="screen" aria-label="Projects">
         <div class="panel glass panel-strong projects-panel">
           <div class="panel-head">
@@ -369,7 +323,7 @@
             <div class="drawer-handle" aria-hidden="true"></div>
 
             <div class="drawer-top">
-              <div class="mono micro muted">Scroll sideways • Select a tile • Double‑click opens link</div>
+              <div class="mono micro muted">Scroll sideways • Click to preview • Double‑click opens link</div>
 
               <div class="drawer-controls">
                 <button class="nav-btn" type="button" id="projectsPrev" aria-label="Scroll left">←</button>
@@ -466,6 +420,6 @@
       </section>
     </main>
 
-    <script src="assets/js/main.js?v=3"></script>
+    <script src="assets/js/main.js?v=6"></script>
   </body>
 </html>
