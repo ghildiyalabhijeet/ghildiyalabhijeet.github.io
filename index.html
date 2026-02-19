@@ -21,7 +21,7 @@
     />
 
     <link rel="icon" href="assets/img/favicon.svg" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2" />
+    <link rel="stylesheet" href="assets/css/main.css?v=3" />
   </head>
 
   <body class="min-h-screen">
@@ -122,80 +122,114 @@
           </div>
 
           <div class="about-layout">
-            <!-- Left: summary card -->
-            <div class="card glass card-strong lift">
-              <div class="card-head">
-                <h3 class="card-title">Summary</h3>
-                <div class="mono micro">Tempe, AZ · ASU</div>
-              </div>
+  <!-- 1) Summary -->
+  <div class="card glass card-strong lift">
+    <div class="card-head">
+      <h3 class="card-title">Summary</h3>
+      <div class="mono micro">Tempe, AZ · ASU</div>
+    </div>
 
-              <p class="readable">
-                Master of Science in Data Science candidate with a strong Computer Science foundation and proficiency in
-                Python, SQL, and machine learning. Experienced across the full data lifecycle — from preprocessing and
-                modeling to interactive dashboards.
-              </p>
+    <p class="readable">
+      Master of Science in Data Science candidate with a strong Computer Science foundation and proficiency in
+      Python, SQL, and machine learning. Experienced across the full data lifecycle — from preprocessing and
+      modeling to interactive dashboards.
+    </p>
 
-              <div class="chips-row mono">
-                <span class="chip">Part‑time: available now</span>
-                <span class="chip">Full‑time: May 2026</span>
-              </div>
+    <div class="chips-row mono">
+      <span class="chip">Part‑time: available now</span>
+      <span class="chip">Full‑time: May 2026</span>
+    </div>
 
-              <div class="quick-actions">
-                <button class="mini-action" type="button" data-copy="aghildiy@asu.edu">
-                  Copy email
-                </button>
-                <button class="mini-action" type="button" data-copy="+14803285875">
-                  Copy phone
-                </button>
-              </div>
+    <div class="quick-actions">
+      <button class="mini-action" type="button" data-copy="aghildiy@asu.edu">
+        Copy email
+      </button>
+    </div>
 
-              <div class="toast mono" id="toast" aria-live="polite" aria-atomic="true"></div>
-            </div>
+    <div class="toast mono" id="toast" aria-live="polite" aria-atomic="true"></div>
+  </div>
 
-            <!-- Right: education + experience (accordion) -->
-            <div class="stack">
-              <div class="card glass card-strong lift">
-                <div class="card-head">
-                  <h3 class="card-title">Education</h3>
-                  <div class="mono micro">CGPA highlights</div>
-                </div>
+  <!-- 2) Education -->
+  <div class="card glass card-strong lift">
+    <div class="card-head">
+      <h3 class="card-title">Education</h3>
+      <div class="mono micro">CGPA highlights</div>
+    </div>
 
-                <div class="edu-grid">
-                  <div class="edu-card">
-                    <div class="edu-top">
-                      <div>
-                        <div class="edu-degree">M.S. Data Science</div>
-                        <div class="mono micro muted">Arizona State University · Tempe, AZ</div>
-                      </div>
-                      <span class="badge mono">CGPA 3.67</span>
-                    </div>
-                    <div class="mono micro muted">Graduating May 2026</div>
-                    <div class="mono micro muted mt-6">
-                      Coursework: Statistical ML · Generative AI · Data Mining · Optimization
-                    </div>
-                  </div>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <div class="edu-top">
+          <div>
+            <div class="edu-degree">M.S. Data Science</div>
+            <div class="mono micro muted">Arizona State University · Tempe, AZ</div>
+          </div>
+          <span class="badge mono">CGPA 3.67</span>
+        </div>
+        <div class="mono micro muted">Graduating May 2026</div>
+        <div class="mono micro muted mt-6">
+          Coursework: Statistical ML · Generative AI · Data Mining · Optimization
+        </div>
+      </div>
 
-                  <div class="edu-card">
-                    <div class="edu-top">
-                      <div>
-                        <div class="edu-degree">B.Tech Computer Science &amp; Engineering</div>
-                        <div class="mono micro muted">DIT University · Uttarakhand, India</div>
-                      </div>
-                      <span class="badge mono">CGPA 3.33</span>
-                    </div>
-                    <div class="mono micro muted">Aug 2018 — Jun 2022</div>
-                    <div class="mono micro muted mt-6">
-                      Coursework: Data Structures · System Design · RDBMS · AI
-                    </div>
-                  </div>
-                </div>
-              </div>
+      <div class="edu-card">
+        <div class="edu-top">
+          <div>
+            <div class="edu-degree">B.Tech Computer Science &amp; Engineering</div>
+            <div class="mono micro muted">DIT University · Uttarakhand, India</div>
+          </div>
+          <span class="badge mono">CGPA 3.33</span>
+        </div>
+        <div class="mono micro muted">Aug 2018 — Jun 2022</div>
+        <div class="mono micro muted mt-6">
+          Coursework: Data Structures · System Design · RDBMS · AI
+        </div>
+      </div>
+    </div>
+  </div>
 
-              <div class="card glass card-strong lift">
-                <div class="card-head">
-                  <h3 class="card-title">Experience</h3>
-                  <div class="mono micro">Tap to expand</div>
-                </div>
+  <!-- 3) Experience -->
+  <div class="card glass card-strong lift">
+    <div class="card-head">
+      <h3 class="card-title">Experience</h3>
+      <div class="mono micro">Tap to expand</div>
+    </div>
+
+    <div class="accordion">
+      <details class="acc-item" open>
+        <summary>
+          <span class="acc-title">Data Analyst Intern · BTP ECO Products</span>
+          <span class="acc-meta mono">Jul 2022 — Aug 2024</span>
+        </summary>
+        <ul class="acc-body">
+          <li>Designed and deployed 5+ Power BI dashboards to automate reporting and clarify key metrics.</li>
+          <li>Translated complex patterns into actionable strategies supporting leadership decisions.</li>
+        </ul>
+      </details>
+
+      <details class="acc-item">
+        <summary>
+          <span class="acc-title">SDE Intern · BTP ECO Products</span>
+          <span class="acc-meta mono">Jul 2021 — Sep 2021</span>
+        </summary>
+        <ul class="acc-body">
+          <li>Built responsive, user-friendly interfaces using HTML and CSS.</li>
+          <li>Improved cross-browser compatibility for consistent UI performance.</li>
+        </ul>
+      </details>
+
+      <details class="acc-item">
+        <summary>
+          <span class="acc-title">Cyber Security Intern · Virtually Testing Foundation</span>
+          <span class="acc-meta mono">Jan 2021 — Mar 2021</span>
+        </summary>
+        <ul class="acc-body">
+          <li>Assisted with security testing in virtual environments; managed technical social content.</li>
+          <li>Drafted guidelines that improved accountability and consistency in project processes.</li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</div>
 
                 <div class="accordion">
                   <details class="acc-item" open>
@@ -432,6 +466,6 @@
       </section>
     </main>
 
-    <script src="assets/js/main.js?v=2"></script>
+    <script src="assets/js/main.js?v=3"></script>
   </body>
 </html>
