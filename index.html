@@ -6,10 +6,10 @@
     <title>Abhijeet Ghildiyal · Data Science</title>
     <meta
       name="description"
-      content="Abhijeet Ghildiyal — M.S. Data Science @ ASU. I build data products: pipelines, ML/GenAI systems, and dashboards."
+      content="Abhijeet Ghildiyal — M.S. Data Science @ ASU. I build pipelines, ML/GenAI systems, and dashboards."
     />
 
-    <!-- Tech stack stays the same: HTML + CSS + JS + Tailwind CDN (no build step) -->
+    <!-- Keep same stack: HTML + CSS + JS + Tailwind CDN (no build step) -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Fonts -->
@@ -26,76 +26,45 @@
   <body>
     <!-- Background -->
     <div class="bg" aria-hidden="true"></div>
+    <canvas id="bgRender" class="bg-render" aria-hidden="true"></canvas>
     <div class="bg-noise" aria-hidden="true"></div>
 
-    <!-- Nav -->
+    <!-- Nav (simplified to reduce clutter) -->
     <header class="topbar" role="banner">
       <nav class="nav glass" aria-label="Primary navigation">
         <a class="nav-link" href="#work">Work</a>
         <a class="nav-link" href="#about">About</a>
         <a class="nav-link" href="#projects">Projects</a>
-
-        <div class="nav-spacer" aria-hidden="true"></div>
-
-        <button class="nav-chip mono" type="button" id="copyEmailTop" data-copy="aghildiy@asu.edu">
-          Copy email
-        </button>
       </nav>
     </header>
 
     <main>
-      <!-- WORK / HERO -->
+      <!-- WORK / HERO (less text, less clutter) -->
       <section id="work" class="screen" aria-label="Work">
         <div class="hero glass prism">
-          <div class="hero-top">
-            <div class="hero-badge mono">
-              M.S. Data Science @ ASU · Tempe, AZ
-              <span class="dot" aria-hidden="true">•</span>
-              Part‑time now · Full‑time May 2026
-            </div>
-
-            <h1 class="hero-title">Abhijeet Ghildiyal</h1>
-
-            <p class="hero-lead">
-              I build <span class="em">data products</span> that feel like software —
-              clean pipelines, ML/GenAI systems, and dashboards teams actually use.
-            </p>
-
-            <div class="hero-stack mono">
-              <span class="pill">Python</span>
-              <span class="pill">SQL</span>
-              <span class="pill">PyTorch</span>
-              <span class="pill">TensorFlow</span>
-              <span class="pill">Power BI</span>
-              <span class="pill">Git</span>
-            </div>
-
-            <div class="hero-cta">
-              <a class="btn btn-primary" href="#projects">Explore projects</a>
-              <a class="btn btn-ghost" href="#about">About & skills</a>
-            </div>
+          <div class="hero-badge mono">
+            M.S. Data Science @ ASU <span class="sep">•</span> Tempe, AZ
+            <span class="sep">•</span> Part‑time now <span class="sep">/</span> Full‑time May 2026
           </div>
 
-          <!-- Creative “product” feel: mini highlight tiles -->
-          <div class="hero-grid" role="list" aria-label="Highlights">
-            <div class="mini glass no-prism" role="listitem">
-              <div class="mini-title">Shipping mindset</div>
-              <div class="mini-text">Dashboards, automation, and ML experiments — with clean UI polish.</div>
-            </div>
+          <h1 class="hero-title">Abhijeet Ghildiyal</h1>
 
-            <div class="mini glass no-prism" role="listitem">
-              <div class="mini-title">Impact</div>
-              <div class="mini-text">Designed & deployed <b>5+</b> Power BI dashboards to clarify key metrics.</div>
-            </div>
+          <p class="hero-lead">
+            Data products: pipelines, ML/GenAI, and dashboards — built clean, fast, and usable.
+          </p>
 
-            <div class="mini glass no-prism" role="listitem">
-              <div class="mini-title">Focus</div>
-              <div class="mini-text">Reproducible pipelines, interpretable models, decision-ready outputs.</div>
-            </div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">Projects</a>
+            <button class="btn btn-ghost" type="button" data-copy="aghildiy@asu.edu">Email</button>
+          </div>
+
+          <div class="hero-tags mono">
+            Python <span class="dot">·</span> SQL <span class="dot">·</span> PyTorch
+            <span class="dot">·</span> TensorFlow <span class="dot">·</span> Power BI
           </div>
         </div>
 
-        <!-- Contact dock -->
+        <!-- Minimal contact dock -->
         <div class="dock glass prism" role="navigation" aria-label="Contact links">
           <a class="dock-btn" href="mailto:aghildiy@asu.edu" aria-label="Email">
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -134,7 +103,7 @@
             </svg>
           </a>
 
-          <button class="dock-btn" type="button" id="copyEmailDock" data-copy="aghildiy@asu.edu" aria-label="Copy email">
+          <button class="dock-btn" type="button" data-copy="aghildiy@asu.edu" aria-label="Copy email">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M9 9h10v10H9z"></path>
               <path d="M5 5h10v10H5z"></path>
@@ -146,18 +115,15 @@
         <div class="scroll mono" aria-hidden="true">Scroll ↓</div>
       </section>
 
-      <!-- ABOUT -->
+      <!-- ABOUT (unchanged from your creative rewrite) -->
       <section id="about" class="screen" aria-label="About">
         <div class="panel glass prism">
           <header class="panel-head">
             <h2 class="panel-title">About</h2>
-            <p class="panel-sub">
-              Data Science · Machine Learning · Analytics — built with a product mindset
-            </p>
+            <p class="panel-sub">Data Science · Machine Learning · Analytics — built with a product mindset</p>
           </header>
 
           <div class="stack">
-            <!-- Snapshot -->
             <article class="card glass no-prism">
               <div class="card-head">
                 <h3 class="card-title">Snapshot</h3>
@@ -165,9 +131,8 @@
               </div>
 
               <p class="copy">
-                I like taking messy, real-world data and turning it into something
-                <b>usable</b>: a reliable pipeline, a model you can reason about,
-                and a dashboard that answers questions without drama.
+                I take messy, real-world data and turn it into something <b>usable</b>:
+                reliable pipelines, models you can reason about, and dashboards that answer questions quickly.
               </p>
 
               <div class="principles">
@@ -186,7 +151,6 @@
               </div>
             </article>
 
-            <!-- Education -->
             <article class="card glass no-prism">
               <div class="card-head">
                 <h3 class="card-title">Education</h3>
@@ -220,7 +184,6 @@
               </div>
             </article>
 
-            <!-- Experience -->
             <article class="card glass no-prism">
               <div class="card-head">
                 <h3 class="card-title">Experience</h3>
@@ -234,8 +197,8 @@
                     <span class="role-meta mono">Jul 2022 — Aug 2024</span>
                   </summary>
                   <ul class="role-body">
-                    <li>Built and shipped 5+ Power BI dashboards to automate reporting and surface key KPIs.</li>
-                    <li>Translated complex patterns into clear, actionable strategies for leadership decisions.</li>
+                    <li>Designed & shipped 5+ Power BI dashboards to automate reporting and surface key KPIs.</li>
+                    <li>Turned complex patterns into clear, actionable insights for leadership decisions.</li>
                   </ul>
                 </details>
 
@@ -245,8 +208,8 @@
                     <span class="role-meta mono">Jul 2021 — Sep 2021</span>
                   </summary>
                   <ul class="role-body">
-                    <li>Developed responsive UI components using HTML and CSS with clean structure.</li>
-                    <li>Improved cross-browser consistency for stable, high-performance front-end behavior.</li>
+                    <li>Built responsive UI components using HTML + CSS with clean structure.</li>
+                    <li>Improved cross-browser consistency for stable UI performance.</li>
                   </ul>
                 </details>
 
@@ -256,15 +219,15 @@
                     <span class="role-meta mono">Jan 2021 — Mar 2021</span>
                   </summary>
                   <ul class="role-body">
-                    <li>Assisted security testing in virtual environments; supported technical social content.</li>
-                    <li>Created guidelines that improved accountability and consistency in project processes.</li>
+                    <li>Assisted security testing in virtual environments; supported technical content work.</li>
+                    <li>Drafted guidelines that improved accountability and process consistency.</li>
                   </ul>
                 </details>
               </div>
             </article>
           </div>
 
-          <!-- Skills Lab -->
+          <!-- Skills Lab (same as before) -->
           <section class="skills glass no-prism" aria-label="Skills">
             <div class="skills-head">
               <div>
@@ -308,9 +271,7 @@
                   <div id="skillName" class="inspector-name">Hover a skill</div>
                   <div id="skillPill" class="inspector-pill mono">—</div>
                 </div>
-                <div id="skillDesc" class="inspector-desc">
-                  Move your cursor over a bubble to see a quick note.
-                </div>
+                <div id="skillDesc" class="inspector-desc">Move your cursor over a bubble to see a quick note.</div>
 
                 <div class="inspector-foot">
                   <div class="mono micro muted">Visible skills</div>
@@ -330,21 +291,19 @@
         </div>
       </section>
 
-      <!-- PROJECTS -->
+      <!-- PROJECTS (1 visible card at a time) -->
       <section id="projects" class="screen screen-tight" aria-label="Projects">
         <div class="panel glass prism">
           <header class="panel-head">
             <h2 class="panel-title">Projects</h2>
-            <p class="panel-sub">
-              A small “deck” you can scroll — <b>2 cards visible</b> on desktop • auto‑spotlight every 4s
-            </p>
+            <p class="panel-sub">One card at a time · click to preview · double‑click opens</p>
           </header>
 
-          <div class="projects-lab">
+          <div class="projects-lab one-card">
             <!-- Deck -->
             <div class="deck">
               <div class="deck-head">
-                <div class="mono micro muted">Tip: click to preview • double‑click to open</div>
+                <div class="mono micro muted">Auto‑spotlight every 4s (pauses on hover)</div>
                 <div class="deck-controls">
                   <button class="navbtn" type="button" id="projPrev" aria-label="Previous">←</button>
                   <button class="navbtn" type="button" id="projNext" aria-label="Next">→</button>
@@ -352,13 +311,7 @@
               </div>
 
               <div id="projTrack" class="track" role="list" aria-label="Project cards">
-                <button
-                  class="pcard"
-                  type="button"
-                  role="listitem"
-                  data-key="genai"
-                  data-accent="59 130 246"
-                >
+                <button class="pcard" type="button" role="listitem" data-key="genai" data-accent="59 130 246">
                   <div class="thumb t-genai" aria-hidden="true">
                     <div class="glyph">
                       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -371,13 +324,7 @@
                   <div class="pmeta mono">GenAI · Optimization</div>
                 </button>
 
-                <button
-                  class="pcard"
-                  type="button"
-                  role="listitem"
-                  data-key="pollution"
-                  data-accent="16 185 129"
-                >
+                <button class="pcard" type="button" role="listitem" data-key="pollution" data-accent="16 185 129">
                   <div class="thumb t-pollution" aria-hidden="true">
                     <div class="glyph">
                       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -390,13 +337,7 @@
                   <div class="pmeta mono">Research · PM2.5</div>
                 </button>
 
-                <button
-                  class="pcard"
-                  type="button"
-                  role="listitem"
-                  data-key="pipeline"
-                  data-accent="234 179 8"
-                >
+                <button class="pcard" type="button" role="listitem" data-key="pipeline" data-accent="234 179 8">
                   <div class="thumb t-pipeline" aria-hidden="true">
                     <div class="glyph">
                       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -413,13 +354,7 @@
                   <div class="pmeta mono">Analytics · ETL</div>
                 </button>
 
-                <button
-                  class="pcard"
-                  type="button"
-                  role="listitem"
-                  data-key="slackbot"
-                  data-accent="236 72 153"
-                >
+                <button class="pcard" type="button" role="listitem" data-key="slackbot" data-accent="236 72 153">
                   <div class="thumb t-slack" aria-hidden="true">
                     <div class="glyph">
                       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -453,8 +388,6 @@
 
               <p class="preview-desc" id="projDesc"></p>
               <ul class="preview-bullets" id="projBullets"></ul>
-
-              <div class="preview-hint mono micro muted">Auto‑spotlight pauses on hover.</div>
             </aside>
           </div>
 

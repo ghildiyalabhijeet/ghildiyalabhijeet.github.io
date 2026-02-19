@@ -1,7 +1,6 @@
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
-
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // Years
@@ -9,34 +8,13 @@
   $("#yearA") && ($("#yearA").textContent = year);
   $("#yearB") && ($("#yearB").textContent = year);
 
-  // Cursor spotlight (throttled)
-  if (!prefersReduced) {
-    let raf = null;
-    window.addEventListener(
-      "pointermove",
-      (e) => {
-        if (raf) return;
-        raf = requestAnimationFrame(() => {
-          document.documentElement.style.setProperty("--spot-x", `${e.clientX}px`);
-          document.documentElement.style.setProperty("--spot-y", `${e.clientY}px`);
-          raf = null;
-        });
-      },
-      { passive: true }
-    );
-  }
-
   // Toast + clipboard
   const toast = $("#toast");
   const showToast = (msg) => {
     if (!toast) return;
     toast.textContent = msg;
-    toast.style.opacity = "1";
     clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => {
-      toast.textContent = "";
-      toast.style.opacity = "0.9";
-    }, 1200);
+    showToast._t = setTimeout(() => (toast.textContent = ""), 1100);
   };
 
   const copyText = async (txt) => {
@@ -45,7 +23,6 @@
       await navigator.clipboard.writeText(txt);
       showToast("Copied ✅");
     } catch {
-      // fallback
       const input = document.createElement("input");
       input.value = txt;
       document.body.appendChild(input);
@@ -56,9 +33,7 @@
     }
   };
 
-  $$("[data-copy]").forEach((el) => {
-    el.addEventListener("click", () => copyText(el.dataset.copy || ""));
-  });
+  $$("[data-copy]").forEach((el) => el.addEventListener("click", () => copyText(el.dataset.copy || "")));
 
   // Scroll spy (nav active state)
   const links = $$(".nav-link");
@@ -86,7 +61,118 @@
     setActive(sections[0].id);
   }
 
-  // ===== Skills Lab =====
+  // =========================
+  // Background "render" (glass orb) — smooth + lightweight
+  // =========================
+  const canvas = $("#bgRender");
+  if (canvas && !prefersReduced) {
+    const ctx = canvas.getContext("2d", { alpha: true });
+    let w = 0;
+    let h = 0;
+    let dpr = 1;
+
+    const resize = () => {
+      dpr = Math.min(2, window.devicePixelRatio || 1);
+      w = window.innerWidth;
+      h = window.innerHeight;
+
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    resize();
+    window.addEventListener("resize", resize, { passive: true });
+
+    let last = 0;
+    const loop = (t) => {
+      // cap ~30fps to stay smooth on GitHub Pages
+      if (t - last < 33) {
+        requestAnimationFrame(loop);
+        return;
+      }
+      last = t;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const tt = t * 0.001;
+
+      // Orb path (slow roam)
+      const cx = w * (0.52 + 0.30 * Math.sin(tt * 0.23));
+      const cy = h * (0.44 + 0.22 * Math.sin(tt * 0.19 + 1.7));
+
+      const r = Math.max(70, Math.min(w, h) * 0.11);
+
+      // Soft outer glow
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      const glow = ctx.createRadialGradient(cx, cy, r * 0.35, cx, cy, r * 2.2);
+      glow.addColorStop(0, "rgba(90, 200, 255, 0.16)");
+      glow.addColorStop(0.35, "rgba(170, 120, 255, 0.10)");
+      glow.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.fillStyle = glow;
+      ctx.fillRect(cx - r * 2.2, cy - r * 2.2, r * 4.4, r * 4.4);
+      ctx.restore();
+
+      // Main glass body
+      const hx = cx - r * 0.30 + Math.sin(tt * 1.1) * r * 0.08;
+      const hy = cy - r * 0.38 + Math.cos(tt * 0.9) * r * 0.06;
+
+      ctx.save();
+      const body = ctx.createRadialGradient(hx, hy, r * 0.10, cx, cy, r);
+      body.addColorStop(0, "rgba(255,255,255,0.70)");
+      body.addColorStop(0.28, "rgba(255,255,255,0.22)");
+      body.addColorStop(0.65, "rgba(190, 220, 255, 0.12)");
+      body.addColorStop(1, "rgba(255,255,255,0.04)");
+
+      ctx.fillStyle = body;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Prismatic neon rim
+      ctx.save();
+      ctx.lineWidth = 2.2;
+      const rim = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+      rim.addColorStop(0, "rgba(255, 85, 205, 0.62)");
+      rim.addColorStop(0.35, "rgba(255, 210, 120, 0.50)");
+      rim.addColorStop(0.65, "rgba(80, 220, 255, 0.62)");
+      rim.addColorStop(1, "rgba(170, 120, 255, 0.62)");
+
+      ctx.strokeStyle = rim;
+      ctx.shadowColor = "rgba(90, 200, 255, 0.22)";
+      ctx.shadowBlur = 18;
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r - 1, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+
+      // Specular highlight sweep
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      const hl = ctx.createRadialGradient(hx, hy, 0, hx, hy, r * 0.9);
+      hl.addColorStop(0, "rgba(255,255,255,0.18)");
+      hl.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.fillStyle = hl;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      requestAnimationFrame(loop);
+    };
+
+    requestAnimationFrame(loop);
+  }
+
+  // =========================
+  // Skills Lab (same behavior)
+  // =========================
   const bubbles = $$(".bubble");
   const filters = $$(".filter");
 
@@ -99,14 +185,9 @@
 
   const updateInspector = (b) => {
     if (!b) return;
-    const name = b.textContent.trim();
-    const group = b.dataset.group || "all";
-    const desc = b.dataset.desc || "—";
-
-    skillName && (skillName.textContent = name);
-    skillPill && (skillPill.textContent = LABEL[group] || "All");
-    skillDesc && (skillDesc.textContent = desc);
-
+    skillName && (skillName.textContent = b.textContent.trim());
+    skillPill && (skillPill.textContent = LABEL[b.dataset.group] || "All");
+    skillDesc && (skillDesc.textContent = b.dataset.desc || "—");
     bubbles.forEach((x) => x.classList.toggle("is-selected", x === b));
   };
 
@@ -132,43 +213,44 @@
     b.addEventListener("mouseenter", () => updateInspector(b));
     b.addEventListener("click", () => updateInspector(b));
   });
-
   applyFilter("all");
 
-  // ===== Projects =====
+  // =========================
+  // Projects (1 visible card, auto spotlight)
+  // =========================
   const PROJECTS = {
     genai: {
       title: "Faster Diffusion",
       meta: "GenAI · Diffusion · Optimization · Python",
       desc:
-        "Optimization experiments focused on speeding up diffusion pipelines while keeping output quality sharp. Built for iteration speed: measure → tune → ship.",
+        "Optimization experiments focused on speeding up diffusion pipelines while keeping output quality sharp.",
       bullets: [
         "Applied throughput-focused optimizations to improve generation efficiency.",
-        "Tuned model architecture/pipeline knobs for better speed-quality trade-offs.",
-        "Collaborated in a small team to keep changes measurable and reproducible.",
+        "Tuned pipeline/architecture knobs for better speed-quality trade-offs.",
+        "Kept changes measurable and reproducible.",
       ],
-      link: "https://github.com/ghildiyalabhijeet/GenAIProject",
+      link: "https://github.com/ghildiyalabhjeet/GenAIProject",
       accent: "59 130 246",
     },
     pollution: {
       title: "Particle Pollution (Research Paper)",
       meta: "ML · PM2.5 · Environmental analytics · PDF",
       desc:
-        "A research study exploring how machine learning can model atmospheric particle pollution using PM2.5 and emission patterns.",
+        "Research exploring how ML can model atmospheric particle pollution using PM2.5 and emission patterns.",
       bullets: [
-        "Analyzed PM2.5 + carbon emission patterns to model environmental impact.",
-        "Trained ML models on pollutant datasets and compared results.",
-        "Packaged findings into a formal research paper deliverable.",
+        "Analyzed PM2.5 + carbon emission patterns for environmental impact modeling.",
+        "Ran ML models on pollutant datasets and compared results.",
+        "Packaged findings into a research paper deliverable.",
       ],
       link:
-        "https://github.com/ghildiyalabhijeet/MachineLearning_Particle_Pollution/blob/main/Research_Paper_Particle_Pollution.pdf",
+        "https://github.com/ghildiyalabhjeet/MachineLearning_Particle_Pollution/blob/main/Research_Paper_Particle_Pollution.pdf",
       accent: "16 185 129",
     },
     pipeline: {
       title: "Digital Assets Analytics Pipeline",
       meta: "Analytics · ETL · Repo",
       desc:
-        "An analytics pipeline repo for digital asset data — structured for ingestion → transform → analysis, with documentation living in the README.",
+        "Pipeline repo structured for ingestion → transform → analysis, with documentation living in the README.",
       bullets: [
         "End-to-end pipeline structure for repeatable analytics workflows.",
         "Designed to keep transformations explicit and auditable.",
@@ -181,11 +263,11 @@
       title: "Slack Python Q&A Bot",
       meta: "Python · Slack API · Automation",
       desc:
-        "A Slack bot that reduces context switching by helping answer Python programming questions inside Slack — fast prompts, fast responses, fast troubleshooting.",
+        "Slack bot that reduces context switching by answering Python questions inside Slack for faster troubleshooting.",
       bullets: [
-        "Integrated Python with Slack API to create a streamlined Q&A interface.",
-        "Optimized for real-time interaction and quick developer help loops.",
-        "Designed to accelerate troubleshooting and reduce friction.",
+        "Integrated Python with Slack API for streamlined Q&A.",
+        "Optimized for real-time interaction and quick feedback loops.",
+        "Designed to reduce friction and accelerate troubleshooting.",
       ],
       link: "https://github.com/AII-projects/slackbot",
       accent: "236 72 153",
@@ -248,7 +330,6 @@
     if (openEl) openEl.href = p.link;
     if (copyBtn) copyBtn.dataset.copy = p.link;
 
-    // accent aura
     const a = accent || p.accent || "59 130 246";
     preview && preview.style.setProperty("--accent", a);
   };
@@ -264,9 +345,7 @@
     });
 
     const card = cards[activeIndex];
-    const key = card.dataset.key;
-    const accent = card.dataset.accent || "59 130 246";
-    setPreview(key, accent);
+    setPreview(card.dataset.key, card.dataset.accent);
     setDots();
 
     if (scroll && track) {
@@ -278,10 +357,9 @@
     }
   };
 
-  const goTo = (idx, user = false) => {
-    if (user) stopAuto();
-    selectCard(idx, { scroll: true, smooth: true });
-    if (user) startAuto();
+  const stopAuto = () => {
+    if (auto) clearInterval(auto);
+    auto = null;
   };
 
   const startAuto = () => {
@@ -292,15 +370,16 @@
     }, 4000);
   };
 
-  const stopAuto = () => {
-    if (auto) clearInterval(auto);
-    auto = null;
+  const goTo = (idx, user = false) => {
+    if (user) stopAuto();
+    selectCard(idx, { scroll: true, smooth: true });
+    if (user) startAuto();
   };
 
-  // Wire up deck events
   if (cards.length) {
     buildDots();
     selectCard(0, { scroll: false, smooth: false });
+    startAuto();
 
     cards.forEach((c, i) => {
       c.addEventListener("click", () => goTo(i, true));
@@ -313,19 +392,18 @@
     prevBtn && prevBtn.addEventListener("click", () => goTo(activeIndex - 1, true));
     nextBtn && nextBtn.addEventListener("click", () => goTo(activeIndex + 1, true));
 
-    // Pause auto while interacting
+    // Pause auto when hovering deck/preview
     track && track.addEventListener("pointerenter", stopAuto);
     track && track.addEventListener("pointerleave", startAuto);
     preview && preview.addEventListener("pointerenter", stopAuto);
     preview && preview.addEventListener("pointerleave", startAuto);
 
-    // When user scrolls manually, snap selection to nearest card
+    // On manual scroll, snap selection to nearest card (still 1-card)
     if (track) {
       let t = 0;
       track.addEventListener(
         "scroll",
         () => {
-          if (!cards.length) return;
           clearTimeout(t);
           t = window.setTimeout(() => {
             const left = track.scrollLeft;
@@ -344,11 +422,8 @@
         { passive: true }
       );
     }
-
-    startAuto();
   }
 
-  // Copy project link
   copyBtn &&
     copyBtn.addEventListener("click", () => {
       const url = copyBtn.dataset.copy || (openEl ? openEl.href : "");
