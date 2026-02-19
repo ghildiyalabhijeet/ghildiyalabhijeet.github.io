@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Abhijeet Ghildiyal | Data Science</title>
+    <title>Abhijeet Ghildiyal · Data Science</title>
     <meta
       name="description"
-      content="Abhijeet Ghildiyal — M.S. Data Science candidate at ASU. Machine learning, GenAI, analytics, and data products."
+      content="Abhijeet Ghildiyal — M.S. Data Science @ ASU. I build data products: pipelines, ML/GenAI systems, and dashboards."
     />
 
-    <!-- Tailwind CDN (no build step) -->
+    <!-- Tech stack stays the same: HTML + CSS + JS + Tailwind CDN (no build step) -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Fonts -->
@@ -20,45 +20,84 @@
       rel="stylesheet"
     />
 
-    <link rel="icon" href="assets/img/favicon.svg" />
-    <link rel="stylesheet" href="assets/css/main.css?v=15" />
+    <link rel="stylesheet" href="assets/css/main.css?v=21" />
   </head>
 
-  <body class="min-h-screen">
-    <!-- Ambient background layers -->
-    <div class="bg-animated" aria-hidden="true"></div>
+  <body>
+    <!-- Background -->
+    <div class="bg" aria-hidden="true"></div>
     <div class="bg-noise" aria-hidden="true"></div>
 
-    <!-- Top nav -->
-    <header class="nav-shell" role="banner">
-      <nav class="nav-glass glass" aria-label="Primary">
-        <a class="nav-item" href="#work">Work</a>
-        <a class="nav-item" href="#about">About</a>
-        <a class="nav-item" href="#projects">Projects</a>
+    <!-- Nav -->
+    <header class="topbar" role="banner">
+      <nav class="nav glass" aria-label="Primary navigation">
+        <a class="nav-link" href="#work">Work</a>
+        <a class="nav-link" href="#about">About</a>
+        <a class="nav-link" href="#projects">Projects</a>
+
+        <div class="nav-spacer" aria-hidden="true"></div>
+
+        <button class="nav-chip mono" type="button" id="copyEmailTop" data-copy="aghildiy@asu.edu">
+          Copy email
+        </button>
       </nav>
     </header>
 
     <main>
-      <!-- WORK -->
+      <!-- WORK / HERO -->
       <section id="work" class="screen" aria-label="Work">
-        <div class="hero-card glass">
-          <h1 class="hero-name">Abhijeet Ghildiyal</h1>
-          <p class="hero-tagline">Building data products &amp; GenAI systems.</p>
+        <div class="hero glass prism">
+          <div class="hero-top">
+            <div class="hero-badge mono">
+              M.S. Data Science @ ASU · Tempe, AZ
+              <span class="dot" aria-hidden="true">•</span>
+              Part‑time now · Full‑time May 2026
+            </div>
 
-          <div class="hero-meta mono">
-            <span>M.S. Data Science @ ASU</span>
-            <span class="dot">•</span>
-            <span>Python · SQL · ML</span>
+            <h1 class="hero-title">Abhijeet Ghildiyal</h1>
+
+            <p class="hero-lead">
+              I build <span class="em">data products</span> that feel like software —
+              clean pipelines, ML/GenAI systems, and dashboards teams actually use.
+            </p>
+
+            <div class="hero-stack mono">
+              <span class="pill">Python</span>
+              <span class="pill">SQL</span>
+              <span class="pill">PyTorch</span>
+              <span class="pill">TensorFlow</span>
+              <span class="pill">Power BI</span>
+              <span class="pill">Git</span>
+            </div>
+
+            <div class="hero-cta">
+              <a class="btn btn-primary" href="#projects">Explore projects</a>
+              <a class="btn btn-ghost" href="#about">About & skills</a>
+            </div>
           </div>
 
-          <div class="hero-cta">
-            <a class="primary-btn" href="#projects">Open Projects Drawer</a>
-            <a class="secondary-btn" href="#about">About me</a>
+          <!-- Creative “product” feel: mini highlight tiles -->
+          <div class="hero-grid" role="list" aria-label="Highlights">
+            <div class="mini glass no-prism" role="listitem">
+              <div class="mini-title">Shipping mindset</div>
+              <div class="mini-text">Dashboards, automation, and ML experiments — with clean UI polish.</div>
+            </div>
+
+            <div class="mini glass no-prism" role="listitem">
+              <div class="mini-title">Impact</div>
+              <div class="mini-text">Designed & deployed <b>5+</b> Power BI dashboards to clarify key metrics.</div>
+            </div>
+
+            <div class="mini glass no-prism" role="listitem">
+              <div class="mini-title">Focus</div>
+              <div class="mini-text">Reproducible pipelines, interpretable models, decision-ready outputs.</div>
+            </div>
           </div>
         </div>
 
-        <div class="contact-bar glass" role="navigation" aria-label="Contact links">
-          <a class="contact-icon" href="mailto:aghildiy@asu.edu" aria-label="Email" title="Email">
+        <!-- Contact dock -->
+        <div class="dock glass prism" role="navigation" aria-label="Contact links">
+          <a class="dock-btn" href="mailto:aghildiy@asu.edu" aria-label="Email">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M4 6h16v12H4z"></path>
               <path d="M4 7l8 6 8-6"></path>
@@ -66,12 +105,11 @@
           </a>
 
           <a
-            class="contact-icon"
+            class="dock-btn"
             href="https://www.linkedin.com/in/abhijeet928"
             target="_blank"
             rel="noopener"
             aria-label="LinkedIn"
-            title="LinkedIn"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M6.5 9.5v9"></path>
@@ -82,12 +120,11 @@
           </a>
 
           <a
-            class="contact-icon"
-            href="https://github.com/ghildiyalabhjeet"
+            class="dock-btn"
+            href="https://github.com/ghildiyalabhijeet"
             target="_blank"
             rel="noopener"
             aria-label="GitHub"
-            title="GitHub"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M9 19c-4 1.2-4-2-5-2"></path>
@@ -96,133 +133,143 @@
               ></path>
             </svg>
           </a>
+
+          <button class="dock-btn" type="button" id="copyEmailDock" data-copy="aghildiy@asu.edu" aria-label="Copy email">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 9h10v10H9z"></path>
+              <path d="M5 5h10v10H5z"></path>
+            </svg>
+          </button>
         </div>
 
-        <div class="scroll-hint mono" aria-hidden="true">Scroll ↓</div>
+        <div class="toast mono" id="toast" aria-live="polite" aria-atomic="true"></div>
+        <div class="scroll mono" aria-hidden="true">Scroll ↓</div>
       </section>
 
       <!-- ABOUT -->
       <section id="about" class="screen" aria-label="About">
-        <div class="panel glass panel-strong about-panel">
-          <div class="panel-head">
+        <div class="panel glass prism">
+          <header class="panel-head">
             <h2 class="panel-title">About</h2>
-            <p class="panel-sub">Data Science · Machine Learning · Analytics</p>
-          </div>
+            <p class="panel-sub">
+              Data Science · Machine Learning · Analytics — built with a product mindset
+            </p>
+          </header>
 
-          <div class="about-layout">
-            <!-- Summary -->
-            <div class="card glass card-strong lift">
+          <div class="stack">
+            <!-- Snapshot -->
+            <article class="card glass no-prism">
               <div class="card-head">
-                <h3 class="card-title">Summary</h3>
-                <div class="mono micro">Tempe, AZ · ASU</div>
+                <h3 class="card-title">Snapshot</h3>
+                <div class="mono micro muted">How I work</div>
               </div>
 
-              <p class="readable">
-                Master of Science in Data Science candidate with a strong Computer Science foundation and proficiency in
-                Python, SQL, and machine learning. Experienced across the full data lifecycle — from preprocessing and
-                modeling to interactive dashboards.
+              <p class="copy">
+                I like taking messy, real-world data and turning it into something
+                <b>usable</b>: a reliable pipeline, a model you can reason about,
+                and a dashboard that answers questions without drama.
               </p>
 
-              <div class="chips-row mono">
-                <span class="chip">Part‑time: available now</span>
-                <span class="chip">Full‑time: May 2026</span>
+              <div class="principles">
+                <div class="principle">
+                  <div class="k">Clarity</div>
+                  <div class="v">Simple metrics, explicit assumptions, readable outputs.</div>
+                </div>
+                <div class="principle">
+                  <div class="k">Speed</div>
+                  <div class="v">Fast iteration loops with clean, testable structure.</div>
+                </div>
+                <div class="principle">
+                  <div class="k">Trust</div>
+                  <div class="v">Reproducible workflows + “show your work” dashboards.</div>
+                </div>
               </div>
-
-              <div class="quick-actions">
-                <button class="mini-action" type="button" data-copy="aghildiy@asu.edu">Copy email</button>
-              </div>
-
-              <div class="toast mono" id="toast" aria-live="polite" aria-atomic="true"></div>
-            </div>
+            </article>
 
             <!-- Education -->
-            <div class="card glass card-strong lift">
+            <article class="card glass no-prism">
               <div class="card-head">
                 <h3 class="card-title">Education</h3>
-                <div class="mono micro">CGPA highlights</div>
+                <div class="mono micro muted">CGPA highlights</div>
               </div>
 
-              <div class="edu-grid">
-                <div class="edu-card">
-                  <div class="edu-top">
-                    <div>
-                      <div class="edu-degree">M.S. Data Science</div>
-                      <div class="mono micro muted">Arizona State University · Tempe, AZ</div>
+              <div class="edu">
+                <div class="edu-row">
+                  <div class="edu-main">
+                    <div class="edu-degree">M.S. Data Science</div>
+                    <div class="mono micro muted">Arizona State University · Tempe, AZ</div>
+                    <div class="mono micro muted">Graduating May 2026</div>
+                    <div class="mono micro muted mt-6">
+                      Coursework: Statistical ML · Generative AI · Data Mining · Optimization
                     </div>
-                    <span class="badge mono">CGPA 3.67</span>
                   </div>
-                  <div class="mono micro muted">Graduating May 2026</div>
-                  <div class="mono micro muted mt-6">
-                    Coursework: Statistical ML · Generative AI · Data Mining · Optimization
-                  </div>
+                  <div class="edu-badge mono">CGPA 3.67</div>
                 </div>
 
-                <div class="edu-card">
-                  <div class="edu-top">
-                    <div>
-                      <div class="edu-degree">B.Tech Computer Science &amp; Engineering</div>
-                      <div class="mono micro muted">DIT University · Uttarakhand, India</div>
+                <div class="edu-row">
+                  <div class="edu-main">
+                    <div class="edu-degree">B.Tech Computer Science &amp; Engineering</div>
+                    <div class="mono micro muted">DIT University · Uttarakhand, India</div>
+                    <div class="mono micro muted">Aug 2018 — Jun 2022</div>
+                    <div class="mono micro muted mt-6">
+                      Coursework: Data Structures · System Design · RDBMS · AI
                     </div>
-                    <span class="badge mono">CGPA 3.33</span>
                   </div>
-                  <div class="mono micro muted">Aug 2018 — Jun 2022</div>
-                  <div class="mono micro muted mt-6">
-                    Coursework: Data Structures · System Design · RDBMS · AI
-                  </div>
+                  <div class="edu-badge mono">CGPA 3.33</div>
                 </div>
               </div>
-            </div>
+            </article>
 
             <!-- Experience -->
-            <div class="card glass card-strong lift">
+            <article class="card glass no-prism">
               <div class="card-head">
                 <h3 class="card-title">Experience</h3>
-                <div class="mono micro">Tap to expand</div>
+                <div class="mono micro muted">Tap to expand</div>
               </div>
 
-              <div class="accordion">
-                <details class="acc-item" open>
+              <div class="timeline">
+                <details class="role" open>
                   <summary>
-                    <span class="acc-title">Data Analyst Intern · BTP ECO Products</span>
-                    <span class="acc-meta mono">Jul 2022 — Aug 2024</span>
+                    <span class="role-title">Data Analyst Intern · BTP ECO Products</span>
+                    <span class="role-meta mono">Jul 2022 — Aug 2024</span>
                   </summary>
-                  <ul class="acc-body">
-                    <li>Designed and deployed 5+ Power BI dashboards to automate reporting and clarify key metrics.</li>
-                    <li>Translated complex patterns into actionable strategies supporting leadership decisions.</li>
+                  <ul class="role-body">
+                    <li>Built and shipped 5+ Power BI dashboards to automate reporting and surface key KPIs.</li>
+                    <li>Translated complex patterns into clear, actionable strategies for leadership decisions.</li>
                   </ul>
                 </details>
 
-                <details class="acc-item">
+                <details class="role">
                   <summary>
-                    <span class="acc-title">SDE Intern · BTP ECO Products</span>
-                    <span class="acc-meta mono">Jul 2021 — Sep 2021</span>
+                    <span class="role-title">SDE Intern · BTP ECO Products</span>
+                    <span class="role-meta mono">Jul 2021 — Sep 2021</span>
                   </summary>
-                  <ul class="acc-body">
-                    <li>Built responsive, user-friendly interfaces using HTML and CSS.</li>
-                    <li>Improved cross-browser compatibility for consistent UI performance.</li>
+                  <ul class="role-body">
+                    <li>Developed responsive UI components using HTML and CSS with clean structure.</li>
+                    <li>Improved cross-browser consistency for stable, high-performance front-end behavior.</li>
                   </ul>
                 </details>
 
-                <details class="acc-item">
+                <details class="role">
                   <summary>
-                    <span class="acc-title">Cyber Security Intern · Virtually Testing Foundation</span>
-                    <span class="acc-meta mono">Jan 2021 — Mar 2021</span>
+                    <span class="role-title">Cyber Security Intern · Virtually Testing Foundation</span>
+                    <span class="role-meta mono">Jan 2021 — Mar 2021</span>
                   </summary>
-                  <ul class="acc-body">
-                    <li>Assisted with security testing in virtual environments; managed technical social content.</li>
-                    <li>Drafted guidelines that improved accountability and consistency in project processes.</li>
+                  <ul class="role-body">
+                    <li>Assisted security testing in virtual environments; supported technical social content.</li>
+                    <li>Created guidelines that improved accountability and consistency in project processes.</li>
                   </ul>
                 </details>
               </div>
-            </div>
+            </article>
           </div>
 
-          <!-- Skills Studio -->
-          <div class="skills-studio glass card-strong" id="skillsStudio">
+          <!-- Skills Lab -->
+          <section class="skills glass no-prism" aria-label="Skills">
             <div class="skills-head">
               <div>
-                <h3 class="card-title">Skills</h3>
-                <div class="mono micro muted">Filter + hover a bubble</div>
+                <h3 class="card-title">Skills Lab</h3>
+                <div class="mono micro muted">Filter • hover a bubble • click to pin</div>
               </div>
 
               <div class="filters" role="tablist" aria-label="Skill categories">
@@ -234,170 +281,194 @@
               </div>
             </div>
 
-            <div class="skills-body">
-              <div id="skillsCloud" class="skills-cloud" aria-label="Skills cloud">
-                <button class="skill-bubble" type="button" data-group="lang" data-size="lg" data-desc="Primary language for ML, analytics, and automation.">Python</button>
-                <button class="skill-bubble" type="button" data-group="lang" data-size="md" data-desc="Querying, joins, analytics, and reporting.">SQL</button>
-                <button class="skill-bubble" type="button" data-group="lang" data-size="sm" data-desc="Frontend markup for clean layouts.">HTML5</button>
-                <button class="skill-bubble" type="button" data-group="lang" data-size="sm" data-desc="Styling, responsive UI, component layouts.">CSS3</button>
+            <div class="skills-grid">
+              <div id="skillsCloud" class="cloud" aria-label="Skills cloud">
+                <button class="bubble" type="button" data-group="lang" data-size="lg" data-desc="Primary language for ML, analytics, automation.">Python</button>
+                <button class="bubble" type="button" data-group="lang" data-size="md" data-desc="Querying, joins, analytics, reporting.">SQL</button>
+                <button class="bubble" type="button" data-group="lang" data-size="sm" data-desc="Semantic structure for UI components.">HTML5</button>
+                <button class="bubble" type="button" data-group="lang" data-size="sm" data-desc="Responsive styling and layout systems.">CSS3</button>
 
-                <button class="skill-bubble" type="button" data-group="data" data-size="md" data-desc="Dataframes, feature engineering, and ETL.">Pandas</button>
-                <button class="skill-bubble" type="button" data-group="data" data-size="md" data-desc="Numerical computing foundations.">NumPy</button>
-                <button class="skill-bubble" type="button" data-group="data" data-size="sm" data-desc="Charts and exploratory plotting.">Matplotlib</button>
-                <button class="skill-bubble" type="button" data-group="data" data-size="sm" data-desc="Statistical visualization and quick EDA.">Seaborn</button>
+                <button class="bubble" type="button" data-group="data" data-size="md" data-desc="Dataframes, wrangling, feature engineering.">Pandas</button>
+                <button class="bubble" type="button" data-group="data" data-size="md" data-desc="Numerical computing fundamentals.">NumPy</button>
+                <button class="bubble" type="button" data-group="data" data-size="sm" data-desc="Plotting + exploratory visuals.">Matplotlib</button>
+                <button class="bubble" type="button" data-group="data" data-size="sm" data-desc="Fast statistical visualization.">Seaborn</button>
 
-                <button class="skill-bubble" type="button" data-group="ml" data-size="md" data-desc="Classic ML models and pipelines.">scikit‑learn</button>
-                <button class="skill-bubble" type="button" data-group="ml" data-size="lg" data-desc="Deep learning + custom training loops.">PyTorch</button>
-                <button class="skill-bubble" type="button" data-group="ml" data-size="lg" data-desc="Model training and deployment pipelines.">TensorFlow</button>
-                <button class="skill-bubble" type="button" data-group="ml" data-size="md" data-desc="Transformers, tokenizers, and model hub.">Hugging Face</button>
+                <button class="bubble" type="button" data-group="ml" data-size="md" data-desc="Classic ML models + pipelines.">scikit‑learn</button>
+                <button class="bubble" type="button" data-group="ml" data-size="lg" data-desc="Deep learning training + experimentation.">PyTorch</button>
+                <button class="bubble" type="button" data-group="ml" data-size="lg" data-desc="Model training and deployment pipelines.">TensorFlow</button>
+                <button class="bubble" type="button" data-group="ml" data-size="md" data-desc="Transformers ecosystem + model hub.">Hugging Face</button>
 
-                <button class="skill-bubble" type="button" data-group="tools" data-size="md" data-desc="Dashboards, DAX, KPI reporting.">Power BI</button>
-                <button class="skill-bubble" type="button" data-group="tools" data-size="sm" data-desc="Version control and collaboration.">Git</button>
-                <button class="skill-bubble" type="button" data-group="tools" data-size="sm" data-desc="Integrations, bots, and automation.">Slack API</button>
+                <button class="bubble" type="button" data-group="tools" data-size="md" data-desc="Dashboards, DAX, KPI reporting.">Power BI</button>
+                <button class="bubble" type="button" data-group="tools" data-size="sm" data-desc="Version control and collaboration.">Git</button>
+                <button class="bubble" type="button" data-group="tools" data-size="sm" data-desc="Bots + integrations for workflows.">Slack API</button>
               </div>
 
-              <div class="skills-side">
-                <div class="skill-inspector glass" aria-live="polite">
-                  <div class="inspector-top">
-                    <div id="skillName" class="inspector-name">Hover a skill</div>
-                    <div id="skillGroup" class="inspector-pill mono">—</div>
-                  </div>
-                  <div id="skillText" class="skill-text">Move your cursor over a bubble to see a quick note.</div>
+              <aside class="inspector glass no-prism" aria-live="polite">
+                <div class="inspector-top">
+                  <div id="skillName" class="inspector-name">Hover a skill</div>
+                  <div id="skillPill" class="inspector-pill mono">—</div>
+                </div>
+                <div id="skillDesc" class="inspector-desc">
+                  Move your cursor over a bubble to see a quick note.
                 </div>
 
-                <div class="skills-stats glass">
+                <div class="inspector-foot">
                   <div class="mono micro muted">Visible skills</div>
-                  <div id="skillsCount" class="skills-count">—</div>
+                  <div id="skillsCount" class="count">—</div>
                 </div>
-              </div>
+              </aside>
             </div>
-          </div>
+          </section>
 
-          <div class="panel-foot">
-            <div class="mono small-muted">© <span id="year"></span> Abhijeet Ghildiyal</div>
-            <div class="mini-actions">
-              <a class="mini-btn" href="#work">Work</a>
-              <a class="mini-btn" href="#projects">Projects</a>
+          <footer class="panel-foot">
+            <div class="mono micro muted">© <span id="yearA"></span> Abhijeet Ghildiyal</div>
+            <div class="foot-actions">
+              <a class="foot-link" href="#work">Work</a>
+              <a class="foot-link" href="#projects">Projects</a>
             </div>
-          </div>
+          </footer>
         </div>
       </section>
 
       <!-- PROJECTS -->
-      <section id="projects" class="screen screen-projects" aria-label="Projects">
-        <div class="panel glass panel-strong projects-panel">
-          <div class="panel-head">
+      <section id="projects" class="screen screen-tight" aria-label="Projects">
+        <div class="panel glass prism">
+          <header class="panel-head">
             <h2 class="panel-title">Projects</h2>
-            <p class="panel-sub">2-up tiles · fits screen · auto-switch every 4s</p>
-          </div>
+            <p class="panel-sub">
+              A small “deck” you can scroll — <b>2 cards visible</b> on desktop • auto‑spotlight every 4s
+            </p>
+          </header>
 
-          <!-- drawer itself has NO border (borderless container) -->
-          <div class="drawer" id="projectsDrawer">
-            <div class="drawer-top">
-              <div class="mono micro muted">Scroll sideways • Click to preview • Double‑click opens link</div>
-              <div class="drawer-controls">
-                <button class="nav-btn" type="button" id="projectsPrev" aria-label="Previous">←</button>
-                <button class="nav-btn" type="button" id="projectsNext" aria-label="Next">→</button>
-              </div>
-            </div>
-
-            <!-- New: tiles + preview side-by-side (desktop), stacked (mobile) -->
-            <div class="drawer-grid">
-              <div class="drawer-left">
-                <div id="projectsRow" class="projects-row" role="list" aria-label="Project tiles">
-                  <button class="proj-square" type="button" role="listitem" data-project="genai">
-                    <div class="sq-thumb thumb-genai">
-                      <div class="sq-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M12 2l1.2 3.8L17 7l-3.8 1.2L12 12l-1.2-3.8L7 7l3.8-1.2L12 2z" />
-                          <path d="M19 12l.9 2.9L23 16l-3.1 1.1L19 20l-.9-2.9L15 16l3.1-1.1L19 12z" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="sq-title">Faster Diffusion</div>
-                    <div class="sq-meta mono">GenAI · Optimization</div>
-                  </button>
-
-                  <button class="proj-square" type="button" role="listitem" data-project="pollution">
-                    <div class="sq-thumb thumb-pollution">
-                      <div class="sq-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <path d="M2 12h20"></path>
-                          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="sq-title">Particle Pollution</div>
-                    <div class="sq-meta mono">Research Paper · PM2.5</div>
-                  </button>
-
-                  <button class="proj-square" type="button" role="listitem" data-project="pipeline">
-                    <div class="sq-thumb thumb-pipeline">
-                      <div class="sq-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M4 6h16v4H4z"></path>
-                          <path d="M6 10v8"></path>
-                          <path d="M10 10v8"></path>
-                          <path d="M14 10v8"></path>
-                          <path d="M18 10v8"></path>
-                          <path d="M4 18h16"></path>
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="sq-title">Digital Assets Pipeline</div>
-                    <div class="sq-meta mono">Analytics · ETL</div>
-                  </button>
-
-                  <button class="proj-square" type="button" role="listitem" data-project="slackbot">
-                    <div class="sq-thumb thumb-slack">
-                      <div class="sq-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
-                          <path d="M8 9h8"></path>
-                          <path d="M8 13h5"></path>
-                        </svg>
-                      </div>
-                    </div>
-                    <div class="sq-title">Slack Python Q&amp;A Bot</div>
-                    <div class="sq-meta mono">Python · Slack API</div>
-                  </button>
+          <div class="projects-lab">
+            <!-- Deck -->
+            <div class="deck">
+              <div class="deck-head">
+                <div class="mono micro muted">Tip: click to preview • double‑click to open</div>
+                <div class="deck-controls">
+                  <button class="navbtn" type="button" id="projPrev" aria-label="Previous">←</button>
+                  <button class="navbtn" type="button" id="projNext" aria-label="Next">→</button>
                 </div>
               </div>
 
-              <div class="drawer-right">
-                <!-- softer edge (no big rainbow border) -->
-                <div class="project-detail glass no-rainbow" aria-live="polite">
-                  <div class="detail-top">
-                    <div>
-                      <div id="projTitle" class="detail-title">Select a project</div>
-                      <div id="projMeta" class="detail-meta mono">Auto-switching every 4 seconds</div>
-                    </div>
-
-                    <div class="detail-actions">
-                      <a id="projOpen" class="primary-btn" href="#" target="_blank" rel="noopener">Open</a>
-                      <button id="projCopy" class="secondary-btn" type="button">Copy link</button>
+              <div id="projTrack" class="track" role="list" aria-label="Project cards">
+                <button
+                  class="pcard"
+                  type="button"
+                  role="listitem"
+                  data-key="genai"
+                  data-accent="59 130 246"
+                >
+                  <div class="thumb t-genai" aria-hidden="true">
+                    <div class="glyph">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 2l1.2 3.8L17 7l-3.8 1.2L12 12l-1.2-3.8L7 7l3.8-1.2L12 2z" />
+                        <path d="M19 12l.9 2.9L23 16l-3.1 1.1L19 20l-.9-2.9L15 16l3.1-1.1L19 12z" />
+                      </svg>
                     </div>
                   </div>
+                  <div class="ptitle">Faster Diffusion</div>
+                  <div class="pmeta mono">GenAI · Optimization</div>
+                </button>
 
-                  <p id="projDesc" class="detail-desc">Click a card to preview details here.</p>
-                  <ul id="projBullets" class="detail-bullets"></ul>
+                <button
+                  class="pcard"
+                  type="button"
+                  role="listitem"
+                  data-key="pollution"
+                  data-accent="16 185 129"
+                >
+                  <div class="thumb t-pollution" aria-hidden="true">
+                    <div class="glyph">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M2 12h20"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="ptitle">Particle Pollution</div>
+                  <div class="pmeta mono">Research · PM2.5</div>
+                </button>
+
+                <button
+                  class="pcard"
+                  type="button"
+                  role="listitem"
+                  data-key="pipeline"
+                  data-accent="234 179 8"
+                >
+                  <div class="thumb t-pipeline" aria-hidden="true">
+                    <div class="glyph">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 6h16v4H4z"></path>
+                        <path d="M6 10v8"></path>
+                        <path d="M10 10v8"></path>
+                        <path d="M14 10v8"></path>
+                        <path d="M18 10v8"></path>
+                        <path d="M4 18h16"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="ptitle">Digital Assets Pipeline</div>
+                  <div class="pmeta mono">Analytics · ETL</div>
+                </button>
+
+                <button
+                  class="pcard"
+                  type="button"
+                  role="listitem"
+                  data-key="slackbot"
+                  data-accent="236 72 153"
+                >
+                  <div class="thumb t-slack" aria-hidden="true">
+                    <div class="glyph">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
+                        <path d="M8 9h8"></path>
+                        <path d="M8 13h5"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="ptitle">Slack Python Q&amp;A Bot</div>
+                  <div class="pmeta mono">Python · Slack API</div>
+                </button>
+              </div>
+
+              <div class="dots" id="projDots" aria-label="Project position indicators"></div>
+            </div>
+
+            <!-- Preview -->
+            <aside class="preview glass no-prism" id="projPreview" style="--accent: 59 130 246" aria-live="polite">
+              <div class="preview-top">
+                <div>
+                  <div class="preview-title" id="projTitle">Faster Diffusion</div>
+                  <div class="preview-meta mono" id="projMeta">GenAI · Diffusion · Optimization · Python</div>
+                </div>
+
+                <div class="preview-actions">
+                  <a class="btn btn-primary" id="projOpen" href="#" target="_blank" rel="noopener">Open</a>
+                  <button class="btn btn-ghost" id="projCopy" type="button">Copy link</button>
                 </div>
               </div>
-            </div>
+
+              <p class="preview-desc" id="projDesc"></p>
+              <ul class="preview-bullets" id="projBullets"></ul>
+
+              <div class="preview-hint mono micro muted">Auto‑spotlight pauses on hover.</div>
+            </aside>
           </div>
 
-          <div class="panel-foot">
-            <div class="mono small-muted">© <span id="year2"></span> Abhijeet Ghildiyal</div>
-            <div class="mini-actions">
-              <a class="mini-btn" href="#about">About</a>
-              <a class="mini-btn" href="#work">Work</a>
+          <footer class="panel-foot">
+            <div class="mono micro muted">© <span id="yearB"></span> Abhijeet Ghildiyal</div>
+            <div class="foot-actions">
+              <a class="foot-link" href="#about">About</a>
+              <a class="foot-link" href="#work">Work</a>
             </div>
-          </div>
+          </footer>
         </div>
       </section>
     </main>
 
-    <script src="assets/js/main.js?v=15"></script>
+    <script src="assets/js/main.js?v=21"></script>
   </body>
 </html>

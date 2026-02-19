@@ -1,205 +1,202 @@
 (() => {
-  const $ = (sel, root = document) => root.querySelector(sel);
-  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
   const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // Years
-  const y = String(new Date().getFullYear());
-  $("#year") && ($("#year").textContent = y);
-  $("#year2") && ($("#year2").textContent = y);
+  const year = String(new Date().getFullYear());
+  $("#yearA") && ($("#yearA").textContent = year);
+  $("#yearB") && ($("#yearB").textContent = year);
 
-  // ==============================
-  // Nav active state (scroll spy)
-  // ==============================
-  const navLinks = $$(".nav-item");
-  const sections = navLinks
-    .map((a) => ({ a, id: (a.getAttribute("href") || "").replace("#", "") }))
-    .map((o) => ({ ...o, el: document.getElementById(o.id) }))
-    .filter((o) => o.el);
-
-  const setActive = (id) => {
-    navLinks.forEach((a) => {
-      const href = a.getAttribute("href") || "";
-      a.classList.toggle("is-active", href === `#${id}`);
-    });
-  };
-
-  if (sections.length) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (!visible) return;
-        setActive(visible.target.id);
-      },
-      { threshold: [0.25, 0.4, 0.55, 0.7] }
-    );
-
-    sections.forEach((s) => io.observe(s.el));
-    setActive(sections[0].id);
-  }
-
-  // ==============================
-  // Copy helpers
-  // ==============================
-  const toast = $("#toast");
-  const showToast = (msg) => {
-    if (!toast) return;
-    toast.textContent = msg;
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(() => (toast.textContent = ""), 1200);
-  };
-
-  const copyText = async (value) => {
-    if (!value) return;
-    try {
-      await navigator.clipboard.writeText(value);
-      showToast(`Copied: ${value}`);
-    } catch (_) {
-      const temp = document.createElement("input");
-      temp.value = value;
-      document.body.appendChild(temp);
-      temp.select();
-      try {
-        document.execCommand("copy");
-        showToast(`Copied: ${value}`);
-      } finally {
-        document.body.removeChild(temp);
-      }
-    }
-  };
-
-  $$("[data-copy]").forEach((btn) => btn.addEventListener("click", () => copyText(btn.dataset.copy || "")));
-
-  // ==============================
-  // Skills: filter + inspector
-  // ==============================
-  const skillsCloud = $("#skillsCloud");
-  const skillBubbles = $$(".skill-bubble");
-  const filters = $$(".filter");
-
-  const skillName = $("#skillName");
-  const skillGroup = $("#skillGroup");
-  const skillText = $("#skillText");
-  const skillsCount = $("#skillsCount");
-
-  const GROUP_LABEL = { lang: "Languages", data: "Data", ml: "ML / DL", tools: "Tools" };
-  skillBubbles.forEach((b, i) => b.style.setProperty("--i", String(i)));
-
-  const setInspector = (bubble) => {
-    if (!bubble) return;
-    const name = bubble.textContent.trim();
-    const group = bubble.dataset.group || "all";
-    const desc = bubble.dataset.desc || "—";
-
-    skillName && (skillName.textContent = name);
-    skillGroup && (skillGroup.textContent = GROUP_LABEL[group] || "All");
-    skillText && (skillText.textContent = desc);
-
-    skillBubbles.forEach((x) => x.classList.toggle("is-selected", x === bubble));
-  };
-
-  const updateCount = () => {
-    if (!skillsCount) return;
-    const visible = skillBubbles.filter((b) => !b.classList.contains("is-dim")).length;
-    skillsCount.textContent = `${visible} / ${skillBubbles.length}`;
-  };
-
-  const applyFilter = (group) => {
-    filters.forEach((f) => f.classList.toggle("is-active", f.dataset.filter === group));
-
-    skillBubbles.forEach((b) => {
-      const dim = !(group === "all" || b.dataset.group === group);
-      b.classList.toggle("is-dim", dim);
-      b.setAttribute("aria-hidden", dim ? "true" : "false");
-    });
-
-    updateCount();
-    const firstVisible = skillBubbles.find((b) => !b.classList.contains("is-dim"));
-    if (firstVisible) setInspector(firstVisible);
-  };
-
-  filters.forEach((f) => f.addEventListener("click", () => applyFilter(f.dataset.filter || "all")));
-  skillBubbles.forEach((b) => {
-    b.addEventListener("mouseenter", () => setInspector(b));
-    b.addEventListener("click", () => setInspector(b));
-  });
-
-  if (skillsCloud) {
-    skillsCloud.addEventListener(
+  // Cursor spotlight (throttled)
+  if (!prefersReduced) {
+    let raf = null;
+    window.addEventListener(
       "pointermove",
       (e) => {
-        if (e.pointerType !== "mouse") return;
-        const r = skillsCloud.getBoundingClientRect();
-        skillsCloud.style.setProperty("--mx", `${e.clientX - r.left}px`);
-        skillsCloud.style.setProperty("--my", `${e.clientY - r.top}px`);
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          document.documentElement.style.setProperty("--spot-x", `${e.clientX}px`);
+          document.documentElement.style.setProperty("--spot-y", `${e.clientY}px`);
+          raf = null;
+        });
       },
       { passive: true }
     );
   }
 
+  // Toast + clipboard
+  const toast = $("#toast");
+  const showToast = (msg) => {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.style.opacity = "1";
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => {
+      toast.textContent = "";
+      toast.style.opacity = "0.9";
+    }, 1200);
+  };
+
+  const copyText = async (txt) => {
+    if (!txt) return;
+    try {
+      await navigator.clipboard.writeText(txt);
+      showToast("Copied ✅");
+    } catch {
+      // fallback
+      const input = document.createElement("input");
+      input.value = txt;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+      showToast("Copied ✅");
+    }
+  };
+
+  $$("[data-copy]").forEach((el) => {
+    el.addEventListener("click", () => copyText(el.dataset.copy || ""));
+  });
+
+  // Scroll spy (nav active state)
+  const links = $$(".nav-link");
+  const sections = links
+    .map((a) => (a.getAttribute("href") || "").replace("#", ""))
+    .map((id) => document.getElementById(id))
+    .filter(Boolean);
+
+  const setActive = (id) => {
+    links.forEach((a) => a.classList.toggle("is-active", a.getAttribute("href") === `#${id}`));
+  };
+
+  if (sections.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        const best = entries
+          .filter((x) => x.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!best) return;
+        setActive(best.target.id);
+      },
+      { threshold: [0.25, 0.4, 0.55, 0.7] }
+    );
+    sections.forEach((s) => io.observe(s));
+    setActive(sections[0].id);
+  }
+
+  // ===== Skills Lab =====
+  const bubbles = $$(".bubble");
+  const filters = $$(".filter");
+
+  const skillName = $("#skillName");
+  const skillPill = $("#skillPill");
+  const skillDesc = $("#skillDesc");
+  const skillsCount = $("#skillsCount");
+
+  const LABEL = { lang: "Languages", data: "Data", ml: "ML / DL", tools: "Tools" };
+
+  const updateInspector = (b) => {
+    if (!b) return;
+    const name = b.textContent.trim();
+    const group = b.dataset.group || "all";
+    const desc = b.dataset.desc || "—";
+
+    skillName && (skillName.textContent = name);
+    skillPill && (skillPill.textContent = LABEL[group] || "All");
+    skillDesc && (skillDesc.textContent = desc);
+
+    bubbles.forEach((x) => x.classList.toggle("is-selected", x === b));
+  };
+
+  const updateCount = () => {
+    if (!skillsCount) return;
+    const visible = bubbles.filter((b) => !b.classList.contains("is-dim")).length;
+    skillsCount.textContent = `${visible} / ${bubbles.length}`;
+  };
+
+  const applyFilter = (group) => {
+    filters.forEach((f) => f.classList.toggle("is-active", f.dataset.filter === group));
+    bubbles.forEach((b) => {
+      const dim = !(group === "all" || b.dataset.group === group);
+      b.classList.toggle("is-dim", dim);
+    });
+    updateCount();
+    const first = bubbles.find((b) => !b.classList.contains("is-dim"));
+    first && updateInspector(first);
+  };
+
+  filters.forEach((f) => f.addEventListener("click", () => applyFilter(f.dataset.filter || "all")));
+  bubbles.forEach((b) => {
+    b.addEventListener("mouseenter", () => updateInspector(b));
+    b.addEventListener("click", () => updateInspector(b));
+  });
+
   applyFilter("all");
 
-  // ==============================
-  // Projects: infinite loop + auto switch every 4s
-  // ==============================
+  // ===== Projects =====
   const PROJECTS = {
     genai: {
       title: "Faster Diffusion",
       meta: "GenAI · Diffusion · Optimization · Python",
       desc:
-        "Performance-focused diffusion work aimed at improving image generation efficiency while maintaining quality.",
+        "Optimization experiments focused on speeding up diffusion pipelines while keeping output quality sharp. Built for iteration speed: measure → tune → ship.",
       bullets: [
-        "Optimization techniques to improve generation speed and efficiency.",
-        "Tuned model pipeline/architecture for better throughput.",
-        "Team collaboration focused on speed while keeping outputs sharp.",
+        "Applied throughput-focused optimizations to improve generation efficiency.",
+        "Tuned model architecture/pipeline knobs for better speed-quality trade-offs.",
+        "Collaborated in a small team to keep changes measurable and reproducible.",
       ],
-      link: "https://github.com/ghildiyalabhjeet/GenAIProject",
+      link: "https://github.com/ghildiyalabhijeet/GenAIProject",
+      accent: "59 130 246",
     },
     pollution: {
       title: "Particle Pollution (Research Paper)",
       meta: "ML · PM2.5 · Environmental analytics · PDF",
       desc:
-        "Research on ML applicability for modeling atmospheric particle pollution using PM2.5 and emissions patterns.",
+        "A research study exploring how machine learning can model atmospheric particle pollution using PM2.5 and emission patterns.",
       bullets: [
-        "Analyzed PM2.5 and carbon emission patterns to model environmental impact.",
-        "Ran ML models on pollutant datasets in a small research team.",
-        "Compiled findings into a research paper deliverable.",
+        "Analyzed PM2.5 + carbon emission patterns to model environmental impact.",
+        "Trained ML models on pollutant datasets and compared results.",
+        "Packaged findings into a formal research paper deliverable.",
       ],
       link:
-        "https://github.com/ghildiyalabhjeet/MachineLearning_Particle_Pollution/blob/main/Research_Paper_Particle_Pollution.pdf",
+        "https://github.com/ghildiyalabhijeet/MachineLearning_Particle_Pollution/blob/main/Research_Paper_Particle_Pollution.pdf",
+      accent: "16 185 129",
     },
     pipeline: {
       title: "Digital Assets Analytics Pipeline",
-      meta: "Analytics · Data pipeline · Repo",
+      meta: "Analytics · ETL · Repo",
       desc:
-        "An analytics pipeline repository for digital asset data — open the repo for the full README, code, and architecture details.",
+        "An analytics pipeline repo for digital asset data — structured for ingestion → transform → analysis, with documentation living in the README.",
       bullets: [
-        "End-to-end pipeline structure for ingest → transform → analyze.",
-        "Designed for reproducible analytics workflows.",
-        "See repository docs for setup and usage.",
+        "End-to-end pipeline structure for repeatable analytics workflows.",
+        "Designed to keep transformations explicit and auditable.",
+        "Open the repo for architecture + setup details.",
       ],
       link: "https://github.com/AII-projects/DigitalAssetsAnalyticsPipeline",
+      accent: "234 179 8",
     },
     slackbot: {
       title: "Slack Python Q&A Bot",
       meta: "Python · Slack API · Automation",
       desc:
-        "A Slack bot that delivers quick, real-time help for Python programming questions via a streamlined interface.",
+        "A Slack bot that reduces context switching by helping answer Python programming questions inside Slack — fast prompts, fast responses, fast troubleshooting.",
       bullets: [
-        "Integrated Python with Slack API for seamless Q&A interaction.",
-        "Built for fast troubleshooting and reduced context-switching.",
-        "Optimized for real-time interaction and rapid response loops.",
+        "Integrated Python with Slack API to create a streamlined Q&A interface.",
+        "Optimized for real-time interaction and quick developer help loops.",
+        "Designed to accelerate troubleshooting and reduce friction.",
       ],
       link: "https://github.com/AII-projects/slackbot",
+      accent: "236 72 153",
     },
   };
 
-  const row = $("#projectsRow");
-  const drawer = $("#projectsDrawer");
+  const track = $("#projTrack");
+  const cards = track ? $$(".pcard", track) : [];
+  const dotsWrap = $("#projDots");
 
+  const preview = $("#projPreview");
   const titleEl = $("#projTitle");
   const metaEl = $("#projMeta");
   const descEl = $("#projDesc");
@@ -207,22 +204,31 @@
   const openEl = $("#projOpen");
   const copyBtn = $("#projCopy");
 
-  const prevBtn = $("#projectsPrev");
-  const nextBtn = $("#projectsNext");
+  const prevBtn = $("#projPrev");
+  const nextBtn = $("#projNext");
 
-  let originals = [];
-  let setWidth = 0;
-  let currentTile = null;
-  let autoTimer = null;
+  let activeIndex = 0;
+  let auto = null;
 
-  const tilesAll = () => (row ? Array.from(row.querySelectorAll(".proj-square")) : []);
-
-  const snapTileToStart = (tile, smooth = true) => {
-    if (!row || !tile) return;
-    row.scrollTo({ left: tile.offsetLeft, behavior: smooth ? "smooth" : "auto" });
+  const buildDots = () => {
+    if (!dotsWrap) return;
+    dotsWrap.innerHTML = "";
+    cards.forEach((_, i) => {
+      const b = document.createElement("button");
+      b.className = "dotbtn";
+      b.type = "button";
+      b.setAttribute("aria-label", `Go to project ${i + 1}`);
+      b.addEventListener("click", () => goTo(i, true));
+      dotsWrap.appendChild(b);
+    });
   };
 
-  const updateDetails = (key) => {
+  const setDots = () => {
+    if (!dotsWrap) return;
+    Array.from(dotsWrap.children).forEach((d, i) => d.classList.toggle("is-active", i === activeIndex));
+  };
+
+  const setPreview = (key, accent) => {
     const p = PROJECTS[key];
     if (!p) return;
 
@@ -232,183 +238,120 @@
 
     if (bulletsEl) {
       bulletsEl.innerHTML = "";
-      p.bullets.forEach((b) => {
+      p.bullets.forEach((x) => {
         const li = document.createElement("li");
-        li.textContent = b;
+        li.textContent = x;
         bulletsEl.appendChild(li);
       });
     }
 
     if (openEl) openEl.href = p.link;
     if (copyBtn) copyBtn.dataset.copy = p.link;
+
+    // accent aura
+    const a = accent || p.accent || "59 130 246";
+    preview && preview.style.setProperty("--accent", a);
   };
 
-  const selectTileElement = (tile, { snap = false, smooth = true } = {}) => {
-    if (!tile) return;
-    const key = tile.dataset.project;
-    if (!PROJECTS[key]) return;
+  const selectCard = (idx, { scroll = false, smooth = true } = {}) => {
+    if (!cards.length) return;
+    activeIndex = (idx + cards.length) % cards.length;
 
-    tilesAll().forEach((t) => t.classList.remove("is-selected"));
-    tile.classList.add("is-selected");
-
-    currentTile = tile;
-    updateDetails(key);
-
-    if (snap) snapTileToStart(tile, smooth);
-  };
-
-  const nearestStartTile = () => {
-    if (!row) return null;
-    const tiles = tilesAll();
-    if (!tiles.length) return null;
-
-    const left = row.scrollLeft;
-    let best = tiles[0];
-    let bestDist = Infinity;
-
-    for (const t of tiles) {
-      const d = Math.abs(t.offsetLeft - left);
-      if (d < bestDist) {
-        best = t;
-        bestDist = d;
-      }
-    }
-    return best;
-  };
-
-  const measureSetWidth = () => {
-    if (!row || !originals.length) return;
-    const firstOrig = originals[0];
-    const lastOrig = originals[originals.length - 1];
-    setWidth = (lastOrig.offsetLeft + lastOrig.offsetWidth) - firstOrig.offsetLeft;
-  };
-
-  const wrapInfinite = () => {
-    if (!row || !setWidth || !originals.length) return;
-
-    const firstOrig = originals[0];
-    const start = firstOrig.offsetLeft;
-
-    if (row.scrollLeft < start - setWidth * 0.25) row.scrollLeft += setWidth;
-    else if (row.scrollLeft > start + setWidth * 1.25) row.scrollLeft -= setWidth;
-  };
-
-  const setupInfinite = () => {
-    if (!row) return;
-
-    originals = Array.from(row.querySelectorAll(".proj-square"));
-    if (originals.length < 2) return;
-
-    const beforeFrag = document.createDocumentFragment();
-    originals.forEach((t) => beforeFrag.appendChild(t.cloneNode(true)));
-    row.insertBefore(beforeFrag, row.firstChild);
-
-    const afterFrag = document.createDocumentFragment();
-    originals.forEach((t) => afterFrag.appendChild(t.cloneNode(true)));
-    row.appendChild(afterFrag);
-
-    requestAnimationFrame(() => {
-      measureSetWidth();
-      selectTileElement(originals[0], { snap: true, smooth: false });
+    cards.forEach((c, i) => {
+      c.classList.toggle("is-selected", i === activeIndex);
+      const accent = c.dataset.accent || "59 130 246";
+      c.style.setProperty("--accent-card", accent);
     });
 
-    let scrollEndT = 0;
-    row.addEventListener(
-      "scroll",
-      () => {
-        wrapInfinite();
-        clearTimeout(scrollEndT);
-        scrollEndT = window.setTimeout(() => {
-          const t = nearestStartTile();
-          if (t) selectTileElement(t);
-        }, 120);
-      },
-      { passive: true }
-    );
+    const card = cards[activeIndex];
+    const key = card.dataset.key;
+    const accent = card.dataset.accent || "59 130 246";
+    setPreview(key, accent);
+    setDots();
 
-    window.addEventListener(
-      "resize",
-      () => {
-        requestAnimationFrame(() => {
-          measureSetWidth();
-          if (currentTile) snapTileToStart(currentTile, false);
-        });
-      },
-      { passive: true }
-    );
+    if (scroll && track) {
+      card.scrollIntoView({
+        behavior: smooth ? "smooth" : "auto",
+        inline: "start",
+        block: "nearest",
+      });
+    }
   };
 
-  const getNextTile = (dir = 1) => {
-    const tiles = tilesAll();
-    if (!tiles.length) return null;
-
-    if (!currentTile) currentTile = tiles.find((t) => t.classList.contains("is-selected")) || tiles[0];
-
-    const idx = tiles.indexOf(currentTile);
-    if (idx === -1) return tiles[0];
-
-    return tiles[idx + dir] || (dir > 0 ? tiles[0] : tiles[tiles.length - 1]);
-  };
-
-  const stopAuto = () => {
-    if (autoTimer) clearInterval(autoTimer);
-    autoTimer = null;
-  };
-
-  const cycleOnce = () => {
-    if (!row) return;
-    const next = getNextTile(1);
-    if (!next) return;
-    selectTileElement(next, { snap: true, smooth: true });
+  const goTo = (idx, user = false) => {
+    if (user) stopAuto();
+    selectCard(idx, { scroll: true, smooth: true });
+    if (user) startAuto();
   };
 
   const startAuto = () => {
-    if (prefersReduced || !row) return;
+    if (prefersReduced || !cards.length) return;
     stopAuto();
-    autoTimer = window.setInterval(cycleOnce, 4000);
+    auto = window.setInterval(() => {
+      selectCard(activeIndex + 1, { scroll: true, smooth: true });
+    }, 4000);
   };
 
-  if (row) {
-    row.addEventListener("click", (e) => {
-      const tile = e.target.closest(".proj-square");
-      if (!tile || !row.contains(tile)) return;
-      stopAuto();
-      selectTileElement(tile, { snap: true, smooth: true });
-      startAuto();
+  const stopAuto = () => {
+    if (auto) clearInterval(auto);
+    auto = null;
+  };
+
+  // Wire up deck events
+  if (cards.length) {
+    buildDots();
+    selectCard(0, { scroll: false, smooth: false });
+
+    cards.forEach((c, i) => {
+      c.addEventListener("click", () => goTo(i, true));
+      c.addEventListener("dblclick", () => {
+        const p = PROJECTS[c.dataset.key];
+        if (p) window.open(p.link, "_blank", "noopener,noreferrer");
+      });
     });
 
-    row.addEventListener("dblclick", (e) => {
-      const tile = e.target.closest(".proj-square");
-      if (!tile || !row.contains(tile)) return;
-      const p = PROJECTS[tile.dataset.project];
-      if (p) window.open(p.link, "_blank", "noopener,noreferrer");
-    });
+    prevBtn && prevBtn.addEventListener("click", () => goTo(activeIndex - 1, true));
+    nextBtn && nextBtn.addEventListener("click", () => goTo(activeIndex + 1, true));
+
+    // Pause auto while interacting
+    track && track.addEventListener("pointerenter", stopAuto);
+    track && track.addEventListener("pointerleave", startAuto);
+    preview && preview.addEventListener("pointerenter", stopAuto);
+    preview && preview.addEventListener("pointerleave", startAuto);
+
+    // When user scrolls manually, snap selection to nearest card
+    if (track) {
+      let t = 0;
+      track.addEventListener(
+        "scroll",
+        () => {
+          if (!cards.length) return;
+          clearTimeout(t);
+          t = window.setTimeout(() => {
+            const left = track.scrollLeft;
+            let best = 0;
+            let bestDist = Infinity;
+            cards.forEach((c, i) => {
+              const d = Math.abs(c.offsetLeft - left);
+              if (d < bestDist) {
+                bestDist = d;
+                best = i;
+              }
+            });
+            selectCard(best, { scroll: false });
+          }, 110);
+        },
+        { passive: true }
+      );
+    }
+
+    startAuto();
   }
 
-  if (copyBtn) {
+  // Copy project link
+  copyBtn &&
     copyBtn.addEventListener("click", () => {
       const url = copyBtn.dataset.copy || (openEl ? openEl.href : "");
-      if (url) copyText(url);
+      url && copyText(url);
     });
-  }
-
-  prevBtn?.addEventListener("click", () => {
-    stopAuto();
-    const prev = getNextTile(-1);
-    if (prev) selectTileElement(prev, { snap: true, smooth: true });
-    startAuto();
-  });
-
-  nextBtn?.addEventListener("click", () => {
-    stopAuto();
-    const next = getNextTile(1);
-    if (next) selectTileElement(next, { snap: true, smooth: true });
-    startAuto();
-  });
-
-  drawer?.addEventListener("pointerenter", stopAuto);
-  drawer?.addEventListener("pointerleave", startAuto);
-
-  setupInfinite();
-  startAuto();
 })();
