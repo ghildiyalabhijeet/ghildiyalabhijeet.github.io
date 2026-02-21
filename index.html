@@ -6,7 +6,7 @@
     <title>Abhijeet Ghildiyal · Data Science</title>
     <meta
       name="description"
-      content="Abhijeet Ghildiyal — M.S. Data Science @ ASU. I build pipelines, ML/GenAI systems, and dashboards."
+      content="Abhijeet Ghildiyal — M.S. Data Science @ ASU. Pipelines, ML/GenAI systems, and dashboards."
     />
 
     <!-- Keep same stack: HTML + CSS + JS + Tailwind CDN (no build step) -->
@@ -20,7 +20,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="assets/css/main.css?v=21" />
+    <link rel="stylesheet" href="assets/css/main.css?v=23" />
   </head>
 
   <body>
@@ -29,9 +29,22 @@
     <canvas id="bgRender" class="bg-render" aria-hidden="true"></canvas>
     <div class="bg-noise" aria-hidden="true"></div>
 
-    <!-- Nav (simplified to reduce clutter) -->
+    <!-- Floating right rail for easy navigation -->
+    <aside class="rail glass prism" aria-label="Section navigation rail">
+      <button class="rail-dot is-active" type="button" data-target="#work" aria-label="Go to Work">
+        <span class="rail-label mono">Work</span>
+      </button>
+      <button class="rail-dot" type="button" data-target="#about" aria-label="Go to About">
+        <span class="rail-label mono">About</span>
+      </button>
+      <button class="rail-dot" type="button" data-target="#projects" aria-label="Go to Projects">
+        <span class="rail-label mono">Projects</span>
+      </button>
+    </aside>
+
+    <!-- Nav -->
     <header class="topbar" role="banner">
-      <nav class="nav glass" aria-label="Primary navigation">
+      <nav class="nav glass prism" aria-label="Primary navigation">
         <a class="nav-link" href="#work">Work</a>
         <a class="nav-link" href="#about">About</a>
         <a class="nav-link" href="#projects">Projects</a>
@@ -39,23 +52,30 @@
     </header>
 
     <main>
-      <!-- WORK / HERO (less text, less clutter) -->
+      <!-- WORK / HERO -->
       <section id="work" class="screen" aria-label="Work">
-        <div class="hero glass prism">
+        <div class="hero glass prism hero-center reveal">
           <div class="hero-badge mono">
             M.S. Data Science @ ASU <span class="sep">•</span> Tempe, AZ
             <span class="sep">•</span> Part‑time now <span class="sep">/</span> Full‑time May 2026
           </div>
 
-          <h1 class="hero-title">Abhijeet Ghildiyal</h1>
+          <h1 class="hero-title hero-title-creative">Abhijeet Ghildiyal</h1>
 
           <p class="hero-lead">
-            Data products: pipelines, ML/GenAI, and dashboards — built clean, fast, and usable.
+            I build <b>data products</b> that feel like software —
+            clean pipelines, ML/GenAI systems, and dashboards teams actually use.
           </p>
 
+          <div class="hero-chips mono" aria-label="Availability chips">
+            <span class="chip chip-ice">Part‑time: available now</span>
+            <span class="chip chip-ice">Full‑time: May 2026</span>
+          </div>
+
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#projects">Projects</a>
-            <button class="btn btn-ghost" type="button" data-copy="aghildiy@asu.edu">Email</button>
+            <a class="btn btn-primary" href="#projects">Explore projects</a>
+            <a class="btn btn-ghost" href="#about">About & skills</a>
+            <button class="btn btn-ghost" type="button" data-copy="aghildiy@asu.edu">Copy email</button>
           </div>
 
           <div class="hero-tags mono">
@@ -65,7 +85,7 @@
         </div>
 
         <!-- Minimal contact dock -->
-        <div class="dock glass prism" role="navigation" aria-label="Contact links">
+        <div class="dock glass prism reveal" role="navigation" aria-label="Contact links">
           <a class="dock-btn" href="mailto:aghildiy@asu.edu" aria-label="Email">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M4 6h16v12H4z"></path>
@@ -102,40 +122,37 @@
               ></path>
             </svg>
           </a>
-
-          <button class="dock-btn" type="button" data-copy="aghildiy@asu.edu" aria-label="Copy email">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M9 9h10v10H9z"></path>
-              <path d="M5 5h10v10H5z"></path>
-            </svg>
-          </button>
         </div>
 
         <div class="toast mono" id="toast" aria-live="polite" aria-atomic="true"></div>
-        <div class="scroll mono" aria-hidden="true">Scroll ↓</div>
+        <button class="scroll-cue mono" type="button" data-target="#about" aria-label="Scroll to About">
+          Scroll ↓
+        </button>
       </section>
 
-      <!-- ABOUT (unchanged from your creative rewrite) -->
+      <!-- ABOUT -->
       <section id="about" class="screen" aria-label="About">
         <div class="panel glass prism">
-          <header class="panel-head">
+          <header class="panel-head reveal">
             <h2 class="panel-title">About</h2>
-            <p class="panel-sub">Data Science · Machine Learning · Analytics — built with a product mindset</p>
+            <p class="panel-sub">Data Science · Machine Learning · Analytics — with a product mindset</p>
           </header>
 
-          <div class="stack">
-            <article class="card glass no-prism">
+          <div class="about-grid roomy">
+            <!-- Summary / Snapshot -->
+            <article class="card glass-lite reveal about-span">
               <div class="card-head">
-                <h3 class="card-title">Snapshot</h3>
-                <div class="mono micro muted">How I work</div>
+                <h3 class="card-title">Summary</h3>
+                <div class="mono micro muted">Full data lifecycle</div>
               </div>
 
               <p class="copy">
-                I take messy, real-world data and turn it into something <b>usable</b>:
-                reliable pipelines, models you can reason about, and dashboards that answer questions quickly.
+                Master’s in Data Science candidate with a strong CS foundation and proficiency in
+                <b>Python</b>, <b>SQL</b>, and <b>machine learning</b>. Experienced across the full data lifecycle —
+                from preprocessing and modeling to building interactive Power BI dashboards.
               </p>
 
-              <div class="principles">
+              <div class="principles roomy">
                 <div class="principle">
                   <div class="k">Clarity</div>
                   <div class="v">Simple metrics, explicit assumptions, readable outputs.</div>
@@ -151,13 +168,14 @@
               </div>
             </article>
 
-            <article class="card glass no-prism">
+            <!-- Education (col 1) -->
+            <article class="card glass-lite reveal">
               <div class="card-head">
                 <h3 class="card-title">Education</h3>
                 <div class="mono micro muted">CGPA highlights</div>
               </div>
 
-              <div class="edu">
+              <div class="edu roomy">
                 <div class="edu-row">
                   <div class="edu-main">
                     <div class="edu-degree">M.S. Data Science</div>
@@ -184,21 +202,22 @@
               </div>
             </article>
 
-            <article class="card glass no-prism">
+            <!-- Experience (col 2) -->
+            <article class="card glass-lite reveal">
               <div class="card-head">
                 <h3 class="card-title">Experience</h3>
                 <div class="mono micro muted">Tap to expand</div>
               </div>
 
-              <div class="timeline">
+              <div class="timeline roomy">
                 <details class="role" open>
                   <summary>
                     <span class="role-title">Data Analyst Intern · BTP ECO Products</span>
                     <span class="role-meta mono">Jul 2022 — Aug 2024</span>
                   </summary>
                   <ul class="role-body">
-                    <li>Designed & shipped 5+ Power BI dashboards to automate reporting and surface key KPIs.</li>
-                    <li>Turned complex patterns into clear, actionable insights for leadership decisions.</li>
+                    <li>Designed and deployed 5+ Power BI dashboards to automate reporting and surface key KPIs.</li>
+                    <li>Translated complex patterns into clear, actionable strategies supporting leadership decisions.</li>
                   </ul>
                 </details>
 
@@ -208,8 +227,8 @@
                     <span class="role-meta mono">Jul 2021 — Sep 2021</span>
                   </summary>
                   <ul class="role-body">
-                    <li>Built responsive UI components using HTML + CSS with clean structure.</li>
-                    <li>Improved cross-browser consistency for stable UI performance.</li>
+                    <li>Built responsive, user-friendly interfaces using HTML and CSS.</li>
+                    <li>Improved cross-browser compatibility for consistent UI performance.</li>
                   </ul>
                 </details>
 
@@ -219,69 +238,86 @@
                     <span class="role-meta mono">Jan 2021 — Mar 2021</span>
                   </summary>
                   <ul class="role-body">
-                    <li>Assisted security testing in virtual environments; supported technical content work.</li>
+                    <li>Assisted with security testing in virtual environments; managed technical social content.</li>
                     <li>Drafted guidelines that improved accountability and process consistency.</li>
                   </ul>
                 </details>
               </div>
             </article>
+
+            <!-- Certifications -->
+            <article class="card glass-lite reveal about-span">
+              <div class="card-head">
+                <h3 class="card-title">Certifications</h3>
+                <div class="mono micro muted">Highlights</div>
+              </div>
+
+              <div class="certs mono">
+                <span class="pill">Python (Data Science)</span>
+                <span class="pill">Power BI</span>
+                <span class="pill">Data Scientist</span>
+                <span class="pill">Artificial Intelligence</span>
+                <span class="pill">Machine Learning</span>
+                <span class="pill">MTA · Security Fundamentals</span>
+              </div>
+            </article>
+
+            <!-- Skills Lab -->
+            <section class="skills glass-lite reveal about-span" aria-label="Skills">
+              <div class="skills-head">
+                <div>
+                  <h3 class="card-title">Skills Lab</h3>
+                  <div class="mono micro muted">Filter • hover a bubble • click to pin</div>
+                </div>
+
+                <div class="filters" role="tablist" aria-label="Skill categories">
+                  <button class="filter is-active" type="button" data-filter="all" role="tab">All</button>
+                  <button class="filter" type="button" data-filter="lang" role="tab">Languages</button>
+                  <button class="filter" type="button" data-filter="data" role="tab">Data</button>
+                  <button class="filter" type="button" data-filter="ml" role="tab">ML / DL</button>
+                  <button class="filter" type="button" data-filter="tools" role="tab">Tools</button>
+                </div>
+              </div>
+
+              <div class="skills-grid roomy">
+                <div id="skillsCloud" class="cloud" aria-label="Skills cloud">
+                  <button class="bubble" type="button" data-group="lang" data-size="lg" data-desc="Primary language for ML, analytics, automation.">Python</button>
+                  <button class="bubble" type="button" data-group="lang" data-size="md" data-desc="Querying, joins, analytics, reporting.">SQL</button>
+                  <button class="bubble" type="button" data-group="lang" data-size="sm" data-desc="Semantic structure for UI components.">HTML5</button>
+                  <button class="bubble" type="button" data-group="lang" data-size="sm" data-desc="Responsive styling and layout systems.">CSS3</button>
+
+                  <button class="bubble" type="button" data-group="data" data-size="md" data-desc="Dataframes, wrangling, feature engineering.">Pandas</button>
+                  <button class="bubble" type="button" data-group="data" data-size="md" data-desc="Numerical computing fundamentals.">NumPy</button>
+                  <button class="bubble" type="button" data-group="data" data-size="sm" data-desc="Plotting + exploratory visuals.">Matplotlib</button>
+                  <button class="bubble" type="button" data-group="data" data-size="sm" data-desc="Fast statistical visualization.">Seaborn</button>
+
+                  <button class="bubble" type="button" data-group="ml" data-size="md" data-desc="Classic ML models + pipelines.">scikit‑learn</button>
+                  <button class="bubble" type="button" data-group="ml" data-size="lg" data-desc="Deep learning training + experimentation.">PyTorch</button>
+                  <button class="bubble" type="button" data-group="ml" data-size="lg" data-desc="Model training and deployment pipelines.">TensorFlow</button>
+                  <button class="bubble" type="button" data-group="ml" data-size="md" data-desc="Transformers ecosystem + model hub.">Hugging Face</button>
+
+                  <button class="bubble" type="button" data-group="tools" data-size="md" data-desc="Dashboards, DAX, KPI reporting.">Power BI</button>
+                  <button class="bubble" type="button" data-group="tools" data-size="sm" data-desc="Version control and collaboration.">Git</button>
+                  <button class="bubble" type="button" data-group="tools" data-size="sm" data-desc="Bots + integrations for workflows.">Slack API</button>
+                </div>
+
+                <aside class="inspector glass-lite" aria-live="polite">
+                  <div class="inspector-top">
+                    <div id="skillName" class="inspector-name">Hover a skill</div>
+                    <div id="skillPill" class="inspector-pill mono">—</div>
+                  </div>
+                  <div id="skillDesc" class="inspector-desc">Move your cursor over a bubble to see a quick note.</div>
+
+                  <div class="inspector-foot">
+                    <div class="mono micro muted">Visible skills</div>
+                    <div id="skillsCount" class="count">—</div>
+                  </div>
+                </aside>
+              </div>
+            </section>
           </div>
 
-          <!-- Skills Lab (same as before) -->
-          <section class="skills glass no-prism" aria-label="Skills">
-            <div class="skills-head">
-              <div>
-                <h3 class="card-title">Skills Lab</h3>
-                <div class="mono micro muted">Filter • hover a bubble • click to pin</div>
-              </div>
-
-              <div class="filters" role="tablist" aria-label="Skill categories">
-                <button class="filter is-active" type="button" data-filter="all" role="tab">All</button>
-                <button class="filter" type="button" data-filter="lang" role="tab">Languages</button>
-                <button class="filter" type="button" data-filter="data" role="tab">Data</button>
-                <button class="filter" type="button" data-filter="ml" role="tab">ML / DL</button>
-                <button class="filter" type="button" data-filter="tools" role="tab">Tools</button>
-              </div>
-            </div>
-
-            <div class="skills-grid">
-              <div id="skillsCloud" class="cloud" aria-label="Skills cloud">
-                <button class="bubble" type="button" data-group="lang" data-size="lg" data-desc="Primary language for ML, analytics, automation.">Python</button>
-                <button class="bubble" type="button" data-group="lang" data-size="md" data-desc="Querying, joins, analytics, reporting.">SQL</button>
-                <button class="bubble" type="button" data-group="lang" data-size="sm" data-desc="Semantic structure for UI components.">HTML5</button>
-                <button class="bubble" type="button" data-group="lang" data-size="sm" data-desc="Responsive styling and layout systems.">CSS3</button>
-
-                <button class="bubble" type="button" data-group="data" data-size="md" data-desc="Dataframes, wrangling, feature engineering.">Pandas</button>
-                <button class="bubble" type="button" data-group="data" data-size="md" data-desc="Numerical computing fundamentals.">NumPy</button>
-                <button class="bubble" type="button" data-group="data" data-size="sm" data-desc="Plotting + exploratory visuals.">Matplotlib</button>
-                <button class="bubble" type="button" data-group="data" data-size="sm" data-desc="Fast statistical visualization.">Seaborn</button>
-
-                <button class="bubble" type="button" data-group="ml" data-size="md" data-desc="Classic ML models + pipelines.">scikit‑learn</button>
-                <button class="bubble" type="button" data-group="ml" data-size="lg" data-desc="Deep learning training + experimentation.">PyTorch</button>
-                <button class="bubble" type="button" data-group="ml" data-size="lg" data-desc="Model training and deployment pipelines.">TensorFlow</button>
-                <button class="bubble" type="button" data-group="ml" data-size="md" data-desc="Transformers ecosystem + model hub.">Hugging Face</button>
-
-                <button class="bubble" type="button" data-group="tools" data-size="md" data-desc="Dashboards, DAX, KPI reporting.">Power BI</button>
-                <button class="bubble" type="button" data-group="tools" data-size="sm" data-desc="Version control and collaboration.">Git</button>
-                <button class="bubble" type="button" data-group="tools" data-size="sm" data-desc="Bots + integrations for workflows.">Slack API</button>
-              </div>
-
-              <aside class="inspector glass no-prism" aria-live="polite">
-                <div class="inspector-top">
-                  <div id="skillName" class="inspector-name">Hover a skill</div>
-                  <div id="skillPill" class="inspector-pill mono">—</div>
-                </div>
-                <div id="skillDesc" class="inspector-desc">Move your cursor over a bubble to see a quick note.</div>
-
-                <div class="inspector-foot">
-                  <div class="mono micro muted">Visible skills</div>
-                  <div id="skillsCount" class="count">—</div>
-                </div>
-              </aside>
-            </div>
-          </section>
-
-          <footer class="panel-foot">
+          <footer class="panel-foot reveal">
             <div class="mono micro muted">© <span id="yearA"></span> Abhijeet Ghildiyal</div>
             <div class="foot-actions">
               <a class="foot-link" href="#work">Work</a>
@@ -291,16 +327,15 @@
         </div>
       </section>
 
-      <!-- PROJECTS (1 visible card at a time) -->
+      <!-- PROJECTS -->
       <section id="projects" class="screen screen-tight" aria-label="Projects">
         <div class="panel glass prism">
-          <header class="panel-head">
+          <header class="panel-head reveal">
             <h2 class="panel-title">Projects</h2>
-            <p class="panel-sub">One card at a time · click to preview · double‑click opens</p>
+            <p class="panel-sub">Infinite carousel · scroll forever · click to preview · double‑click opens</p>
           </header>
 
-          <div class="projects-lab one-card">
-            <!-- Deck -->
+          <div class="projects-lab one-card reveal">
             <div class="deck">
               <div class="deck-head">
                 <div class="mono micro muted">Auto‑spotlight every 4s (pauses on hover)</div>
@@ -310,6 +345,7 @@
                 </div>
               </div>
 
+              <!-- JS clones before/after for infinite -->
               <div id="projTrack" class="track" role="list" aria-label="Project cards">
                 <button class="pcard" type="button" role="listitem" data-key="genai" data-accent="59 130 246">
                   <div class="thumb t-genai" aria-hidden="true">
@@ -372,8 +408,7 @@
               <div class="dots" id="projDots" aria-label="Project position indicators"></div>
             </div>
 
-            <!-- Preview -->
-            <aside class="preview glass no-prism" id="projPreview" style="--accent: 59 130 246" aria-live="polite">
+            <aside class="preview glass prism" id="projPreview" style="--accent: 59 130 246" aria-live="polite">
               <div class="preview-top">
                 <div>
                   <div class="preview-title" id="projTitle">Faster Diffusion</div>
@@ -388,10 +423,12 @@
 
               <p class="preview-desc" id="projDesc"></p>
               <ul class="preview-bullets" id="projBullets"></ul>
+
+              <div class="mono micro muted preview-foot">Tip: track is infinite — keep scrolling →</div>
             </aside>
           </div>
 
-          <footer class="panel-foot">
+          <footer class="panel-foot reveal">
             <div class="mono micro muted">© <span id="yearB"></span> Abhijeet Ghildiyal</div>
             <div class="foot-actions">
               <a class="foot-link" href="#about">About</a>
@@ -402,6 +439,6 @@
       </section>
     </main>
 
-    <script src="assets/js/main.js?v=21"></script>
+    <script src="assets/js/main.js?v=23"></script>
   </body>
 </html>
