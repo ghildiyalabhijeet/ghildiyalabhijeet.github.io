@@ -7,8 +7,7 @@
   const h = React.createElement;
 
   const prefersReduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const AUTO_MS = prefersReduce ? 0 : 4000; // auto-spotlight every 4s, pauses on hover/touch
-
+  const AUTO_MS = prefersReduce ? 0 : 4000; // auto spotlight every 4s
   const DRAG_THRESHOLD = 42;
 
   const PROJECTS = [
@@ -20,7 +19,8 @@
       desc: "Optimization experiments focused on speeding up diffusion pipelines while keeping output quality sharp.",
       tags: ["Python", "PyTorch", "Optimization"],
       url: "https://github.com/ghildiyalabhijeet/GenAIProject",
-      accentRGB: "250, 204, 21", // yellow
+      thumb: "assets/img/projects/faster-diffusion.webp",
+      accentRGB: "250, 204, 21",
       icon: "spark",
     },
     {
@@ -31,7 +31,8 @@
       desc: "ML workflow + research paper on modeling atmospheric particle pollution and emissions signals.",
       tags: ["Machine Learning", "PM2.5", "Research"],
       url: "https://github.com/ghildiyalabhjeet/MachineLearning_Particle_Pollution/blob/main/Research_Paper_Particle_Pollution.pdf",
-      accentRGB: "34, 197, 94", // green
+      thumb: "assets/img/projects/particle-pollution.webp",
+      accentRGB: "34, 197, 94",
       icon: "globe",
     },
     {
@@ -42,7 +43,8 @@
       desc: "An analytics pipeline repo structured for ingestion → transform → analysis with documentation in README.",
       tags: ["ETL", "Analytics", "Docs"],
       url: "https://github.com/AII-projects/DigitalAssetsAnalyticsPipeline",
-      accentRGB: "59, 130, 246", // blue
+      thumb: "assets/img/projects/digital-assets-pipeline.webp",
+      accentRGB: "59, 130, 246",
       icon: "bars",
     },
     {
@@ -53,7 +55,8 @@
       desc: "A Slack bot that delivers quick, real-time help for Python questions via a streamlined interface.",
       tags: ["Python", "Slack API", "Automation"],
       url: "https://github.com/AII-projects/slackbot",
-      accentRGB: "168, 85, 247", // purple
+      thumb: "assets/img/projects/slackbot.webp",
+      accentRGB: "168, 85, 247",
       icon: "chat",
     },
   ];
@@ -126,7 +129,6 @@
         h("path", { d: "M17 16v-7" })
       );
     }
-    // chat
     return h(
       "svg",
       common,
@@ -137,7 +139,6 @@
   }
 
   function computeDiff(i, active, n) {
-    // shortest wrap-around distance
     let d = i - active;
     const half = Math.floor(n / 2);
     if (d > half) d -= n;
@@ -148,11 +149,79 @@
   function ProjectDeck({ projects }) {
     const n = projects.length;
 
+    const viewportRef = useRef(null);
     const [active, setActive] = useState(0);
     const [copiedId, setCopiedId] = useState(null);
     const [paused, setPaused] = useState(false);
 
-    // auto-spotlight
+    const [layout, setLayout] = useState(() => ({
+      cardW: 330,
+      cardH: 560,
+      shiftX: 240,
+      depth: 180,
+      lift: 18,
+      avatar: 118,
+      viewportH: 680,
+    }));
+
+    // Responsive sizing: fits both width + height
+    useEffect(() => {
+      let raf = 0;
+
+      const compute = () => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          const w =
+            viewportRef.current?.getBoundingClientRect().width ||
+            window.innerWidth ||
+            1000;
+          const vh = window.innerHeight || 900;
+
+          // Card width: big on mobile, controlled on desktop
+          let cardW;
+          if (w < 560) cardW = w * 0.84;           // mobile: bigger, more immersive
+          else if (w < 920) cardW = w * 0.42;      // mid: balanced
+          else cardW = 340;                        // desktop cap
+
+          cardW = Math.round(Math.max(240, Math.min(340, cardW)));
+
+          // Card height derived from width, but limited by viewport height
+          let cardH = Math.round(cardW * 1.62);
+          cardH = Math.max(360, Math.min(560, cardH));
+          cardH = Math.min(cardH, Math.round(vh * 0.70)); // fit vertically
+
+          const shiftX = Math.round(cardW * 0.72);
+          const depth = Math.round(cardW * 0.55);
+          const lift = Math.round(cardW * 0.05);
+
+          const avatar = Math.round(Math.max(92, Math.min(118, cardW * 0.35)));
+
+          // viewport should include avatar above the card
+          const viewportH = Math.max(
+            460,
+            Math.min(Math.round(vh * 0.80), cardH + 120)
+          );
+
+          setLayout({ cardW, cardH, shiftX, depth, lift, avatar, viewportH });
+        });
+      };
+
+      compute();
+      window.addEventListener("resize", compute);
+      return () => {
+        window.removeEventListener("resize", compute);
+        cancelAnimationFrame(raf);
+      };
+    }, []);
+
+    const stageStyle = {
+      "--cardW": `${layout.cardW}px`,
+      "--cardH": `${layout.cardH}px`,
+      "--avatarSize": `${layout.avatar}px`,
+      "--viewportH": `${layout.viewportH}px`,
+    };
+
+    // auto spotlight
     useEffect(() => {
       if (!AUTO_MS) return;
       if (paused) return;
@@ -174,13 +243,12 @@
       return () => window.removeEventListener("keydown", onKey);
     }, [n]);
 
-    // swipe/drag
+    // touch/drag
     const drag = useRef({ down: false, x0: 0 });
-
     const onPointerDown = (e) => {
       drag.current.down = true;
       drag.current.x0 = e.clientX;
-      setPaused(true); // pause on touch
+      setPaused(true);
     };
 
     const onPointerUp = (e) => {
@@ -188,14 +256,10 @@
       drag.current.down = false;
 
       const dx = e.clientX - drag.current.x0;
-      if (Math.abs(dx) < DRAG_THRESHOLD) {
-        // small tap: just resume
-        setTimeout(() => setPaused(false), 400);
-        return;
+      if (Math.abs(dx) >= DRAG_THRESHOLD) {
+        if (dx > 0) setActive((a) => clampIndex(a - 1, n));
+        else setActive((a) => clampIndex(a + 1, n));
       }
-
-      if (dx > 0) setActive((a) => clampIndex(a - 1, n));
-      else setActive((a) => clampIndex(a + 1, n));
 
       setTimeout(() => setPaused(false), 650);
     };
@@ -219,7 +283,7 @@
         h(
           "p",
           { className: "mono" },
-          "3D deck · infinite loop · auto‑spotlight every 4s · pause on hover/touch · click selects · double‑click opens"
+          "3D deck · hover pauses · click selects · double‑click opens · swipe / arrows"
         )
       ),
 
@@ -227,6 +291,7 @@
         "div",
         {
           className: "mc-stage",
+          style: stageStyle,
           onMouseEnter: () => setPaused(true),
           onMouseLeave: () => setPaused(false),
         },
@@ -246,6 +311,7 @@
           "div",
           {
             className: "mc-viewport",
+            ref: viewportRef,
             onPointerDown,
             onPointerUp,
             onPointerCancel: onPointerUp,
@@ -256,15 +322,14 @@
 
             const visible = abs <= 3;
 
-            // tuned for “mecarreira fan”
-            const tx = d * 240;
-            const tz = -abs * 180;
-            const ty = abs * 18;
+            const tx = d * layout.shiftX;
+            const tz = -abs * layout.depth;
+            const ty = abs * layout.lift;
             const ry = d * -18;
-            const rz = d * 1.5;
+            const rz = d * 1.4;
 
-            const scale = Math.max(0.72, 1.07 - abs * 0.16);
-            const opacity = visible ? Math.max(0, 1 - abs * 0.20) : 0;
+            const scale = Math.max(0.74, 1.08 - abs * 0.16);
+            const opacity = visible ? Math.max(0, 1 - abs * 0.22) : 0;
 
             const transform =
               `translate(-50%, -50%) ` +
@@ -301,9 +366,24 @@
               h(
                 "div",
                 { className: "mc-body" },
+
                 h(
                   "div",
                   { className: "mc-thumb", "aria-hidden": "true" },
+                  p.thumb
+                    ? h("img", {
+                        className: "mc-thumbImg",
+                        src: p.thumb,
+                        alt: "",
+                        loading: "lazy",
+                        decoding: "async",
+                        onError: (e) => {
+                          // hide broken image; fallback stays
+                          e.currentTarget.style.display = "none";
+                        },
+                      })
+                    : null,
+                  h("div", { className: "mc-thumbOverlay" }),
                   h("div", { className: "mc-thumbIcon" }, h(Icon, { name: p.icon }))
                 ),
 
