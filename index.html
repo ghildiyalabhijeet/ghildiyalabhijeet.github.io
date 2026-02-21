@@ -9,7 +9,7 @@
       content="Abhijeet Ghildiyal — M.S. Data Science @ ASU. Pipelines, ML/GenAI systems, and dashboards."
     />
 
-    <!-- Keep same stack: HTML + CSS + JS + Tailwind CDN (no build step) -->
+    <!-- Same stack: HTML + CSS + JS + Tailwind CDN (no build step) -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Fonts -->
@@ -20,7 +20,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="assets/css/main.css?v=23" />
+    <link rel="stylesheet" href="assets/css/main.css?v=24" />
   </head>
 
   <body>
@@ -29,7 +29,7 @@
     <canvas id="bgRender" class="bg-render" aria-hidden="true"></canvas>
     <div class="bg-noise" aria-hidden="true"></div>
 
-    <!-- Floating right rail for easy navigation -->
+    <!-- Floating right rail -->
     <aside class="rail glass prism" aria-label="Section navigation rail">
       <button class="rail-dot is-active" type="button" data-target="#work" aria-label="Go to Work">
         <span class="rail-label mono">Work</span>
@@ -55,21 +55,77 @@
       <!-- WORK / HERO -->
       <section id="work" class="screen" aria-label="Work">
         <div class="hero glass prism hero-center reveal">
-          <div class="hero-badge mono">
-            M.S. Data Science @ ASU <span class="sep">•</span> Tempe, AZ
-            <span class="sep">•</span> Part‑time now <span class="sep">/</span> Full‑time May 2026
+          <!-- compact facts row (icons > text) -->
+          <div class="hero-facts mono" aria-label="Quick facts">
+            <span class="fact">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 18v-7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v7" />
+                <path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2" />
+                <path d="M7 18h10" />
+              </svg>
+              ASU · M.S. DS
+            </span>
+
+            <span class="fact">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 21s7-5 7-11a7 7 0 1 0-14 0c0 6 7 11 7 11z" />
+                <path d="M12 10a2.2 2.2 0 1 0 0 .1z" />
+              </svg>
+              Tempe, AZ
+            </span>
+
+            <span class="fact">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 7v5l3 2" />
+                <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+              </svg>
+              Part‑time now
+            </span>
+
+            <span class="fact">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+              Full‑time May 2026
+            </span>
           </div>
 
           <h1 class="hero-title hero-title-creative">Abhijeet Ghildiyal</h1>
 
-          <p class="hero-lead">
-            I build <b>data products</b> that feel like software —
-            clean pipelines, ML/GenAI systems, and dashboards teams actually use.
+          <p class="hero-tagline">
+            Data products <span class="dot">·</span> ML/GenAI <span class="dot">·</span> dashboards
           </p>
 
-          <div class="hero-chips mono" aria-label="Availability chips">
-            <span class="chip chip-ice">Part‑time: available now</span>
-            <span class="chip chip-ice">Full‑time: May 2026</span>
+          <!-- icon-forward “what I do” row (less text, more symbol) -->
+          <div class="hero-icons" aria-label="Focus icons">
+            <div class="hicon" title="Pipelines" aria-label="Pipelines">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 6h16v4H4z" />
+                <path d="M6 10v8" />
+                <path d="M10 10v8" />
+                <path d="M14 10v8" />
+                <path d="M18 10v8" />
+                <path d="M4 18h16" />
+              </svg>
+              <span class="mono">Pipelines</span>
+            </div>
+
+            <div class="hicon" title="GenAI / ML" aria-label="GenAI / ML">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2l1.2 3.8L17 7l-3.8 1.2L12 12l-1.2-3.8L7 7l3.8-1.2L12 2z" />
+                <path d="M19 12l.9 2.9L23 16l-3.1 1.1L19 20l-.9-2.9L15 16l3.1-1.1L19 12z" />
+              </svg>
+              <span class="mono">ML/GenAI</span>
+            </div>
+
+            <div class="hicon" title="Dashboards" aria-label="Dashboards">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 19V5" />
+                <path d="M4 19h16" />
+                <path d="M7 15l3-4 3 3 4-6" />
+              </svg>
+              <span class="mono">Dashboards</span>
+            </div>
           </div>
 
           <div class="hero-actions">
@@ -78,53 +134,49 @@
             <button class="btn btn-ghost" type="button" data-copy="aghildiy@asu.edu">Copy email</button>
           </div>
 
-          <div class="hero-tags mono">
-            Python <span class="dot">·</span> SQL <span class="dot">·</span> PyTorch
-            <span class="dot">·</span> TensorFlow <span class="dot">·</span> Power BI
+          <!-- compact icon dock (no extra panel) -->
+          <div class="hero-dock" role="navigation" aria-label="Quick links">
+            <a class="dock-btn" href="mailto:aghildiy@asu.edu" aria-label="Email">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 6h16v12H4z"></path>
+                <path d="M4 7l8 6 8-6"></path>
+              </svg>
+            </a>
+
+            <a
+              class="dock-btn"
+              href="https://www.linkedin.com/in/abhijeet928"
+              target="_blank"
+              rel="noopener"
+              aria-label="LinkedIn"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6.5 9.5v9"></path>
+                <path d="M6.5 6.5h.01"></path>
+                <path d="M10 18.5v-5.2c0-2.8 4-3 4 0v5.2"></path>
+                <path d="M14 13.3c0-1.3.9-2.3 2.3-2.3 1.2 0 2.2.9 2.2 2.4v5.1"></path>
+              </svg>
+            </a>
+
+            <a
+              class="dock-btn"
+              href="https://github.com/ghildiyalabhijeet"
+              target="_blank"
+              rel="noopener"
+              aria-label="GitHub"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 19c-4 1.2-4-2-5-2"></path>
+                <path
+                  d="M15 19v-2.2c0-.7.2-1.2.6-1.6-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.8-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.5 9.5 0 0 1 5 0c2-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.8 1 1.7 1 2.8 0 3.9-2.4 4.7-4.6 5 .4.4.7 1 .7 2v2.8"
+                ></path>
+              </svg>
+            </a>
           </div>
         </div>
 
-        <!-- Minimal contact dock -->
-        <div class="dock glass prism reveal" role="navigation" aria-label="Contact links">
-          <a class="dock-btn" href="mailto:aghildiy@asu.edu" aria-label="Email">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 6h16v12H4z"></path>
-              <path d="M4 7l8 6 8-6"></path>
-            </svg>
-          </a>
-
-          <a
-            class="dock-btn"
-            href="https://www.linkedin.com/in/abhijeet928"
-            target="_blank"
-            rel="noopener"
-            aria-label="LinkedIn"
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M6.5 9.5v9"></path>
-              <path d="M6.5 6.5h.01"></path>
-              <path d="M10 18.5v-5.2c0-2.8 4-3 4 0v5.2"></path>
-              <path d="M14 13.3c0-1.3.9-2.3 2.3-2.3 1.2 0 2.2.9 2.2 2.4v5.1"></path>
-            </svg>
-          </a>
-
-          <a
-            class="dock-btn"
-            href="https://github.com/ghildiyalabhijeet"
-            target="_blank"
-            rel="noopener"
-            aria-label="GitHub"
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M9 19c-4 1.2-4-2-5-2"></path>
-              <path
-                d="M15 19v-2.2c0-.7.2-1.2.6-1.6-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.8-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.5 9.5 0 0 1 5 0c2-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.8 1 1.7 1 2.8 0 3.9-2.4 4.7-4.6 5 .4.4.7 1 .7 2v2.8"
-              ></path>
-            </svg>
-          </a>
-        </div>
-
         <div class="toast mono" id="toast" aria-live="polite" aria-atomic="true"></div>
+
         <button class="scroll-cue mono" type="button" data-target="#about" aria-label="Scroll to About">
           Scroll ↓
         </button>
@@ -138,37 +190,66 @@
             <p class="panel-sub">Data Science · Machine Learning · Analytics — with a product mindset</p>
           </header>
 
-          <div class="about-grid roomy">
-            <!-- Summary / Snapshot -->
-            <article class="card glass-lite reveal about-span">
+          <!-- REQUIRED: vertical order only -->
+          <div class="about-stack roomy">
+            <!-- 1) Summary -->
+            <article class="card glass-lite reveal">
               <div class="card-head">
                 <h3 class="card-title">Summary</h3>
                 <div class="mono micro muted">Full data lifecycle</div>
               </div>
 
               <p class="copy">
-                Master’s in Data Science candidate with a strong CS foundation and proficiency in
-                <b>Python</b>, <b>SQL</b>, and <b>machine learning</b>. Experienced across the full data lifecycle —
-                from preprocessing and modeling to building interactive Power BI dashboards.
+                Master’s in Data Science candidate with a strong CS foundation and proficiency in <b>Python</b>,
+                <b>SQL</b>, and <b>machine learning</b>. Experienced across the full data lifecycle —
+                preprocessing, modeling, and interactive Power BI dashboards.
               </p>
 
-              <div class="principles roomy">
-                <div class="principle">
-                  <div class="k">Clarity</div>
-                  <div class="v">Simple metrics, explicit assumptions, readable outputs.</div>
+              <!-- vertical principles (not side-by-side) -->
+              <div class="principles-vertical">
+                <div class="pitem">
+                  <div class="picon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M4 6h16"></path>
+                      <path d="M4 12h10"></path>
+                      <path d="M4 18h16"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="pk">Clarity</div>
+                    <div class="pv">Simple metrics, explicit assumptions, readable outputs.</div>
+                  </div>
                 </div>
-                <div class="principle">
-                  <div class="k">Speed</div>
-                  <div class="v">Fast iteration loops with clean, testable structure.</div>
+
+                <div class="pitem">
+                  <div class="picon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 7v5l3 2"></path>
+                      <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="pk">Speed</div>
+                    <div class="pv">Fast iteration loops with clean, testable structure.</div>
+                  </div>
                 </div>
-                <div class="principle">
-                  <div class="k">Trust</div>
-                  <div class="v">Reproducible workflows + “show your work” dashboards.</div>
+
+                <div class="pitem">
+                  <div class="picon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 2l7 4v6c0 5-3 9-7 10C8 21 5 17 5 12V6z"></path>
+                      <path d="M9.5 12l1.8 1.8L15.8 9"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="pk">Trust</div>
+                    <div class="pv">Reproducible workflows + “show your work” dashboards.</div>
+                  </div>
                 </div>
               </div>
             </article>
 
-            <!-- Education (col 1) -->
+            <!-- 2) Education -->
             <article class="card glass-lite reveal">
               <div class="card-head">
                 <h3 class="card-title">Education</h3>
@@ -202,7 +283,7 @@
               </div>
             </article>
 
-            <!-- Experience (col 2) -->
+            <!-- 3) Experience -->
             <article class="card glass-lite reveal">
               <div class="card-head">
                 <h3 class="card-title">Experience</h3>
@@ -245,28 +326,11 @@
               </div>
             </article>
 
-            <!-- Certifications -->
-            <article class="card glass-lite reveal about-span">
-              <div class="card-head">
-                <h3 class="card-title">Certifications</h3>
-                <div class="mono micro muted">Highlights</div>
-              </div>
-
-              <div class="certs mono">
-                <span class="pill">Python (Data Science)</span>
-                <span class="pill">Power BI</span>
-                <span class="pill">Data Scientist</span>
-                <span class="pill">Artificial Intelligence</span>
-                <span class="pill">Machine Learning</span>
-                <span class="pill">MTA · Security Fundamentals</span>
-              </div>
-            </article>
-
-            <!-- Skills Lab -->
-            <section class="skills glass-lite reveal about-span" aria-label="Skills">
+            <!-- 4) Skills (and certifications inside) -->
+            <section class="skills glass-lite reveal" aria-label="Skills">
               <div class="skills-head">
                 <div>
-                  <h3 class="card-title">Skills Lab</h3>
+                  <h3 class="card-title">Skills</h3>
                   <div class="mono micro muted">Filter • hover a bubble • click to pin</div>
                 </div>
 
@@ -279,7 +343,7 @@
                 </div>
               </div>
 
-              <div class="skills-grid roomy">
+              <div class="skills-stack roomy">
                 <div id="skillsCloud" class="cloud" aria-label="Skills cloud">
                   <button class="bubble" type="button" data-group="lang" data-size="lg" data-desc="Primary language for ML, analytics, automation.">Python</button>
                   <button class="bubble" type="button" data-group="lang" data-size="md" data-desc="Querying, joins, analytics, reporting.">SQL</button>
@@ -313,6 +377,18 @@
                     <div id="skillsCount" class="count">—</div>
                   </div>
                 </aside>
+
+                <div class="cert-row">
+                  <div class="mono micro muted">Certifications</div>
+                  <div class="certs mono">
+                    <span class="pill">Python (Data Science)</span>
+                    <span class="pill">Power BI</span>
+                    <span class="pill">Data Scientist</span>
+                    <span class="pill">Artificial Intelligence</span>
+                    <span class="pill">Machine Learning</span>
+                    <span class="pill">MTA · Security Fundamentals</span>
+                  </div>
+                </div>
               </div>
             </section>
           </div>
@@ -332,51 +408,45 @@
         <div class="panel glass prism">
           <header class="panel-head reveal">
             <h2 class="panel-title">Projects</h2>
-            <p class="panel-sub">Infinite carousel · scroll forever · click to preview · double‑click opens</p>
+            <p class="panel-sub">
+              Marquee deck · infinite loop · pause on hover/tap · click selects · double‑click opens
+            </p>
           </header>
 
-          <div class="projects-lab one-card reveal">
-            <div class="deck">
-              <div class="deck-head">
-                <div class="mono micro muted">Auto‑spotlight every 4s (pauses on hover)</div>
-                <div class="deck-controls">
-                  <button class="navbtn" type="button" id="projPrev" aria-label="Previous">←</button>
-                  <button class="navbtn" type="button" id="projNext" aria-label="Next">→</button>
-                </div>
-              </div>
-
-              <!-- JS clones before/after for infinite -->
-              <div id="projTrack" class="track" role="list" aria-label="Project cards">
-                <button class="pcard" type="button" role="listitem" data-key="genai" data-accent="59 130 246">
-                  <div class="thumb t-genai" aria-hidden="true">
-                    <div class="glyph">
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
+          <div class="projects-clean reveal">
+            <!-- Marquee -->
+            <div class="marquee glass-lite prism-lite" id="projMarquee" aria-label="Projects marquee (infinite)">
+              <div class="marquee-track" id="marqueeTrack">
+                <div class="marquee-group" id="marqueeGroup">
+                  <button class="mcard" type="button" data-key="genai" data-accent="59 130 246">
+                    <span class="micon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
                         <path d="M12 2l1.2 3.8L17 7l-3.8 1.2L12 12l-1.2-3.8L7 7l3.8-1.2L12 2z" />
                         <path d="M19 12l.9 2.9L23 16l-3.1 1.1L19 20l-.9-2.9L15 16l3.1-1.1L19 12z" />
                       </svg>
-                    </div>
-                  </div>
-                  <div class="ptitle">Faster Diffusion</div>
-                  <div class="pmeta mono">GenAI · Optimization</div>
-                </button>
+                    </span>
+                    <span class="mtext">
+                      <span class="mtitle">Faster Diffusion</span>
+                      <span class="mmeta mono">GenAI · Optimization</span>
+                    </span>
+                  </button>
 
-                <button class="pcard" type="button" role="listitem" data-key="pollution" data-accent="16 185 129">
-                  <div class="thumb t-pollution" aria-hidden="true">
-                    <div class="glyph">
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <path d="M2 12h20"></path>
+                  <button class="mcard" type="button" data-key="pollution" data-accent="16 185 129">
+                    <span class="micon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <path d="M3 12h18"></path>
                       </svg>
-                    </div>
-                  </div>
-                  <div class="ptitle">Particle Pollution</div>
-                  <div class="pmeta mono">Research · PM2.5</div>
-                </button>
+                    </span>
+                    <span class="mtext">
+                      <span class="mtitle">Particle Pollution</span>
+                      <span class="mmeta mono">Research · PM2.5</span>
+                    </span>
+                  </button>
 
-                <button class="pcard" type="button" role="listitem" data-key="pipeline" data-accent="234 179 8">
-                  <div class="thumb t-pipeline" aria-hidden="true">
-                    <div class="glyph">
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <button class="mcard" type="button" data-key="pipeline" data-accent="234 179 8">
+                    <span class="micon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
                         <path d="M4 6h16v4H4z"></path>
                         <path d="M6 10v8"></path>
                         <path d="M10 10v8"></path>
@@ -384,47 +454,48 @@
                         <path d="M18 10v8"></path>
                         <path d="M4 18h16"></path>
                       </svg>
-                    </div>
-                  </div>
-                  <div class="ptitle">Digital Assets Pipeline</div>
-                  <div class="pmeta mono">Analytics · ETL</div>
-                </button>
+                    </span>
+                    <span class="mtext">
+                      <span class="mtitle">Digital Assets Pipeline</span>
+                      <span class="mmeta mono">Analytics · ETL</span>
+                    </span>
+                  </button>
 
-                <button class="pcard" type="button" role="listitem" data-key="slackbot" data-accent="236 72 153">
-                  <div class="thumb t-slack" aria-hidden="true">
-                    <div class="glyph">
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <button class="mcard" type="button" data-key="slackbot" data-accent="236 72 153">
+                    <span class="micon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24">
                         <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
                         <path d="M8 9h8"></path>
                         <path d="M8 13h5"></path>
                       </svg>
-                    </div>
-                  </div>
-                  <div class="ptitle">Slack Python Q&amp;A Bot</div>
-                  <div class="pmeta mono">Python · Slack API</div>
-                </button>
+                    </span>
+                    <span class="mtext">
+                      <span class="mtitle">Slack Python Q&amp;A Bot</span>
+                      <span class="mmeta mono">Python · Slack API</span>
+                    </span>
+                  </button>
+                </div>
               </div>
-
-              <div class="dots" id="projDots" aria-label="Project position indicators"></div>
             </div>
 
-            <aside class="preview glass prism" id="projPreview" style="--accent: 59 130 246" aria-live="polite">
-              <div class="preview-top">
+            <!-- Clean preview (less clutter than your old right-side panel) -->
+            <aside class="pview glass prism" id="projPreview" style="--accent: 59 130 246" aria-live="polite">
+              <div class="pview-top">
                 <div>
-                  <div class="preview-title" id="projTitle">Faster Diffusion</div>
-                  <div class="preview-meta mono" id="projMeta">GenAI · Diffusion · Optimization · Python</div>
+                  <div class="pview-title" id="projTitle">Faster Diffusion</div>
+                  <div class="pview-meta mono" id="projMeta">GenAI · Diffusion · Optimization · Python</div>
                 </div>
 
-                <div class="preview-actions">
+                <div class="pview-actions">
                   <a class="btn btn-primary" id="projOpen" href="#" target="_blank" rel="noopener">Open</a>
                   <button class="btn btn-ghost" id="projCopy" type="button">Copy link</button>
                 </div>
               </div>
 
-              <p class="preview-desc" id="projDesc"></p>
-              <ul class="preview-bullets" id="projBullets"></ul>
+              <p class="pview-desc" id="projDesc"></p>
+              <ul class="pview-bullets" id="projBullets"></ul>
 
-              <div class="mono micro muted preview-foot">Tip: track is infinite — keep scrolling →</div>
+              <div class="mono micro muted pview-foot">Tip: hover the deck to pause — click to select</div>
             </aside>
           </div>
 
@@ -439,6 +510,6 @@
       </section>
     </main>
 
-    <script src="assets/js/main.js?v=23"></script>
+    <script src="assets/js/main.js?v=24"></script>
   </body>
 </html>
