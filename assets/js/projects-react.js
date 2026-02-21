@@ -7,7 +7,7 @@
   const h = React.createElement;
 
   const prefersReduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const AUTO_MS = prefersReduce ? 0 : 4000; // auto spotlight every 4s
+  const AUTO_MS = prefersReduce ? 0 : 5000; // ✅ switch every 5 seconds
   const DRAG_THRESHOLD = 42;
 
   const PROJECTS = [
@@ -152,6 +152,8 @@
     const viewportRef = useRef(null);
     const [active, setActive] = useState(0);
     const [copiedId, setCopiedId] = useState(null);
+
+    // ✅ paused ONLY when hovering the drawer
     const [paused, setPaused] = useState(false);
 
     const [layout, setLayout] = useState(() => ({
@@ -164,7 +166,7 @@
       viewportH: 680,
     }));
 
-    // Responsive sizing: fits both width + height
+    // Responsive sizing
     useEffect(() => {
       let raf = 0;
 
@@ -177,18 +179,16 @@
             1000;
           const vh = window.innerHeight || 900;
 
-          // Card width: big on mobile, controlled on desktop
           let cardW;
-          if (w < 560) cardW = w * 0.84;           // mobile: bigger, more immersive
-          else if (w < 920) cardW = w * 0.42;      // mid: balanced
-          else cardW = 340;                        // desktop cap
+          if (w < 560) cardW = w * 0.84;
+          else if (w < 920) cardW = w * 0.42;
+          else cardW = 340;
 
           cardW = Math.round(Math.max(240, Math.min(340, cardW)));
 
-          // Card height derived from width, but limited by viewport height
           let cardH = Math.round(cardW * 1.62);
           cardH = Math.max(360, Math.min(560, cardH));
-          cardH = Math.min(cardH, Math.round(vh * 0.70)); // fit vertically
+          cardH = Math.min(cardH, Math.round(vh * 0.70));
 
           const shiftX = Math.round(cardW * 0.72);
           const depth = Math.round(cardW * 0.55);
@@ -196,7 +196,6 @@
 
           const avatar = Math.round(Math.max(92, Math.min(118, cardW * 0.35)));
 
-          // viewport should include avatar above the card
           const viewportH = Math.max(
             460,
             Math.min(Math.round(vh * 0.80), cardH + 120)
@@ -221,7 +220,7 @@
       "--viewportH": `${layout.viewportH}px`,
     };
 
-    // auto spotlight
+    // ✅ auto spotlight every 5s, loops forever. pauses on hover.
     useEffect(() => {
       if (!AUTO_MS) return;
       if (paused) return;
@@ -233,22 +232,11 @@
       return () => clearInterval(t);
     }, [paused, n]);
 
-    // keyboard
-    useEffect(() => {
-      const onKey = (e) => {
-        if (e.key === "ArrowLeft") setActive((a) => clampIndex(a - 1, n));
-        if (e.key === "ArrowRight") setActive((a) => clampIndex(a + 1, n));
-      };
-      window.addEventListener("keydown", onKey);
-      return () => window.removeEventListener("keydown", onKey);
-    }, [n]);
-
-    // touch/drag
+    // swipe/drag still works
     const drag = useRef({ down: false, x0: 0 });
     const onPointerDown = (e) => {
       drag.current.down = true;
       drag.current.x0 = e.clientX;
-      setPaused(true);
     };
 
     const onPointerUp = (e) => {
@@ -256,12 +244,10 @@
       drag.current.down = false;
 
       const dx = e.clientX - drag.current.x0;
-      if (Math.abs(dx) >= DRAG_THRESHOLD) {
-        if (dx > 0) setActive((a) => clampIndex(a - 1, n));
-        else setActive((a) => clampIndex(a + 1, n));
-      }
+      if (Math.abs(dx) < DRAG_THRESHOLD) return;
 
-      setTimeout(() => setPaused(false), 650);
+      if (dx > 0) setActive((a) => clampIndex(a - 1, n));
+      else setActive((a) => clampIndex(a + 1, n));
     };
 
     useEffect(() => {
@@ -269,9 +255,6 @@
       const t = setTimeout(() => setCopiedId(null), 900);
       return () => clearTimeout(t);
     }, [copiedId]);
-
-    const goPrev = () => setActive((a) => clampIndex(a - 1, n));
-    const goNext = () => setActive((a) => clampIndex(a + 1, n));
 
     return h(
       "div",
@@ -283,7 +266,7 @@
         h(
           "p",
           { className: "mono" },
-          "3D deck · hover pauses · click selects · double‑click opens · swipe / arrows"
+          "Auto-switch every 5s · infinite loop · hover drawer to pause · click selects · double-click opens"
         )
       ),
 
@@ -297,17 +280,6 @@
         },
 
         h(
-          "button",
-          { type: "button", className: "mc-arrow left", "aria-label": "Previous", onClick: goPrev },
-          h("span", null, "‹")
-        ),
-        h(
-          "button",
-          { type: "button", className: "mc-arrow right", "aria-label": "Next", onClick: goNext },
-          h("span", null, "›")
-        ),
-
-        h(
           "div",
           {
             className: "mc-viewport",
@@ -319,7 +291,6 @@
           projects.map((p, i) => {
             const d = computeDiff(i, active, n);
             const abs = Math.abs(d);
-
             const visible = abs <= 3;
 
             const tx = d * layout.shiftX;
@@ -378,7 +349,6 @@
                         loading: "lazy",
                         decoding: "async",
                         onError: (e) => {
-                          // hide broken image; fallback stays
                           e.currentTarget.style.display = "none";
                         },
                       })

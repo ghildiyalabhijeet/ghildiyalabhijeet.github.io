@@ -1017,21 +1017,57 @@ body {
   }
 }
 /* =========================================================
-   Deck responsive sizing + 1:1 thumbnail overrides (v3)
-   Paste at the END of main.css
+   Projects deck overrides (v5)
+   - borderless drawer (cards float)
+   - no arrow buttons
+   - responsive sizing + 1:1 thumbnails
    ========================================================= */
 
+/* Remove the OUTER projects panel border/glass outline */
+.projects-panel.glass{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.projects-panel.glass::before,
+.projects-panel.glass::after{
+  content: none !important;
+}
+
+/* Make the drawer look like a "dark stage" but borderless */
+.mc-stage{
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 28px;
+  padding: 20px 12px 16px !important;
+
+  background:
+    radial-gradient(1100px 520px at 50% 10%, rgba(255,255,255,0.06), transparent 62%),
+    radial-gradient(740px 420px at 20% 60%, rgba(59,130,246,0.10), transparent 62%),
+    radial-gradient(740px 420px at 80% 60%, rgba(168,85,247,0.10), transparent 62%),
+    linear-gradient(180deg, rgba(7,9,16,0.66), rgba(6,7,12,0.78)) !important;
+
+  /* let neon/glow breathe outside the drawer */
+  overflow: visible !important;
+}
+
+/* kill arrows if any older cached HTML still shows them */
+.mc-arrow{ display: none !important; }
+
+/* Viewport height comes from JS vars */
 .mc-viewport{
   height: var(--viewportH, clamp(480px, 70vh, 720px));
 }
 
-/* Card size now comes from JS vars */
+/* Card size comes from JS vars */
 .mc-card{
   width: var(--cardW, min(340px, 82vw));
   height: var(--cardH, min(560px, 72vh));
 }
 
-/* Avatar scales too */
+/* Avatar scales */
 .mc-avatar{
   width: var(--avatarSize, 118px);
   height: var(--avatarSize, 118px);
@@ -1042,7 +1078,7 @@ body {
   height: calc(var(--avatarSize, 118px) * 0.38);
 }
 
-/* Make the thumbnail a true 1:1 square */
+/* Thumbnail is true 1:1 square */
 .mc-thumb{
   aspect-ratio: 1 / 1;
   height: auto;
@@ -1050,7 +1086,7 @@ body {
   border-radius: 16px;
 }
 
-/* Real image fills the square */
+/* real image fills */
 .mc-thumbImg{
   position: absolute;
   inset: 0;
@@ -1062,18 +1098,18 @@ body {
   filter: saturate(1.02) contrast(1.02);
 }
 
-/* Slight overlay so text vibe stays premium */
+/* overlay keeps it premium and readable */
 .mc-thumbOverlay{
   position: absolute;
   inset: 0;
   border-radius: 16px;
   background:
     radial-gradient(120% 100% at 20% 0%, rgba(255,255,255,0.12), transparent 55%),
-    linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.28));
+    linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.30));
   pointer-events: none;
 }
 
-/* Fallback icon sits above background if image missing */
+/* fallback icon */
 .mc-thumbIcon{
   position: relative;
   z-index: 2;
@@ -1081,7 +1117,7 @@ body {
   transform: scale(2.2);
 }
 
-/* Keep card text from overflowing on short screens */
+/* stop text from overflowing on short screens */
 .mc-desc{
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -1089,7 +1125,6 @@ body {
   overflow: hidden;
 }
 
-/* Slightly tighter gaps on very short screens */
 @media (max-height: 700px){
   .mc-body{ gap: 10px; }
   .mc-actions{ gap: 8px; }
