@@ -2,6 +2,8 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
+  const prefersReduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
   // Footer year
   const yearEl = $("#year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
@@ -45,6 +47,27 @@
   }
 
   // ==============================
+  // Focus mode: glow cards when they enter viewport
+  // ==============================
+  const focusCards = $$(".focus-card");
+  if (focusCards.length) {
+    const focusIO = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          e.target.classList.toggle("is-focus", e.isIntersecting);
+        });
+      },
+      {
+        // Highlight when the card is meaningfully on screen
+        threshold: [0.25, 0.45, 0.6],
+        rootMargin: "-10% 0px -25% 0px",
+      }
+    );
+
+    focusCards.forEach((el) => focusIO.observe(el));
+  }
+
+  // ==============================
   // Copy email
   // ==============================
   const copyBtn = $("#copyEmailBtn");
@@ -57,6 +80,7 @@
         return true;
       }
     } catch (_) {}
+
     try {
       const ta = document.createElement("textarea");
       ta.value = text;
@@ -69,6 +93,7 @@
       document.body.removeChild(ta);
       return !!ok;
     } catch (_) {}
+
     return false;
   }
 
@@ -79,5 +104,47 @@
       copyBtn.textContent = ok ? "Copied ✓" : "Copy failed";
       setTimeout(() => (copyBtn.textContent = prev), 1100);
     });
+  }
+
+  // ==============================
+  // Cursor ambience (glowy orb follows pointer)
+  // ==============================
+  if (!prefersReduce) {
+    const root = document.documentElement;
+
+    let targetX = window.innerWidth * 0.5;
+    let targetY = window.innerHeight * 0.45;
+    let currentX = targetX;
+    let currentY = targetY;
+
+    let raf = 0;
+
+    const tick = () => {
+      raf = 0;
+      // Smooth follow (ease)
+      const k = 0.12;
+      currentX += (targetX - currentX) * k;
+      currentY += (targetY - currentY) * k;
+
+      root.style.setProperty("--mx", `${currentX.toFixed(1)}px`);
+      root.style.setProperty("--my", `${currentY.toFixed(1)}px`);
+
+      // Continue until close enough
+      const dx = Math.abs(targetX - currentX);
+      const dy = Math.abs(targetY - currentY);
+      if (dx > 0.5 || dy > 0.5) raf = requestAnimationFrame(tick);
+    };
+
+    const onMove = (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+
+    // Seed with initial position
+    root.style.setProperty("--mx", `${currentX.toFixed(1)}px`);
+    root.style.setProperty("--my", `${currentY.toFixed(1)}px`);
   }
 })();

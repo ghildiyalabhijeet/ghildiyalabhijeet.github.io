@@ -21,13 +21,14 @@
     />
 
     <link rel="icon" href="assets/img/favicon.svg" />
-    <link rel="stylesheet" href="assets/css/main.css?v=2" />
+    <link rel="stylesheet" href="assets/css/main.css?v=4" />
   </head>
 
   <body class="min-h-screen">
     <!-- Ambient background layers -->
     <div class="bg-animated" aria-hidden="true"></div>
     <div class="bg-noise" aria-hidden="true"></div>
+    <div class="bg-cursor" aria-hidden="true"></div>
 
     <!-- Top nav -->
     <header class="nav-shell" role="banner">
@@ -40,8 +41,8 @@
 
     <main>
       <!-- WORK / HERO -->
-      <section id="work" class="screen" aria-label="Work">
-        <div class="hero-card glass">
+      <section id="work" class="screen screen--hero section section--work" aria-label="Work">
+        <div class="hero-card glass focus-card">
           <div class="hero-top mono">
             M.S. Data Science @ ASU · Tempe, AZ · Part‑time now / Full‑time May 2026
           </div>
@@ -70,11 +71,11 @@
           </div>
 
           <div class="hero-mini mono" aria-hidden="true">
-  Tip: Projects auto‑switch every 5s — hover to pause
-</div>
+            Tip: Projects auto‑switch every 5s — click a slide to pause · double‑click opens
+          </div>
         </div>
 
-        <div class="contact-bar glass" role="navigation" aria-label="Contact links">
+        <div class="contact-bar glass focus-card" role="navigation" aria-label="Contact links">
           <a class="contact-icon" href="mailto:aghildiy@asu.edu" aria-label="Email" title="Email">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M4 6h16v12H4z"></path>
@@ -118,189 +119,198 @@
         <div class="hint mono" aria-hidden="true">Scroll ↓</div>
       </section>
 
-      <!-- ABOUT -->
-      <section id="about" class="screen" aria-label="About">
-        <div class="panel glass about-panel">
+      <!-- ABOUT (split into focused panels) -->
+      <section id="about" class="screen screen--section section section--about about-stack" aria-label="About">
+        <!-- ABOUT / SUMMARY -->
+        <div class="panel glass focus-card">
           <div class="panel-head">
             <h2 class="panel-title">About</h2>
-            <p class="panel-sub">
-              Data Science · Machine Learning · Analytics — with a product mindset
-            </p>
+            <p class="panel-sub">Data Science · Machine Learning · Analytics — with a product mindset</p>
           </div>
 
-          <!-- vertical stack (no side-by-side) -->
-          <div class="about-stack">
-            <article class="about-block">
-              <h3 class="block-title">Summary</h3>
-              <p class="block-body">
-                I’m a Master of Science in Data Science candidate with a strong Computer Science foundation.
-                I work across the full data lifecycle — from preprocessing and modeling to building interactive
-                Power BI dashboards that make decisions easier.
-              </p>
-              <div class="mini-row mono">
-                <span class="chip">Part‑time: available now</span>
-                <span class="chip">Full‑time: May 2026</span>
-              </div>
+          <div class="about-summary">
+            <p class="block-body">
+              I’m a Master of Science in Data Science candidate with a strong Computer Science foundation.
+              I work across the full data lifecycle — from preprocessing and modeling to building interactive
+              dashboards that make decisions easier.
+            </p>
 
-              <div class="mini-icons" aria-label="What I optimize for">
-                <div class="mini-icon">
-                  <span class="mini-dot"></span>
-                  <div>
-                    <div class="mini-title">Clarity</div>
-                    <div class="mini-text mono">Readable outputs + explicit assumptions</div>
-                  </div>
-                </div>
-                <div class="mini-icon">
-                  <span class="mini-dot"></span>
-                  <div>
-                    <div class="mini-title">Speed</div>
-                    <div class="mini-text mono">Fast iteration loops, testable structure</div>
-                  </div>
-                </div>
-                <div class="mini-icon">
-                  <span class="mini-dot"></span>
-                  <div>
-                    <div class="mini-title">Trust</div>
-                    <div class="mini-text mono">Reproducible workflows + “show your work”</div>
-                  </div>
+            <div class="mini-row mono">
+              <span class="chip">Part‑time: available now</span>
+              <span class="chip">Full‑time: May 2026</span>
+            </div>
+
+            <div class="mini-icons" aria-label="What I optimize for">
+              <div class="mini-icon">
+                <span class="mini-dot"></span>
+                <div>
+                  <div class="mini-title">Clarity</div>
+                  <div class="mini-text mono">Readable outputs + explicit assumptions</div>
                 </div>
               </div>
-            </article>
-
-            <article class="about-block">
-              <h3 class="block-title">Education</h3>
-
-              <div class="edu-item">
-                <div class="edu-top">
-                  <div class="edu-degree">M.S. Data Science</div>
-                  <div class="edu-meta mono">Arizona State University · Tempe, AZ</div>
-                </div>
-                <div class="edu-bottom">
-                  <span class="edu-date mono">Graduating May 2026</span>
-                  <span class="edu-gpa mono">CGPA 3.67</span>
-                </div>
-                <div class="edu-courses mono">
-                  Coursework: Statistical ML · Generative AI · Data Mining · Optimization
+              <div class="mini-icon">
+                <span class="mini-dot"></span>
+                <div>
+                  <div class="mini-title">Speed</div>
+                  <div class="mini-text mono">Fast iteration loops, testable structure</div>
                 </div>
               </div>
+              <div class="mini-icon">
+                <span class="mini-dot"></span>
+                <div>
+                  <div class="mini-title">Trust</div>
+                  <div class="mini-text mono">Reproducible workflows + “show your work”</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-              <div class="edu-item mt-4">
-                <div class="edu-top">
-                  <div class="edu-degree">B.Tech Computer Science &amp; Engineering</div>
-                  <div class="edu-meta mono">DIT University · Uttarakhand, India</div>
-                </div>
-                <div class="edu-bottom">
-                  <span class="edu-date mono">Aug 2018 — Jun 2022</span>
-                  <span class="edu-gpa mono">CGPA 3.33</span>
-                </div>
-                <div class="edu-courses mono">
-                  Coursework: Data Structures · System Design · RDBMS · AI
-                </div>
+        <!-- EDUCATION (stacked) -->
+        <div class="panel glass focus-card">
+          <div class="panel-head">
+            <h2 class="panel-title">Education</h2>
+            <p class="panel-sub">Degrees &amp; core coursework</p>
+          </div>
+
+          <div class="card-stack">
+            <article class="subcard">
+              <div class="edu-top">
+                <div class="edu-degree">M.S. Data Science</div>
+                <div class="edu-meta mono">Arizona State University · Tempe, AZ</div>
+              </div>
+              <div class="edu-bottom">
+                <span class="edu-date mono">Graduating May 2026</span>
+                <span class="edu-gpa mono">CGPA 3.67</span>
+              </div>
+              <div class="edu-courses mono">
+                Coursework: Statistical ML · Generative AI · Data Mining · Optimization
               </div>
             </article>
 
-            <article class="about-block">
-              <h3 class="block-title">Experience</h3>
-
-              <div class="exp-list">
-                <div class="exp-item">
-                  <div class="exp-top">
-                    <div class="exp-role">Data Analyst Intern · BTP ECO Products</div>
-                    <div class="exp-date mono">Jul 2022 — Aug 2024</div>
-                  </div>
-                  <ul class="exp-bullets">
-                    <li>Designed &amp; deployed 5+ Power BI dashboards to automate reporting and surface key KPIs.</li>
-                    <li>Translated complex patterns into clear, actionable strategies for leadership decisions.</li>
-                  </ul>
-                </div>
-
-                <div class="exp-item">
-                  <div class="exp-top">
-                    <div class="exp-role">SDE Intern · BTP ECO Products</div>
-                    <div class="exp-date mono">Jul 2021 — Sep 2021</div>
-                  </div>
-                  <ul class="exp-bullets">
-                    <li>Built responsive, user-friendly interfaces using HTML and CSS.</li>
-                    <li>Improved cross-browser compatibility for consistent UI performance.</li>
-                  </ul>
-                </div>
-
-                <div class="exp-item">
-                  <div class="exp-top">
-                    <div class="exp-role">Cyber Security Intern · Virtually Testing Foundation</div>
-                    <div class="exp-date mono">Jan 2021 — Mar 2021</div>
-                  </div>
-                  <ul class="exp-bullets">
-                    <li>Assisted with security testing in virtual environments and managed technical content.</li>
-                    <li>Drafted guidelines that improved accountability and process consistency.</li>
-                  </ul>
-                </div>
+            <article class="subcard">
+              <div class="edu-top">
+                <div class="edu-degree">B.Tech Computer Science &amp; Engineering</div>
+                <div class="edu-meta mono">DIT University · Uttarakhand, India</div>
+              </div>
+              <div class="edu-bottom">
+                <span class="edu-date mono">Aug 2018 — Jun 2022</span>
+                <span class="edu-gpa mono">CGPA 3.33</span>
+              </div>
+              <div class="edu-courses mono">
+                Coursework: Data Structures · System Design · RDBMS · AI
               </div>
             </article>
+          </div>
+        </div>
 
-            <article class="about-block">
-              <h3 class="block-title">Skills</h3>
+        <!-- EXPERIENCE (stacked) -->
+        <div class="panel glass focus-card">
+          <div class="panel-head">
+            <h2 class="panel-title">Experience</h2>
+            <p class="panel-sub">Recent roles &amp; outcomes</p>
+          </div>
 
-              <div class="skills-groups">
-                <div class="skill-group">
-                  <div class="skill-head">
-                    <span class="skill-badge mono">Languages</span>
-                  </div>
-                  <div class="skills-wrap">
-                    <span class="skill-pill">Python</span>
-                    <span class="skill-pill">SQL</span>
-                    <span class="skill-pill">HTML5</span>
-                    <span class="skill-pill">CSS3</span>
-                  </div>
-                </div>
-
-                <div class="skill-group">
-                  <div class="skill-head">
-                    <span class="skill-badge mono">Data</span>
-                  </div>
-                  <div class="skills-wrap">
-                    <span class="skill-pill">Pandas</span>
-                    <span class="skill-pill">NumPy</span>
-                    <span class="skill-pill">Matplotlib</span>
-                    <span class="skill-pill">Seaborn</span>
-                    <span class="skill-pill">Power BI</span>
-                  </div>
-                </div>
-
-                <div class="skill-group">
-                  <div class="skill-head">
-                    <span class="skill-badge mono">ML / DL</span>
-                  </div>
-                  <div class="skills-wrap">
-                    <span class="skill-pill">scikit-learn</span>
-                    <span class="skill-pill">PyTorch</span>
-                    <span class="skill-pill">TensorFlow</span>
-                    <span class="skill-pill">Hugging Face</span>
-                  </div>
-                </div>
-
-                <div class="skill-group">
-                  <div class="skill-head">
-                    <span class="skill-badge mono">Tools</span>
-                  </div>
-                  <div class="skills-wrap">
-                    <span class="skill-pill">Git</span>
-                    <span class="skill-pill">Slack API</span>
-                    <span class="skill-pill">Windows</span>
-                  </div>
-                </div>
+          <div class="exp-list">
+            <div class="exp-item">
+              <div class="exp-top">
+                <div class="exp-role">Data Analyst Intern · BTP ECO Products</div>
+                <div class="exp-date mono">Jul 2022 — Aug 2024</div>
               </div>
+              <ul class="exp-bullets">
+                <li>Designed &amp; deployed 5+ Power BI dashboards to automate reporting and surface key KPIs.</li>
+                <li>Translated complex patterns into clear, actionable strategies for leadership decisions.</li>
+              </ul>
+            </div>
 
-              <h3 class="block-title mt-6">Certifications</h3>
-              <div class="certs-wrap">
-                <span class="cert-pill">Python (Data Science)</span>
-                <span class="cert-pill">Power BI</span>
-                <span class="cert-pill">Data Scientist</span>
-                <span class="cert-pill">Artificial Intelligence</span>
-                <span class="cert-pill">Machine Learning</span>
-                <span class="cert-pill">MTA Security Fundamentals</span>
+            <div class="exp-item">
+              <div class="exp-top">
+                <div class="exp-role">SDE Intern · BTP ECO Products</div>
+                <div class="exp-date mono">Jul 2021 — Sep 2021</div>
               </div>
-            </article>
+              <ul class="exp-bullets">
+                <li>Built responsive, user-friendly interfaces using HTML and CSS.</li>
+                <li>Improved cross-browser compatibility for consistent UI performance.</li>
+              </ul>
+            </div>
+
+            <div class="exp-item">
+              <div class="exp-top">
+                <div class="exp-role">Cyber Security Intern · Virtually Testing Foundation</div>
+                <div class="exp-date mono">Jan 2021 — Mar 2021</div>
+              </div>
+              <ul class="exp-bullets">
+                <li>Assisted with security testing in virtual environments and managed technical content.</li>
+                <li>Drafted guidelines that improved accountability and process consistency.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- SKILLS -->
+        <div class="panel glass focus-card">
+          <div class="panel-head">
+            <h2 class="panel-title">Skills</h2>
+            <p class="panel-sub">Languages, tooling, and ML stack</p>
+          </div>
+
+          <div class="skills-groups">
+            <div class="skill-group">
+              <div class="skill-head"><span class="skill-badge mono">Languages</span></div>
+              <div class="skills-wrap">
+                <span class="skill-pill">Python</span>
+                <span class="skill-pill">SQL</span>
+                <span class="skill-pill">HTML5</span>
+                <span class="skill-pill">CSS3</span>
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <div class="skill-head"><span class="skill-badge mono">Data</span></div>
+              <div class="skills-wrap">
+                <span class="skill-pill">Pandas</span>
+                <span class="skill-pill">NumPy</span>
+                <span class="skill-pill">Matplotlib</span>
+                <span class="skill-pill">Seaborn</span>
+                <span class="skill-pill">Power BI</span>
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <div class="skill-head"><span class="skill-badge mono">ML / DL</span></div>
+              <div class="skills-wrap">
+                <span class="skill-pill">scikit-learn</span>
+                <span class="skill-pill">PyTorch</span>
+                <span class="skill-pill">TensorFlow</span>
+                <span class="skill-pill">Hugging Face</span>
+              </div>
+            </div>
+
+            <div class="skill-group">
+              <div class="skill-head"><span class="skill-badge mono">Tools</span></div>
+              <div class="skills-wrap">
+                <span class="skill-pill">Git</span>
+                <span class="skill-pill">Slack API</span>
+                <span class="skill-pill">Windows</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CERTIFICATIONS + FOOTER -->
+        <div class="panel glass focus-card">
+          <div class="panel-head">
+            <h2 class="panel-title">Certifications</h2>
+            <p class="panel-sub">Highlights</p>
+          </div>
+
+          <div class="certs-wrap">
+            <span class="cert-pill">Python (Data Science)</span>
+            <span class="cert-pill">Power BI</span>
+            <span class="cert-pill">Data Scientist</span>
+            <span class="cert-pill">Artificial Intelligence</span>
+            <span class="cert-pill">Machine Learning</span>
+            <span class="cert-pill">MTA Security Fundamentals</span>
           </div>
 
           <div class="panel-foot">
@@ -313,9 +323,9 @@
         </div>
       </section>
 
-      <!-- PROJECTS (React deck) -->
-      <section id="projects" class="screen" aria-label="Projects">
-        <div class="panel glass projects-panel">
+      <!-- PROJECTS -->
+      <section id="projects" class="screen screen--section section section--projects" aria-label="Projects">
+        <div class="panel glass projects-panel focus-card">
           <div id="projectsReactRoot"></div>
         </div>
       </section>
@@ -325,10 +335,10 @@
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 
-    <!-- Projects deck -->
-    <script src="assets/js/projects-react.js?v=2"></script>
+    <!-- Projects carousel -->
+    <script src="assets/js/projects-react.js?v=4"></script>
 
     <!-- Site JS -->
-    <script src="assets/js/main.js?v=2"></script>
+    <script src="assets/js/main.js?v=4"></script>
   </body>
 </html>
