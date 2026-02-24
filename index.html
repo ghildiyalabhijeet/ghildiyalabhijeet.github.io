@@ -21,14 +21,18 @@
     />
 
     <link rel="icon" href="assets/img/favicon.svg" />
-    <link rel="stylesheet" href="assets/css/main.css?v=4" />
+    <link rel="stylesheet" href="assets/css/main.css?v=8" />
   </head>
 
   <body class="min-h-screen">
     <!-- Ambient background layers -->
-    <div class="bg-animated" aria-hidden="true"></div>
-    <div class="bg-noise" aria-hidden="true"></div>
-    <div class="bg-cursor" aria-hidden="true"></div>
+    <div id="bgRoot" aria-hidden="true">
+      <div class="bg-animated"></div>
+      <div class="bg-noise"></div>
+      <div class="bg-orb"></div>
+      <canvas id="bgSnow" class="bg-snow"></canvas>
+      <div class="bg-cursor"></div>
+    </div>
 
     <!-- Top nav -->
     <header class="nav-shell" role="banner">
@@ -43,35 +47,33 @@
       <!-- WORK / HERO -->
       <section id="work" class="screen screen--hero section section--work" aria-label="Work">
         <div class="hero-card glass focus-card">
-          <div class="hero-top mono">
-            M.S. Data Science @ ASU · Tempe, AZ · Part‑time now / Full‑time May 2026
-          </div>
+          <div class="hero-visual" aria-hidden="true"></div>
 
-          <h1 class="hero-name">Abhijeet Ghildiyal</h1>
+          <div class="hero-content">
+            <div class="hero-badges mono" aria-label="Context badges">
+              <span class="badge">M.S. Data Science @ ASU</span>
+              <span class="badge">Tempe, AZ</span>
+              <span class="badge">Full‑time May 2026</span>
+            </div>
 
-          <p class="hero-tagline">
-            I build <strong>data products</strong> that feel like software —
-            pipelines, ML/GenAI, and dashboards teams actually use.
-          </p>
+            <h1 class="hero-name">Abhijeet Ghildiyal</h1>
 
-          <div class="hero-chips mono" aria-label="Core stack">
-            <span class="chip">Python</span>
-            <span class="chip">SQL</span>
-            <span class="chip">PyTorch</span>
-            <span class="chip">TensorFlow</span>
-            <span class="chip">Power BI</span>
-          </div>
+            <p class="hero-tagline">Data products · ML/GenAI · dashboards</p>
 
-          <div class="hero-actions" aria-label="Primary actions">
-            <a class="primary-btn" href="#projects">Explore projects</a>
-            <a class="secondary-btn" href="#about">About &amp; skills</a>
-            <button id="copyEmailBtn" class="secondary-btn" type="button">
-              Copy email
-            </button>
-          </div>
+            <div class="hero-chips mono" aria-label="Core stack">
+              <span class="chip">Python</span>
+              <span class="chip">SQL</span>
+              <span class="chip">PyTorch</span>
+              <span class="chip">Power BI</span>
+            </div>
 
-          <div class="hero-mini mono" aria-hidden="true">
-            Tip: Projects auto‑switch every 5s — click a slide to pause · double‑click opens
+            <div class="hero-actions" aria-label="Primary actions">
+              <a class="primary-btn" href="#projects">Explore projects</a>
+              <a class="secondary-btn" href="#about">About &amp; skills</a>
+              <button id="copyEmailBtn" class="secondary-btn" type="button">
+                Copy email
+              </button>
+            </div>
           </div>
         </div>
 
@@ -301,16 +303,45 @@
         <div class="panel glass focus-card">
           <div class="panel-head">
             <h2 class="panel-title">Certifications</h2>
-            <p class="panel-sub">Highlights</p>
+            <p class="panel-sub">Highlights (click to open)</p>
           </div>
 
-          <div class="certs-wrap">
-            <span class="cert-pill">Python (Data Science)</span>
-            <span class="cert-pill">Power BI</span>
-            <span class="cert-pill">Data Scientist</span>
-            <span class="cert-pill">Artificial Intelligence</span>
-            <span class="cert-pill">Machine Learning</span>
-            <span class="cert-pill">MTA Security Fundamentals</span>
+          <div class="certs-wrap" aria-label="Certification links">
+            <a
+              class="cert-pill"
+              href="https://courses.edx.org/certificates/d0dd51a1f6614444a77041eaaf12a069"
+              target="_blank"
+              rel="noopener"
+              >Python (Data Science)</a
+            >
+            <a
+              class="cert-pill"
+              href="https://www.datacamp.com/certificate/DS0027205077835"
+              target="_blank"
+              rel="noopener"
+              >Data Scientist</a
+            >
+            <a
+              class="cert-pill"
+              href="https://www.udemy.com/certificate/UC-bd02c222-a7f0-4dee-a07f-bcaf973fcf65"
+              target="_blank"
+              rel="noopener"
+              >Artificial Intelligence</a
+            >
+            <a
+              class="cert-pill"
+              href="https://www.coursera.org/account/accomplishments/verify/HCGHHMGU6LHB?utm_source=mobile&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=course"
+              target="_blank"
+              rel="noopener"
+              >Machine Learning</a
+            >
+            <a
+              class="cert-pill"
+              href="https://www.credly.com/badges/0456cd7e-bb61-4398-9eba-cfc2bacb98f8/linked_in_profile"
+              target="_blank"
+              rel="noopener"
+              >MTA Security Fundamentals</a
+            >
           </div>
 
           <div class="panel-foot">
@@ -336,9 +367,9 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 
     <!-- Projects carousel -->
-    <script src="assets/js/projects-react.js?v=4"></script>
+    <script src="assets/js/projects-react.js?v=8"></script>
 
     <!-- Site JS -->
-    <script src="assets/js/main.js?v=4"></script>
+    <script src="assets/js/main.js?v=8"></script>
   </body>
 </html>
