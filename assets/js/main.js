@@ -186,7 +186,7 @@
     orb.ty = rand(-0.18 * vh, 1.18 * vh);
   };
 
-  // ===== FX Canvas system (integrated; no extra RAF loops) =====
+  // ===== FX Canvas system (Snow/Dust/Bokeh/Stars/Rain/Off) =====
   const fxCanvas = document.getElementById("bgFX");
   const fxBtn = document.getElementById("fxToggle");
 
@@ -221,7 +221,6 @@
       if (mode === "stars") return clamp(Math.floor(area / (low ? 56000 : 38000)), 40, low ? 120 : 190);
       if (mode === "rain") return clamp(Math.floor(area / (low ? 52000 : 36000)), 55, low ? 140 : 210);
       if (mode === "dust") return clamp(Math.floor(area / (low ? 90000 : 65000)), 25, low ? 70 : 110);
-      // snow
       return clamp(Math.floor(area / (low ? 82000 : 56000)), 35, low ? 85 : 135);
     };
 
@@ -278,7 +277,6 @@
         };
       }
 
-      // snow
       return {
         t: "snow",
         x: rand(0, state.w),
@@ -292,11 +290,18 @@
       };
     };
 
+    const reset = (reseed = false) => {
+      const mode = FX_MODES[fxModeIndex];
+      if (reseed) state.particles = [];
+      const target = countForMode(mode);
+      while (state.particles.length < target) state.particles.push(makeParticle(mode, true));
+      while (state.particles.length > target) state.particles.pop();
+    };
+
     const resize = () => {
       state.w = Math.max(1, window.innerWidth);
       state.h = Math.max(1, window.innerHeight);
 
-      // keep DPR low (big perf win)
       const deviceDpr = window.devicePixelRatio || 1;
       state.dpr = Math.min(LOW_POWER ? 1 : 1.35, deviceDpr);
 
@@ -306,16 +311,7 @@
       fxCanvas.style.height = `${state.h}px`;
 
       ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
-
       reset(true);
-    };
-
-    const reset = (reseed = false) => {
-      const mode = FX_MODES[fxModeIndex];
-      if (reseed) state.particles = [];
-      const target = countForMode(mode);
-      while (state.particles.length < target) state.particles.push(makeParticle(mode, true));
-      while (state.particles.length > target) state.particles.pop();
     };
 
     const step = (dt, now) => {
@@ -325,7 +321,6 @@
         return;
       }
 
-      // maintain target count if resized/mode changed
       const target = countForMode(mode);
       if (state.particles.length < target) {
         for (let i = 0; i < target - state.particles.length; i++) state.particles.push(makeParticle(mode, false));
@@ -372,7 +367,6 @@
         }
 
         const wob = Math.sin((now / 1000) + p.phase) * (p.wobble ? p.wobble * 0.08 : 0);
-
         p.y += (p.vy || 0) * dt;
         p.x += (p.vx || 0) * dt + wob;
 
@@ -383,7 +377,6 @@
         if (p.x < -80) p.x = state.w + 80;
         if (p.x > state.w + 80) p.x = -80;
 
-        // “bokeh” = bigger soft dots (cheap version)
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255,255,255,${p.a})`;
@@ -394,7 +387,7 @@
     resize();
     window.addEventListener("resize", resize, { passive: true });
 
-    return { resize, reset, step };
+    return { reset, step };
   })();
 
   const setMode = (idx) => {
@@ -403,9 +396,7 @@
     if (fx) fx.reset(true);
   };
 
-  if (fxBtn) {
-    fxBtn.addEventListener("click", () => setMode(fxModeIndex + 1));
-  }
+  if (fxBtn) fxBtn.addEventListener("click", () => setMode(fxModeIndex + 1));
 
   window.addEventListener("keydown", (e) => {
     if ((e.key || "").toLowerCase() !== "f") return;
@@ -430,7 +421,6 @@
     vw = window.innerWidth;
     vh = window.innerHeight;
 
-    // smooth cursor
     const k = LOW_POWER ? 0.22 : 0.16;
     smx += (mx - smx) * k;
     smy += (my - smy) * k;
@@ -440,34 +430,25 @@
     root.style.setProperty("--sx", `${smx.toFixed(1)}px`);
     root.style.setProperty("--sy", `${smy.toFixed(1)}px`);
 
-    // parallax (lighter)
     const nx = (smx - vw / 2) / (vw / 2);
     const ny = (smy - vh / 2) / (vh / 2);
     const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
 
     const amp = LOW_POWER ? 0.55 : 1;
 
-    const aurX = nx * 14 * amp;
-    const aurY = ny * 10 * amp + clamp(-scrollY * 0.016, -40, 40);
+    root.style.setProperty("--aurX", `${(nx * 14 * amp).toFixed(1)}px`);
+    root.style.setProperty("--aurY", `${(ny * 10 * amp + clamp(-scrollY * 0.016, -40, 40)).toFixed(1)}px`);
 
-    const orbX = nx * 20 * amp;
-    const orbY = ny * 14 * amp + clamp(-scrollY * 0.028, -60, 60);
+    root.style.setProperty("--orbX", `${(nx * 20 * amp).toFixed(1)}px`);
+    root.style.setProperty("--orbY", `${(ny * 14 * amp + clamp(-scrollY * 0.028, -60, 60)).toFixed(1)}px`);
 
-    const fxX = nx * 10 * amp;
-    const fxY = ny * 8 * amp + clamp(-scrollY * 0.012, -30, 30);
-
-    root.style.setProperty("--aurX", `${aurX.toFixed(1)}px`);
-    root.style.setProperty("--aurY", `${aurY.toFixed(1)}px`);
-    root.style.setProperty("--orbX", `${orbX.toFixed(1)}px`);
-    root.style.setProperty("--orbY", `${orbY.toFixed(1)}px`);
-    root.style.setProperty("--fxX", `${fxX.toFixed(1)}px`);
-    root.style.setProperty("--fxY", `${fxY.toFixed(1)}px`);
+    root.style.setProperty("--fxX", `${(nx * 10 * amp).toFixed(1)}px`);
+    root.style.setProperty("--fxY", `${(ny * 8 * amp + clamp(-scrollY * 0.012, -30, 30)).toFixed(1)}px`);
 
     // orb movement
     const dx = orb.tx - orb.x;
     const dy = orb.ty - orb.y;
     const dist = Math.hypot(dx, dy) || 1;
-
     if (dist < 18) pickOrbTarget();
 
     const step = orb.speed * dt;
@@ -475,14 +456,12 @@
     orb.x += dx * t;
     orb.y += dy * t;
 
-    // tiny drift
     orb.x += Math.sin(now / 1900) * 0.08;
     orb.y += Math.cos(now / 2200) * 0.08;
 
     root.style.setProperty("--ox", `${orb.x.toFixed(1)}px`);
     root.style.setProperty("--oy", `${orb.y.toFixed(1)}px`);
 
-    // canvas fx
     if (fx) fx.step(dt, now);
   };
 

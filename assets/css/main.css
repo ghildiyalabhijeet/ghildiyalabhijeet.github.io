@@ -2,25 +2,19 @@
   --text: rgba(255, 255, 255, 0.92);
   --muted: rgba(255, 255, 255, 0.66);
 
-  --glass-bg: rgba(255, 255, 255, 0.06);
   --glass-border: rgba(255, 255, 255, 0.14);
 
   --shadow-lg: 0 28px 72px rgba(0, 0, 0, 0.52);
-  --shadow-sm: 0 14px 34px rgba(0, 0, 0, 0.36);
 
   --radius-xl: 34px;
   --radius-lg: 26px;
-  --radius-md: 20px;
 
   --blue: 72, 155, 255;
   --pink: 244, 114, 182;
   --violet: 167, 139, 250;
   --teal: 94, 234, 212;
-  --amber: 250, 204, 21;
-  --green: 34, 197, 94;
 
   --ease: cubic-bezier(0.2, 0.9, 0.2, 1);
-  --ease-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
   --dur-1: 140ms;
   --dur-2: 360ms;
   --dur-3: 560ms;
@@ -46,26 +40,23 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
-    "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   color: var(--text);
   background: #070a12;
   position: relative;
   overflow-x: hidden;
 
-  /* CRISPER TEXT (helps the “blurry” look on some browsers) */
+  /* crisper text */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: geometricPrecision;
 }
 
 button { font: inherit; color: inherit; }
-
 main { position: relative; z-index: 20; }
 
 .mono {
-  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 /* =========================
@@ -108,14 +99,10 @@ main { position: relative; z-index: 20; }
 
 .bg-orb {
   z-index: 2;
-  background:
-    radial-gradient(560px 560px at var(--ox) var(--oy),
-      rgba(72, 155, 255, 0.22),
-      rgba(72, 155, 255, 0) 66%);
+  background: radial-gradient(560px 560px at var(--ox) var(--oy), rgba(72, 155, 255, 0.22), rgba(72, 155, 255, 0) 66%);
   mix-blend-mode: screen;
   opacity: 0.74;
   transform: translate3d(var(--orbX), var(--orbY), 0) scale(1.06);
-  transform-origin: center;
 }
 
 .bg-fx {
@@ -124,12 +111,10 @@ main { position: relative; z-index: 20; }
   height: 100%;
   opacity: 0.26;
   transform: translate3d(var(--fxX), var(--fxY), 0) scale(1.03);
-  transform-origin: center;
 }
 
 .bg-cursor {
   z-index: 4;
-  /* reduced to a single glow (cheaper + still looks good) */
   background: radial-gradient(740px 740px at var(--mx) var(--my), rgba(72, 155, 255, 0.20), rgba(72, 155, 255, 0) 62%);
   mix-blend-mode: screen;
   opacity: 0.62;
@@ -153,8 +138,7 @@ body.pane-active .bg-spotlight { opacity: 0.82; }
 }
 
 /* =========================
-   Glass material (SHARP TEXT VERSION)
-   - blur moved to ::before so text doesn't get rendered on the blur layer
+   Glass (sharp text)
 ========================= */
 .glass {
   position: relative;
@@ -172,7 +156,6 @@ body.pane-active .bg-spotlight { opacity: 0.82; }
   pointer-events: none;
   z-index: 0;
 
-  /* glass fill + soft gloss */
   background:
     radial-gradient(120% 85% at 20% 0%, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0) 58%),
     rgba(255, 255, 255, 0.06);
@@ -181,7 +164,6 @@ body.pane-active .bg-spotlight { opacity: 0.82; }
   -webkit-backdrop-filter: blur(14px) saturate(140%);
 }
 
-/* Prism border ring (top layer) */
 .glass::after {
   content: "";
   position: absolute;
@@ -205,25 +187,18 @@ body.pane-active .bg-spotlight { opacity: 0.82; }
   opacity: 0.80;
 }
 
-/* ensure content is above blur layer */
 .glass > * { position: relative; z-index: 1; }
 
 /* =========================
    Base interactions
 ========================= */
 :where(a, button) { -webkit-tap-highlight-color: transparent; }
-
 :where(a, button):focus-visible {
   outline: none;
-  box-shadow:
-    0 0 0 2px rgba(var(--blue), 0.45),
-    0 0 0 6px rgba(var(--blue), 0.14);
+  box-shadow: 0 0 0 2px rgba(var(--blue), 0.45), 0 0 0 6px rgba(var(--blue), 0.14);
 }
 
-/* =========================
-   Pane Focus Mode
-   - removed filter() to avoid text blur + GPU overhead
-========================= */
+/* Pane Focus */
 body.pane-focus .focus-card,
 body.pane-active .focus-card {
   opacity: 0.36;
@@ -232,22 +207,14 @@ body.pane-active .focus-card {
 body.pane-focus .focus-card.is-hover,
 body.pane-focus .focus-card.is-active,
 body.pane-active .focus-card.is-hover,
-body.pane-active .focus-card.is-active {
-  opacity: 1;
-}
+body.pane-active .focus-card.is-active { opacity: 1; }
 
-/* =========================
-   Focus cards (2D only — avoids “blur from 3D transforms”)
-========================= */
+/* Focus cards 2D */
 .focus-card {
   --hoverLift: 0px;
   --scale: 1;
   transform: translate3d(0, var(--hoverLift), 0) scale(var(--scale));
-  transition:
-    transform var(--dur-2) var(--ease),
-    box-shadow var(--dur-2) var(--ease),
-    border-color var(--dur-2) var(--ease),
-    opacity var(--dur-2) var(--ease);
+  transition: transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease), opacity var(--dur-2) var(--ease);
 }
 
 .focus-card.reveal { opacity: 0; }
@@ -255,10 +222,7 @@ body.pane-active .focus-card.is-active {
 
 .focus-card.is-focus {
   border-color: rgba(255, 255, 255, 0.18);
-  box-shadow:
-    0 34px 90px rgba(0, 0, 0, 0.56),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 0 58px rgba(var(--glow), 0.14);
+  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.56), inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 58px rgba(var(--glow), 0.14);
 }
 
 .focus-card:hover,
@@ -266,20 +230,13 @@ body.pane-active .focus-card.is-active {
   --hoverLift: -3px;
   --scale: 1.008;
   border-color: rgba(255, 255, 255, 0.18);
-  box-shadow:
-    0 40px 100px rgba(0, 0, 0, 0.58),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 0 62px rgba(var(--glow), 0.16);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 62px rgba(var(--glow), 0.16);
 }
 
 .focus-card.is-active {
   --scale: 1.01;
   border-color: rgba(var(--glow), 0.62);
-  box-shadow:
-    0 44px 120px rgba(0, 0, 0, 0.62),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    0 0 0 2px rgba(var(--glow), 0.42),
-    0 0 80px rgba(var(--glow), 0.20);
+  box-shadow: 0 44px 120px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 0 2px rgba(var(--glow), 0.42), 0 0 80px rgba(var(--glow), 0.20);
 }
 
 /* =========================
@@ -312,28 +269,21 @@ body.pane-active .focus-card.is-active {
   font-weight: 850;
   color: rgba(255, 255, 255, 0.70);
   text-decoration: none;
-  transition:
-    background var(--dur-1) var(--ease),
-    box-shadow var(--dur-1) var(--ease),
-    transform var(--dur-1) var(--ease),
-    color var(--dur-1) var(--ease);
+  transition: background var(--dur-1) var(--ease), box-shadow var(--dur-1) var(--ease), transform var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
   cursor: pointer;
   user-select: none;
+  background: transparent;
+  border: none;
 }
 
 .nav-item:hover {
   background: rgba(255, 255, 255, 0.10);
   color: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24), 0 0 30px rgba(var(--blue), 0.12);
   transform: translateY(-1px);
 }
 .nav-item.is-active {
   background: rgba(255, 255, 255, 0.16);
   color: rgba(255, 255, 255, 0.92);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 16px 30px rgba(0, 0, 0, 0.28),
-    0 0 34px rgba(var(--blue), 0.14);
 }
 
 .nav-fx {
@@ -433,10 +383,7 @@ body.pane-active .focus-card.is-active {
   border: 1px solid rgba(255, 255, 255, 0.14);
   transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
 }
-.badge--accent {
-  background: rgba(59, 130, 246, 0.16);
-  border-color: rgba(59, 130, 246, 0.28);
-}
+.badge--accent { background: rgba(59, 130, 246, 0.16); border-color: rgba(59, 130, 246, 0.28); }
 .badge:hover { transform: translateY(-1px); background: rgba(255, 255, 255, 0.10); }
 
 .hero-name {
@@ -453,7 +400,6 @@ body.pane-active .focus-card.is-active {
   font-size: clamp(1.05rem, 1.8vw, 1.28rem);
   font-weight: 800;
   color: rgba(255, 255, 255, 0.78);
-  letter-spacing: -0.01em;
 }
 
 .hero-chips {
@@ -489,21 +435,17 @@ body.pane-active .focus-card.is-active {
   border-radius: 999px;
   text-decoration: none;
   font-weight: 850;
-  letter-spacing: -0.01em;
   border: 1px solid rgba(255, 255, 255, 0.16);
   transition: transform var(--dur-1) var(--ease), filter var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
   cursor: pointer;
+  background: transparent;
 }
-
 .primary-btn {
   color: rgba(255, 255, 255, 0.98);
   background: linear-gradient(180deg, rgba(59, 130, 246, 0.96), rgba(37, 99, 235, 0.92));
   box-shadow: 0 18px 44px rgba(37, 99, 235, 0.22);
 }
-.secondary-btn {
-  background: rgba(255, 255, 255, 0.10);
-  color: rgba(255, 255, 255, 0.84);
-}
+.secondary-btn { background: rgba(255, 255, 255, 0.10); color: rgba(255, 255, 255, 0.84); }
 .primary-btn:hover, .secondary-btn:hover { transform: translateY(-2px); filter: brightness(1.03); }
 
 .hint { font-size: 0.82rem; color: rgba(255, 255, 255, 0.50); }
@@ -552,12 +494,7 @@ body.pane-active .focus-card.is-active {
   background: rgba(255, 255, 255, 0.05);
   transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease), box-shadow var(--dur-2) var(--ease);
 }
-.mini-icon:hover {
-  transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.16);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.26);
-}
+.mini-icon:hover { transform: translateY(-1px); background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.16); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.26); }
 .mini-dot { width: 10px; height: 10px; border-radius: 999px; margin-top: 6px; background: rgba(59, 130, 246, 0.9); }
 .mini-title { font-weight: 900; letter-spacing: -0.02em; color: rgba(255, 255, 255, 0.90); }
 .mini-text { margin-top: 2px; font-size: 0.78rem; color: rgba(255, 255, 255, 0.62); }
@@ -602,8 +539,7 @@ body.pane-active .focus-card.is-active {
   transition: transform var(--dur-1) var(--ease), box-shadow var(--dur-2) var(--ease), border-color var(--dur-1) var(--ease);
 }
 .skill-group:hover { transform: translateY(-1px); border-color: rgba(255, 255, 255, 0.16); box-shadow: 0 16px 44px rgba(0, 0, 0, 0.26); }
-
-.skill-head { display: flex; align-items: center; justify-content: flex-start; margin-bottom: 10px; }
+.skill-head { display: flex; align-items: center; margin-bottom: 10px; }
 .skill-badge { font-size: 0.74rem; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(255, 255, 255, 0.62); padding: 6px 10px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(255, 255, 255, 0.06); }
 .skills-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
 .skill-pill { font-size: 0.82rem; padding: 8px 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.14); color: rgba(255, 255, 255, 0.82); transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease); }
@@ -646,10 +582,10 @@ body.pane-active .focus-card.is-active {
 .mini-btn:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-1px); }
 
 /* =========================
-   PROJECTS (kept; removed blur on bottom bar for sharp text)
+   PROJECTS (vanilla)
 ========================= */
 .projects-panel { padding: 36px 32px; }
-.pc-wrap { width: min(1120px, 100%); margin: 0 auto; }
+.pc-wrap { width: min(1120px, 100%); margin: 0 auto; outline: none; }
 
 .pc-head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
 .pc-titleRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
@@ -675,6 +611,7 @@ body.pane-active .focus-card.is-active {
 
 .pc-controls { display: inline-flex; gap: 10px; }
 .pc-ctrl {
+  appearance: none; -webkit-appearance: none;
   height: 40px;
   padding: 0 14px;
   border-radius: 999px;
@@ -711,7 +648,6 @@ body.pane-active .focus-card.is-active {
   opacity: 0.9;
 }
 
-/* Progress segments */
 .pc-progress {
   position: absolute;
   top: 14px;
@@ -730,6 +666,7 @@ body.pane-active .focus-card.is-active {
 .pc-slide { flex: 0 0 100%; padding: 10px; box-sizing: border-box; }
 
 .pc-card {
+  appearance: none; -webkit-appearance: none;
   --accent: var(--blue);
 
   width: 100%;
@@ -768,17 +705,18 @@ body.pane-active .focus-card.is-active {
   display: grid;
   gap: 10px;
 
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.66));
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.66));
   border-top: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 .pc-bottomTop { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
 .pc-title { font-weight: 950; letter-spacing: -0.03em; font-size: 20px; color: rgba(255, 255, 255, 0.94); }
 .pc-year { font-size: 12px; color: rgba(255, 255, 255, 0.62); }
+
 .pc-techRow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 
 .pc-techIcon {
+  appearance: none; -webkit-appearance: none;
   --t: var(--accent);
   width: 34px;
   height: 34px;
@@ -789,7 +727,11 @@ body.pane-active .focus-card.is-active {
   letter-spacing: -0.02em;
   font-size: 12px;
   color: rgba(255, 255, 255, 0.92);
-  background: rgba(255,255,255,0.06);
+
+  background:
+    radial-gradient(120% 100% at 30% 20%, rgba(var(--t), 0.28), rgba(255,255,255,0.06) 62%),
+    rgba(255,255,255,0.06);
+
   border: 1px solid rgba(255, 255, 255, 0.16);
   transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
 }
@@ -820,6 +762,7 @@ body.pane-active .focus-card.is-active {
 
 .pc-dots { margin-top: 14px; display: flex; justify-content: center; gap: 8px; }
 .pc-dot {
+  appearance: none; -webkit-appearance: none;
   width: 10px; height: 10px; border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(255, 255, 255, 0.10);
@@ -840,6 +783,7 @@ body.pane-active .focus-card.is-active {
 .pc-film::-webkit-scrollbar { width: 0; height: 0; }
 
 .pc-thumb {
+  appearance: none; -webkit-appearance: none;
   --accent: var(--blue);
   flex: 0 0 170px;
   height: 98px;
