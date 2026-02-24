@@ -8,9 +8,10 @@
 
   const mm = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
   const prefersReduce = mm ? mm.matches : false;
-  const AUTO_MS = prefersReduce ? 0 : 4000;
 
-  // === Tech icon mapping (abbr + tint)
+  const AUTO_MS = prefersReduce ? 0 : 4000;
+  const TICK_MS = 70; // progress update interval (cheap + smooth enough)
+
   const TECH = {
     Python: { abbr: "Py", rgb: "55, 118, 171" },
     SQL: { abbr: "SQL", rgb: "59, 130, 246" },
@@ -62,11 +63,7 @@
   ];
 
   const clampIndex = (i, n) => ((i % n) + n) % n;
-
-  const openInNewTab = (url) => {
-    if (!url) return;
-    window.open(url, "_blank", "noopener,noreferrer");
-  };
+  const openInNewTab = (url) => url && window.open(url, "_blank", "noopener,noreferrer");
 
   function ProjectsH2Icon() {
     return h(
@@ -117,11 +114,9 @@
     const [progress, setProgress] = useState(0);
 
     const startRef = useRef(performance.now());
-    const lastPRef = useRef(0);
 
     const resetProgress = () => {
       startRef.current = performance.now();
-      lastPRef.current = 0;
       setProgress(0);
     };
 
@@ -130,77 +125,46 @@
       setPaused(true);
     };
 
-    useEffect(() => {
-      resetProgress();
-    }, [active]);
+    useEffect(() => resetProgress(), [active]);
 
     useEffect(() => {
       if (!AUTO_MS) return;
+      if (paused) return;
 
-      let raf = 0;
-      const loop = (now) => {
-        if (!paused) {
-          const p = (now - startRef.current) / AUTO_MS;
+      const id = window.setInterval(() => {
+        const now = performance.now();
+        const p = (now - startRef.current) / AUTO_MS;
 
-          if (p >= 1) {
-            setActive((i) => clampIndex(i + 1, n));
-          } else {
-            if (Math.abs(p - lastPRef.current) > 0.02) {
-              lastPRef.current = p;
-              setProgress(p);
-            }
-          }
+        if (p >= 1) {
+          setActive((i) => clampIndex(i + 1, n));
+        } else {
+          setProgress(p);
         }
-        raf = requestAnimationFrame(loop);
-      };
+      }, TICK_MS);
 
-      raf = requestAnimationFrame(loop);
-      return () => cancelAnimationFrame(raf);
-    }, [paused, n]);
+      return () => window.clearInterval(id);
+    }, [paused, n, active]);
 
     const onCardClick = (idx) => {
       setActive(idx);
       setPaused(true);
     };
 
-    const onCardDoubleClick = (idx) => {
-      openInNewTab(projects[idx] && projects[idx].url);
-    };
+    const onCardDoubleClick = (idx) => openInNewTab(projects[idx] && projects[idx].url);
 
     const onKeyDown = (e) => {
-      if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        go(-1);
-      }
-      if (e.key === "ArrowRight") {
-        e.preventDefault();
-        go(1);
-      }
-      if (e.key === "Enter") {
-        e.preventDefault();
-        openInNewTab(projects[active] && projects[active].url);
-      }
-      if (e.key === " ") {
-        e.preventDefault();
-        setPaused((p) => !p);
-      }
+      if (e.key === "ArrowLeft") { e.preventDefault(); go(-1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); go(1); }
+      if (e.key === "Enter") { e.preventDefault(); openInNewTab(projects[active] && projects[active].url); }
+      if (e.key === " ") { e.preventDefault(); setPaused((p) => !p); }
     };
 
-    const trackStyle = {
-      transform: `translate3d(${-active * 100}%, 0, 0)`,
-    };
-
+    const trackStyle = { transform: `translate3d(${-active * 100}%, 0, 0)` };
     const autoBtnLabel = paused ? "Resume auto switch" : "Pause auto switch";
 
     return h(
       "div",
-      {
-        className: "pc-wrap",
-        onKeyDown,
-        tabIndex: 0,
-        role: "region",
-        "aria-label": "Projects slideshow",
-      },
+      { className: "pc-wrap", onKeyDown, tabIndex: 0, role: "region", "aria-label": "Projects slideshow" },
 
       h(
         "div",
@@ -234,7 +198,6 @@
         "div",
         { className: "pc-stage" },
 
-        // Progress segments
         h(
           "div",
           { className: "pc-progress", "aria-hidden": "true" },
@@ -254,7 +217,6 @@
             projects.map((p, idx) => {
               const isActive = idx === active;
               const style = { "--accent": p.accentRGB || "72, 155, 255" };
-
               const stack = Array.isArray(p.stack) ? p.stack.slice(0, 6) : [];
 
               return h(
@@ -276,17 +238,14 @@
                     "div",
                     { className: "pc-media" },
 
-                    // Real thumbnail (your 1.webp..4.webp)
                     p.thumb
                       ? h("img", {
                           className: "pc-img",
                           src: p.thumb,
                           alt: `${p.title} thumbnail`,
                           loading: "lazy",
-                          onError: (e) => {
-                            // If missing, hide the broken image (keeps gradients)
-                            e.currentTarget.style.display = "none";
-                          },
+                          decoding: "async",
+                          onError: (e) => { e.currentTarget.style.display = "none"; },
                         })
                       : null,
 
@@ -294,7 +253,6 @@
 
                     h("div", { className: "pc-openHint mono", "aria-hidden": "true" }, h(OpenIcon), "Open repo"),
 
-                    // Bottom overlay: title + year + tech icons
                     h(
                       "div",
                       { className: "pc-bottomBar" },
@@ -318,7 +276,6 @@
         )
       ),
 
-      // Dots
       h(
         "div",
         { className: "pc-dots", role: "tablist", "aria-label": "Select project" },
@@ -327,10 +284,7 @@
             key: p.id,
             type: "button",
             className: `pc-dot ${idx === active ? "is-active" : ""}`,
-            onClick: () => {
-              setActive(idx);
-              setPaused(true);
-            },
+            onClick: () => { setActive(idx); setPaused(true); },
             "aria-label": `Go to ${p.title}`,
             role: "tab",
             "aria-selected": idx === active,
@@ -338,7 +292,6 @@
         )
       ),
 
-      // Film-strip thumbnails (image-only)
       h(
         "div",
         { className: "pc-film", role: "list", "aria-label": "Project thumbnails" },
@@ -354,10 +307,7 @@
               className: `pc-thumb ${isActive ? "is-active" : ""}`,
               style,
               role: "listitem",
-              onClick: () => {
-                setActive(idx);
-                setPaused(true);
-              },
+              onClick: () => { setActive(idx); setPaused(true); },
               onDoubleClick: () => openInNewTab(p.url),
               "aria-label": `${p.title} thumbnail`,
               title: `${p.title} — click to select · double‑click to open`,
@@ -368,9 +318,8 @@
                   src: p.thumb,
                   alt: "",
                   loading: "lazy",
-                  onError: (e) => {
-                    e.currentTarget.style.display = "none";
-                  },
+                  decoding: "async",
+                  onError: (e) => { e.currentTarget.style.display = "none"; },
                 })
               : null,
             h("div", { className: "pc-thumbOverlay" })

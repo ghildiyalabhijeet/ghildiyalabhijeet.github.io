@@ -9,9 +9,6 @@
       content="Abhijeet Ghildiyal — M.S. Data Science @ ASU. Data products, ML/GenAI systems, and dashboards."
     />
 
-    <!-- Tailwind CDN (kept; no build step) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -21,10 +18,10 @@
     />
 
     <link rel="icon" href="assets/img/favicon.svg" />
-    <link rel="stylesheet" href="assets/css/main.css?v=10" />
+    <link rel="stylesheet" href="assets/css/main.css?v=11" />
   </head>
 
-  <body class="min-h-screen">
+  <body>
     <!-- Ambient background layers -->
     <div id="bgRoot" aria-hidden="true">
       <div class="bg-animated"></div>
@@ -42,7 +39,7 @@
         <a class="nav-item" href="#about">About</a>
         <a class="nav-item" href="#projects">Projects</a>
 
-        <!-- FX toggle (cycles Snow/Dust/Bokeh/Stars/Rain) -->
+        <!-- FX toggle (cycles Snow/Dust/Bokeh/Stars/Rain/Off) -->
         <button id="fxToggle" class="nav-item nav-fx" type="button" aria-label="Toggle background effect">
           FX: Snow
         </button>
@@ -64,7 +61,6 @@
             </div>
 
             <h1 class="hero-name">Abhijeet Ghildiyal</h1>
-
             <p class="hero-tagline">Data products · ML/GenAI · dashboards</p>
 
             <div class="hero-chips mono" aria-label="Core stack">
@@ -77,9 +73,7 @@
             <div class="hero-actions" aria-label="Primary actions">
               <a class="primary-btn" href="#projects">Explore projects</a>
               <a class="secondary-btn" href="#about">About &amp; skills</a>
-              <button id="copyEmailBtn" class="secondary-btn" type="button">
-                Copy email
-              </button>
+              <button id="copyEmailBtn" class="secondary-btn" type="button">Copy email</button>
             </div>
           </div>
         </div>
@@ -207,9 +201,7 @@
                 <span class="edu-date mono">Graduating May 2026</span>
                 <span class="edu-gpa mono">CGPA 3.67</span>
               </div>
-              <div class="edu-courses mono">
-                Coursework: Statistical ML · Generative AI · Data Mining · Optimization
-              </div>
+              <div class="edu-courses mono">Coursework: Statistical ML · Generative AI · Data Mining · Optimization</div>
             </article>
 
             <article class="subcard">
@@ -221,9 +213,7 @@
                 <span class="edu-date mono">Aug 2018 — Jun 2022</span>
                 <span class="edu-gpa mono">CGPA 3.33</span>
               </div>
-              <div class="edu-courses mono">
-                Coursework: Data Structures · System Design · RDBMS · AI
-              </div>
+              <div class="edu-courses mono">Coursework: Data Structures · System Design · RDBMS · AI</div>
             </article>
           </div>
         </div>
@@ -354,25 +344,11 @@
           </div>
 
           <div class="certs-wrap" aria-label="Certification links">
-            <a
-              class="cert-pill"
-              href="https://courses.edx.org/certificates/d0dd51a1f6614444a77041eaaf12a069"
-              target="_blank"
-              rel="noopener"
+            <a class="cert-pill" href="https://courses.edx.org/certificates/d0dd51a1f6614444a77041eaaf12a069" target="_blank" rel="noopener"
               >Python (Data Science)</a
             >
-            <a
-              class="cert-pill"
-              href="https://www.datacamp.com/certificate/DS0027205077835"
-              target="_blank"
-              rel="noopener"
-              >Data Scientist</a
-            >
-            <a
-              class="cert-pill"
-              href="https://www.udemy.com/certificate/UC-bd02c222-a7f0-4dee-a07f-bcaf973fcf65"
-              target="_blank"
-              rel="noopener"
+            <a class="cert-pill" href="https://www.datacamp.com/certificate/DS0027205077835" target="_blank" rel="noopener">Data Scientist</a>
+            <a class="cert-pill" href="https://www.udemy.com/certificate/UC-bd02c222-a7f0-4dee-a07f-bcaf973fcf65" target="_blank" rel="noopener"
               >Artificial Intelligence</a
             >
             <a
@@ -414,9 +390,9 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 
     <!-- Projects carousel -->
-    <script src="assets/js/projects-react.js?v=10"></script>
+    <script src="assets/js/projects-react.js?v=11"></script>
 
     <!-- Site JS -->
-    <script src="assets/js/main.js?v=10"></script>
+    <script src="assets/js/main.js?v=11"></script>
   </body>
 </html>

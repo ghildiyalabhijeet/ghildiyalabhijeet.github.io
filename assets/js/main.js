@@ -1,14 +1,29 @@
 (() => {
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
-
-  const mm = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
-  const prefersReduce = mm ? mm.matches : false;
-
-  const MOTION = prefersReduce ? 0.55 : 1;
-
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const rand = (min, max) => min + Math.random() * (max - min);
 
+  // ===== perf heuristics =====
+  const mm = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+  const PREFERS_REDUCE = mm ? mm.matches : false;
+
+  const CORES = typeof navigator !== "undefined" ? navigator.hardwareConcurrency : 0;
+  const MEM = typeof navigator !== "undefined" ? navigator.deviceMemory : 0;
+
+  const LOW_POWER =
+    PREFERS_REDUCE ||
+    (typeof MEM === "number" && MEM > 0 && MEM <= 4) ||
+    (typeof CORES === "number" && CORES > 0 && CORES <= 4) ||
+    window.innerWidth < 768;
+
+  const TARGET_FPS = LOW_POWER ? 24 : 30;
+  const FRAME_MS = 1000 / TARGET_FPS;
+
+  const root = document.documentElement;
+  const body = document.body;
+
+  // ===== Year =====
   const yearEl = $("#year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
@@ -35,9 +50,8 @@
         if (!visible) return;
         setActive(visible.target.id);
       },
-      { threshold: [0.25, 0.4, 0.55, 0.7] }
+      { threshold: [0.25, 0.45, 0.6] }
     );
-
     sections.forEach((s) => io.observe(s.el));
 
     const initial = (location.hash || "").replace("#", "");
@@ -45,9 +59,8 @@
     else setActive(sections[0].id);
   }
 
-  // ===== Focus Cards (reveal + in-view glow) =====
+  // ===== Focus cards (reveal + focus) =====
   const focusCards = $$(".focus-card");
-
   if (focusCards.length) {
     focusCards.forEach((el) => el.classList.add("reveal"));
 
@@ -59,30 +72,19 @@
       },
       { threshold: 0.08, rootMargin: "0px 0px -10% 0px" }
     );
-
     focusCards.forEach((el) => revealIO.observe(el));
 
     const focusIO = new IntersectionObserver(
       (entries) => {
-        entries.forEach((e) => {
-          e.target.classList.toggle("is-focus", e.isIntersecting);
-        });
+        entries.forEach((e) => e.target.classList.toggle("is-focus", e.isIntersecting));
       },
       { threshold: [0.25, 0.45, 0.6], rootMargin: "-10% 0px -25% 0px" }
     );
-
     focusCards.forEach((el) => focusIO.observe(el));
   }
 
-  // ===== Pane Focus Mode++ (hover spotlight + active ring) =====
+  // ===== Pane Focus Mode++ =====
   if (focusCards.length) {
-    const body = document.body;
-
-    const clearHover = () => {
-      focusCards.forEach((c) => c.classList.remove("is-hover"));
-      body.classList.remove("pane-focus");
-    };
-
     const setActiveCard = (card) => {
       focusCards.forEach((c) => c.classList.remove("is-active"));
       if (card) {
@@ -113,15 +115,6 @@
       const inNav = e.target && e.target.closest ? e.target.closest(".nav-shell") : null;
       if (!inCard && !inNav) setActiveCard(null);
     });
-
-    window.addEventListener("blur", () => {
-      clearHover();
-      setActiveCard(null);
-    });
-
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState !== "visible") clearHover();
-    });
   }
 
   // ===== Copy email =====
@@ -135,7 +128,6 @@
         return true;
       }
     } catch (_) {}
-
     try {
       const ta = document.createElement("textarea");
       ta.value = text;
@@ -148,7 +140,6 @@
       document.body.removeChild(ta);
       return !!ok;
     } catch (_) {}
-
     return false;
   }
 
@@ -161,99 +152,45 @@
     });
   }
 
-  // ===== Mouse tracking for cursor glow + spotlight + parallax =====
-  const root = document.documentElement;
-
+  // ===== Mouse position (for glow + spotlight) =====
   let vw = window.innerWidth;
   let vh = window.innerHeight;
 
   let mx = vw * 0.5;
   let my = vh * 0.45;
 
+  // smoothed
   let smx = mx;
   let smy = my;
-
-  let sx = mx;
-  let sy = my;
-  let ssx = sx;
-  let ssy = sy;
 
   window.addEventListener(
     "pointermove",
     (e) => {
       mx = e.clientX;
       my = e.clientY;
-      sx = e.clientX;
-      sy = e.clientY;
     },
     { passive: true }
   );
 
-  // ===== Floating orb path =====
-  {
-    const rand = (min, max) => min + Math.random() * (max - min);
+  // ===== Orb path (random drift) =====
+  const orb = {
+    x: rand(-0.15 * vw, 1.15 * vw),
+    y: rand(-0.15 * vh, 1.15 * vh),
+    tx: rand(-0.18 * vw, 1.18 * vw),
+    ty: rand(-0.18 * vh, 1.18 * vh),
+    speed: LOW_POWER ? 10 : 14,
+  };
 
-    let w = vw;
-    let h = vh;
+  const pickOrbTarget = () => {
+    orb.tx = rand(-0.18 * vw, 1.18 * vw);
+    orb.ty = rand(-0.18 * vh, 1.18 * vh);
+  };
 
-    let x = rand(-0.15 * w, 1.15 * w);
-    let y = rand(-0.15 * h, 1.15 * h);
-    let tx = rand(-0.18 * w, 1.18 * w);
-    let ty = rand(-0.18 * h, 1.18 * h);
-
-    const speed = 14 * MOTION;
-    const pickTarget = () => {
-      tx = rand(-0.18 * w, 1.18 * w);
-      ty = rand(-0.18 * h, 1.18 * h);
-    };
-
-    root.style.setProperty("--ox", `${x.toFixed(1)}px`);
-    root.style.setProperty("--oy", `${y.toFixed(1)}px`);
-
-    let last = performance.now();
-
-    const step = (now) => {
-      const dt = Math.min(0.05, (now - last) / 1000);
-      last = now;
-
-      const dx = tx - x;
-      const dy = ty - y;
-      const dist = Math.hypot(dx, dy) || 1;
-
-      if (dist < 18) pickTarget();
-
-      const stepDist = speed * dt;
-      const t = Math.min(1, stepDist / dist);
-      x += dx * t;
-      y += dy * t;
-
-      x += Math.sin(now / 1800) * 0.08;
-      y += Math.cos(now / 2200) * 0.08;
-
-      root.style.setProperty("--ox", `${x.toFixed(1)}px`);
-      root.style.setProperty("--oy", `${y.toFixed(1)}px`);
-
-      requestAnimationFrame(step);
-    };
-
-    requestAnimationFrame(step);
-
-    window.addEventListener(
-      "resize",
-      () => {
-        w = window.innerWidth;
-        h = window.innerHeight;
-        pickTarget();
-      },
-      { passive: true }
-    );
-  }
-
-  // ===== FX Canvas (Snow/Dust/Bokeh/Stars/Rain) =====
+  // ===== FX Canvas system (integrated; no extra RAF loops) =====
   const fxCanvas = document.getElementById("bgFX");
   const fxBtn = document.getElementById("fxToggle");
 
-  const FX_MODES = ["snow", "dust", "bokeh", "stars", "rain"];
+  const FX_MODES = ["snow", "dust", "bokeh", "stars", "rain", "off"];
   let fxModeIndex = 0;
 
   const setFXLabel = () => {
@@ -263,51 +200,32 @@
   };
   setFXLabel();
 
-  let fxSystem = null;
-
-  if (fxBtn) {
-    fxBtn.addEventListener("click", () => {
-      fxModeIndex = (fxModeIndex + 1) % FX_MODES.length;
-      setFXLabel();
-      if (fxSystem) fxSystem.reset(true);
-    });
-  }
-
-  window.addEventListener("keydown", (e) => {
-    if ((e.key || "").toLowerCase() !== "f") return;
-    const tag = (document.activeElement && document.activeElement.tagName) || "";
-    if (["INPUT", "TEXTAREA", "SELECT"].includes(tag)) return;
-    fxModeIndex = (fxModeIndex + 1) % FX_MODES.length;
-    setFXLabel();
-    if (fxSystem) fxSystem.reset(true);
-  });
-
-  if (fxCanvas && fxCanvas.getContext) {
+  const fx = (() => {
+    if (!fxCanvas || !fxCanvas.getContext) return null;
     const ctx = fxCanvas.getContext("2d");
-    const rand = (min, max) => min + Math.random() * (max - min);
 
     const state = {
       w: 1,
       h: 1,
-      dpr: Math.min(2, window.devicePixelRatio || 1),
+      dpr: 1,
       particles: [],
-      last: performance.now(),
     };
 
-    const computeCount = () => {
+    const countForMode = (mode) => {
       const area = state.w * state.h;
-      const mode = FX_MODES[fxModeIndex];
+      const low = LOW_POWER ? 1 : 0;
 
-      if (mode === "bokeh") return clamp(Math.floor(area / 52000), 20, 60);
-      if (mode === "stars") return clamp(Math.floor(area / 16000), 80, 240);
-      if (mode === "rain") return clamp(Math.floor(area / 12000), 80, 220);
-      if (mode === "dust") return clamp(Math.floor(area / 26000), 50, 140);
-      return clamp(Math.floor(area / 24000), 60, 160);
+      if (mode === "off") return 0;
+
+      if (mode === "bokeh") return clamp(Math.floor(area / (low ? 200000 : 130000)), 10, low ? 22 : 36);
+      if (mode === "stars") return clamp(Math.floor(area / (low ? 56000 : 38000)), 40, low ? 120 : 190);
+      if (mode === "rain") return clamp(Math.floor(area / (low ? 52000 : 36000)), 55, low ? 140 : 210);
+      if (mode === "dust") return clamp(Math.floor(area / (low ? 90000 : 65000)), 25, low ? 70 : 110);
+      // snow
+      return clamp(Math.floor(area / (low ? 82000 : 56000)), 35, low ? 85 : 135);
     };
 
-    const makeParticle = (spawnInView = true) => {
-      const mode = FX_MODES[fxModeIndex];
-
+    const makeParticle = (mode, spawnInView = true) => {
       if (mode === "rain") {
         return {
           t: "rain",
@@ -315,9 +233,9 @@
           y: spawnInView ? rand(0, state.h) : rand(-state.h, 0),
           len: rand(10, 26),
           w: rand(0.7, 1.4),
-          a: rand(0.05, 0.12),
-          vy: rand(280, 460) * MOTION,
-          vx: rand(-40, 40) * MOTION,
+          a: rand(0.05, 0.11),
+          vy: rand(240, 420) * (LOW_POWER ? 0.9 : 1),
+          vx: rand(-36, 36) * (LOW_POWER ? 0.9 : 1),
         };
       }
 
@@ -338,10 +256,10 @@
           t: "bokeh",
           x: rand(0, state.w),
           y: spawnInView ? rand(0, state.h) : rand(-state.h, 0),
-          r: rand(10, 46),
-          a: rand(0.018, 0.05),
-          vy: rand(8, 16) * MOTION,
-          vx: rand(-6, 6) * MOTION,
+          r: rand(10, 42),
+          a: rand(0.012, 0.04),
+          vy: rand(8, 14) * (LOW_POWER ? 0.9 : 1),
+          vx: rand(-6, 6) * (LOW_POWER ? 0.9 : 1),
           phase: rand(0, Math.PI * 2),
         };
       }
@@ -352,23 +270,24 @@
           x: rand(0, state.w),
           y: spawnInView ? rand(0, state.h) : rand(-state.h, 0),
           r: rand(0.6, 1.8),
-          a: rand(0.03, 0.10),
-          vy: rand(10, 22) * MOTION,
-          vx: rand(-10, 10) * MOTION,
-          wobble: rand(4, 18),
+          a: rand(0.025, 0.08),
+          vy: rand(10, 20) * (LOW_POWER ? 0.9 : 1),
+          vx: rand(-10, 10) * (LOW_POWER ? 0.9 : 1),
+          wobble: rand(4, 16),
           phase: rand(0, Math.PI * 2),
         };
       }
 
+      // snow
       return {
         t: "snow",
         x: rand(0, state.w),
         y: spawnInView ? rand(0, state.h) : rand(-state.h, 0),
-        r: rand(0.9, 2.4),
-        a: rand(0.04, 0.14),
-        vy: rand(14, 34) * MOTION,
-        vx: rand(-10, 10) * MOTION,
-        wobble: rand(6, 20),
+        r: rand(0.9, 2.3),
+        a: rand(0.035, 0.11),
+        vy: rand(12, 30) * (LOW_POWER ? 0.9 : 1),
+        vx: rand(-10, 10) * (LOW_POWER ? 0.9 : 1),
+        wobble: rand(6, 18),
         phase: rand(0, Math.PI * 2),
       };
     };
@@ -376,7 +295,10 @@
     const resize = () => {
       state.w = Math.max(1, window.innerWidth);
       state.h = Math.max(1, window.innerHeight);
-      state.dpr = Math.min(2, window.devicePixelRatio || 1);
+
+      // keep DPR low (big perf win)
+      const deviceDpr = window.devicePixelRatio || 1;
+      state.dpr = Math.min(LOW_POWER ? 1 : 1.35, deviceDpr);
 
       fxCanvas.width = Math.floor(state.w * state.dpr);
       fxCanvas.height = Math.floor(state.h * state.dpr);
@@ -385,43 +307,44 @@
 
       ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
 
-      const target = computeCount();
-      while (state.particles.length < target) state.particles.push(makeParticle(true));
-      while (state.particles.length > target) state.particles.pop();
+      reset(true);
     };
 
     const reset = (reseed = false) => {
+      const mode = FX_MODES[fxModeIndex];
       if (reseed) state.particles = [];
-      resize();
+      const target = countForMode(mode);
+      while (state.particles.length < target) state.particles.push(makeParticle(mode, true));
+      while (state.particles.length > target) state.particles.pop();
     };
 
-    const draw = (now) => {
-      const dt = Math.min(0.05, (now - state.last) / 1000);
-      state.last = now;
-
+    const step = (dt, now) => {
       const mode = FX_MODES[fxModeIndex];
+      if (mode === "off") {
+        ctx.clearRect(0, 0, state.w, state.h);
+        return;
+      }
 
-      ctx.clearRect(0, 0, state.w, state.h);
-
-      const target = computeCount();
+      // maintain target count if resized/mode changed
+      const target = countForMode(mode);
       if (state.particles.length < target) {
-        for (let i = 0; i < target - state.particles.length; i++) state.particles.push(makeParticle(false));
+        for (let i = 0; i < target - state.particles.length; i++) state.particles.push(makeParticle(mode, false));
       } else if (state.particles.length > target) {
         state.particles.length = target;
       }
+
+      ctx.clearRect(0, 0, state.w, state.h);
 
       if (mode === "stars") {
         for (let i = 0; i < state.particles.length; i++) {
           const p = state.particles[i];
           const tw = (Math.sin((now / 1000) * p.tw + p.phase) + 1) / 2;
           const a = p.a * (0.55 + 0.55 * tw);
-
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(255,255,255,${a})`;
           ctx.fill();
         }
-        requestAnimationFrame(draw);
         return;
       }
 
@@ -434,7 +357,7 @@
 
           if (p.y > state.h + 40) {
             p.x = rand(0, state.w);
-            p.y = rand(-120, -20);
+            p.y = rand(-140, -20);
           }
           if (p.x < -60) p.x = state.w + 60;
           if (p.x > state.w + 60) p.x = -60;
@@ -454,122 +377,84 @@
         p.x += (p.vx || 0) * dt + wob;
 
         if (p.y > state.h + 80) {
-          state.particles[i] = makeParticle(false);
+          state.particles[i] = makeParticle(mode, false);
           continue;
         }
         if (p.x < -80) p.x = state.w + 80;
         if (p.x > state.w + 80) p.x = -80;
 
-        if (p.t === "bokeh") {
-          const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-          g.addColorStop(0, `rgba(255,255,255,${p.a})`);
-          g.addColorStop(1, "rgba(255,255,255,0)");
-          ctx.fillStyle = g;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fill();
-          continue;
-        }
-
+        // “bokeh” = bigger soft dots (cheap version)
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255,255,255,${p.a})`;
         ctx.fill();
       }
-
-      requestAnimationFrame(draw);
     };
 
     resize();
     window.addEventListener("resize", resize, { passive: true });
-    requestAnimationFrame(draw);
 
-    fxSystem = { reset };
+    return { resize, reset, step };
+  })();
+
+  const setMode = (idx) => {
+    fxModeIndex = ((idx % FX_MODES.length) + FX_MODES.length) % FX_MODES.length;
+    setFXLabel();
+    if (fx) fx.reset(true);
+  };
+
+  if (fxBtn) {
+    fxBtn.addEventListener("click", () => setMode(fxModeIndex + 1));
   }
 
-  // ===== Parallax + panel depth =====
-  const cardSeeds = focusCards.map((el, i) => ({ el, seed: (Math.random() * 1000 + i * 13.37) % 1000 }));
+  window.addEventListener("keydown", (e) => {
+    if ((e.key || "").toLowerCase() !== "f") return;
+    const tag = (document.activeElement && document.activeElement.tagName) || "";
+    if (["INPUT", "TEXTAREA", "SELECT"].includes(tag)) return;
+    setMode(fxModeIndex + 1);
+  });
 
-  const updateViewport = () => {
-    vw = window.innerWidth;
-    vh = window.innerHeight;
-  };
-  window.addEventListener("resize", updateViewport, { passive: true });
-
-  let lastDepthUpdate = 0;
-
-  const updateCardDepth = () => {
-    const now = performance.now();
-    if (now - lastDepthUpdate < 34) return;
-    lastDepthUpdate = now;
-
-    for (let i = 0; i < cardSeeds.length; i++) {
-      const el = cardSeeds[i].el;
-      const rect = el.getBoundingClientRect();
-      const inView = rect.bottom > -40 && rect.top < vh + 40;
-
-      if (!inView) {
-        el.style.setProperty("--tiltX", "0deg");
-        el.style.setProperty("--tiltY", "0deg");
-        el.style.setProperty("--z", "0px");
-        el.style.setProperty("--lift", "0px");
-        continue;
-      }
-
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const dx = (cx - vw / 2) / (vw / 2);
-      const dy = (cy - vh / 2) / (vh / 2);
-
-      const tiltX = clamp(dy * -3.8, -4.2, 4.2);
-      const tiltY = clamp(dx * 2.6, -3.2, 3.2);
-
-      const centerWeight = 1 - clamp(Math.abs(dy), 0, 1);
-      const z = centerWeight * 26;
-      const lift = -z * 0.16;
-
-      el.style.setProperty("--tiltX", `${tiltX.toFixed(2)}deg`);
-      el.style.setProperty("--tiltY", `${tiltY.toFixed(2)}deg`);
-      el.style.setProperty("--z", `${z.toFixed(1)}px`);
-      el.style.setProperty("--lift", `${lift.toFixed(1)}px`);
-    }
-  };
-
-  let raf = 0;
+  // ===== main render loop (single RAF; throttled) =====
+  let lastFrame = 0;
+  let lastNow = performance.now();
 
   const tick = (now) => {
-    raf = 0;
+    requestAnimationFrame(tick);
 
-    const k = 0.12 * MOTION;
+    if (now - lastFrame < FRAME_MS) return;
+    lastFrame = now;
+
+    const dt = Math.min(0.05, (now - lastNow) / 1000);
+    lastNow = now;
+
+    vw = window.innerWidth;
+    vh = window.innerHeight;
+
+    // smooth cursor
+    const k = LOW_POWER ? 0.22 : 0.16;
     smx += (mx - smx) * k;
     smy += (my - smy) * k;
 
-    const ks = 0.085 * MOTION;
-    ssx += (sx - ssx) * ks;
-    ssy += (sy - ssy) * ks;
-
     root.style.setProperty("--mx", `${smx.toFixed(1)}px`);
     root.style.setProperty("--my", `${smy.toFixed(1)}px`);
-    root.style.setProperty("--sx", `${ssx.toFixed(1)}px`);
-    root.style.setProperty("--sy", `${ssy.toFixed(1)}px`);
+    root.style.setProperty("--sx", `${smx.toFixed(1)}px`);
+    root.style.setProperty("--sy", `${smy.toFixed(1)}px`);
 
+    // parallax (lighter)
     const nx = (smx - vw / 2) / (vw / 2);
     const ny = (smy - vh / 2) / (vh / 2);
-
     const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
 
-    const sA = clamp(-scrollY * 0.02, -60, 60);
-    const sO = clamp(-scrollY * 0.035, -90, 90);
-    const sF = clamp(-scrollY * 0.015, -45, 45);
+    const amp = LOW_POWER ? 0.55 : 1;
 
-    const aurX = nx * 18;
-    const aurY = ny * 12 + sA;
+    const aurX = nx * 14 * amp;
+    const aurY = ny * 10 * amp + clamp(-scrollY * 0.016, -40, 40);
 
-    const orbX = nx * 30;
-    const orbY = ny * 20 + sO;
+    const orbX = nx * 20 * amp;
+    const orbY = ny * 14 * amp + clamp(-scrollY * 0.028, -60, 60);
 
-    const fxX = nx * 12;
-    const fxY = ny * 10 + sF;
+    const fxX = nx * 10 * amp;
+    const fxY = ny * 8 * amp + clamp(-scrollY * 0.012, -30, 30);
 
     root.style.setProperty("--aurX", `${aurX.toFixed(1)}px`);
     root.style.setProperty("--aurY", `${aurY.toFixed(1)}px`);
@@ -578,32 +463,28 @@
     root.style.setProperty("--fxX", `${fxX.toFixed(1)}px`);
     root.style.setProperty("--fxY", `${fxY.toFixed(1)}px`);
 
-    const t = now / 1000;
-    for (let i = 0; i < cardSeeds.length; i++) {
-      const { el, seed } = cardSeeds[i];
+    // orb movement
+    const dx = orb.tx - orb.x;
+    const dy = orb.ty - orb.y;
+    const dist = Math.hypot(dx, dy) || 1;
 
-      let amp = 0.35;
-      if (el.classList.contains("is-focus")) amp = 0.65;
-      if (el.classList.contains("is-hover")) amp = 1.55;
-      if (el.classList.contains("is-active")) amp = 1.75;
+    if (dist < 18) pickOrbTarget();
 
-      amp *= MOTION;
+    const step = orb.speed * dt;
+    const t = Math.min(1, step / dist);
+    orb.x += dx * t;
+    orb.y += dy * t;
 
-      const dx = Math.sin(t * 0.85 + seed) * amp;
-      const dy = Math.cos(t * 0.75 + seed * 0.72) * amp;
+    // tiny drift
+    orb.x += Math.sin(now / 1900) * 0.08;
+    orb.y += Math.cos(now / 2200) * 0.08;
 
-      el.style.setProperty("--driftX", `${dx.toFixed(2)}px`);
-      el.style.setProperty("--driftY", `${dy.toFixed(2)}px`);
-    }
+    root.style.setProperty("--ox", `${orb.x.toFixed(1)}px`);
+    root.style.setProperty("--oy", `${orb.y.toFixed(1)}px`);
 
-    updateCardDepth();
-    raf = requestAnimationFrame(tick);
+    // canvas fx
+    if (fx) fx.step(dt, now);
   };
 
-  const ensureRAF = () => {
-    if (!raf) raf = requestAnimationFrame(tick);
-  };
-
-  ensureRAF();
-  window.addEventListener("scroll", ensureRAF, { passive: true });
+  requestAnimationFrame(tick);
 })();
