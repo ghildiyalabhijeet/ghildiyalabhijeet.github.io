@@ -4,7 +4,9 @@
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const rand = (min, max) => min + Math.random() * (max - min);
 
-  // ===== perf heuristics =====
+  const root = document.documentElement;
+  const body = document.body;
+
   const mm = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
   const PREFERS_REDUCE = mm ? mm.matches : false;
 
@@ -17,11 +19,10 @@
     (typeof CORES === "number" && CORES > 0 && CORES <= 4) ||
     window.innerWidth < 768;
 
-  const TARGET_FPS = LOW_POWER ? 24 : 30;
-  const FRAME_MS = 1000 / TARGET_FPS;
-
-  const root = document.documentElement;
-  const body = document.body;
+  // Make FX *smooth* (not choppy), but lower particle count.
+  // 60fps on normal devices, 30fps on low-power.
+  const FX_TARGET_FPS = LOW_POWER ? 30 : 60;
+  const FX_FRAME_MS = 1000 / FX_TARGET_FPS;
 
   // ===== Year =====
   const yearEl = $("#year");
@@ -152,14 +153,13 @@
     });
   }
 
-  // ===== Mouse position (for glow + spotlight) =====
+  // ===== Mouse smoothing + CSS var cache =====
   let vw = window.innerWidth;
   let vh = window.innerHeight;
 
   let mx = vw * 0.5;
   let my = vh * 0.45;
 
-  // smoothed
   let smx = mx;
   let smy = my;
 
@@ -172,13 +172,22 @@
     { passive: true }
   );
 
-  // ===== Orb path (random drift) =====
+  const cache = Object.create(null);
+  const setPxVar = (name, val, eps = 0.2) => {
+    const prev = cache[name];
+    if (prev === undefined || Math.abs(prev - val) > eps) {
+      cache[name] = val;
+      root.style.setProperty(`--${name}`, `${val.toFixed(1)}px`);
+    }
+  };
+
+  // ===== Orb drift =====
   const orb = {
     x: rand(-0.15 * vw, 1.15 * vw),
     y: rand(-0.15 * vh, 1.15 * vh),
     tx: rand(-0.18 * vw, 1.18 * vw),
     ty: rand(-0.18 * vh, 1.18 * vh),
-    speed: LOW_POWER ? 10 : 14,
+    speed: LOW_POWER ? 9 : 12,
   };
 
   const pickOrbTarget = () => {
@@ -186,12 +195,12 @@
     orb.ty = rand(-0.18 * vh, 1.18 * vh);
   };
 
-  // ===== FX Canvas system (Snow/Dust/Bokeh/Stars/Rain/Off) =====
+  // ===== FX canvas =====
   const fxCanvas = document.getElementById("bgFX");
   const fxBtn = document.getElementById("fxToggle");
 
   const FX_MODES = ["snow", "dust", "bokeh", "stars", "rain", "off"];
-  let fxModeIndex = 0;
+  let fxModeIndex = LOW_POWER ? FX_MODES.indexOf("off") : 0; // smooth by default
 
   const setFXLabel = () => {
     if (!fxBtn) return;
@@ -204,90 +213,39 @@
     if (!fxCanvas || !fxCanvas.getContext) return null;
     const ctx = fxCanvas.getContext("2d");
 
-    const state = {
-      w: 1,
-      h: 1,
-      dpr: 1,
-      particles: [],
-    };
+    const state = { w: 1, h: 1, dpr: 1, particles: [] };
 
     const countForMode = (mode) => {
       const area = state.w * state.h;
-      const low = LOW_POWER ? 1 : 0;
 
+      // noticeably reduced vs earlier versions (but still visible)
       if (mode === "off") return 0;
-
-      if (mode === "bokeh") return clamp(Math.floor(area / (low ? 200000 : 130000)), 10, low ? 22 : 36);
-      if (mode === "stars") return clamp(Math.floor(area / (low ? 56000 : 38000)), 40, low ? 120 : 190);
-      if (mode === "rain") return clamp(Math.floor(area / (low ? 52000 : 36000)), 55, low ? 140 : 210);
-      if (mode === "dust") return clamp(Math.floor(area / (low ? 90000 : 65000)), 25, low ? 70 : 110);
-      return clamp(Math.floor(area / (low ? 82000 : 56000)), 35, low ? 85 : 135);
+      if (mode === "bokeh") return clamp(Math.floor(area / (LOW_POWER ? 320000 : 240000)), 8, LOW_POWER ? 18 : 26);
+      if (mode === "stars") return clamp(Math.floor(area / (LOW_POWER ? 90000 : 65000)), 20, LOW_POWER ? 90 : 140);
+      if (mode === "rain") return clamp(Math.floor(area / (LOW_POWER ? 95000 : 70000)), 22, LOW_POWER ? 110 : 160);
+      if (mode === "dust") return clamp(Math.floor(area / (LOW_POWER ? 170000 : 120000)), 12, LOW_POWER ? 55 : 85);
+      // snow
+      return clamp(Math.floor(area / (LOW_POWER ? 125000 : 85000)), 14, LOW_POWER ? 60 : 95);
     };
 
     const makeParticle = (mode, spawnInView = true) => {
+      const x = rand(0, state.w);
+      const y = spawnInView ? rand(0, state.h) : rand(-state.h, 0);
+
       if (mode === "rain") {
-        return {
-          t: "rain",
-          x: rand(0, state.w),
-          y: spawnInView ? rand(0, state.h) : rand(-state.h, 0),
-          len: rand(10, 26),
-          w: rand(0.7, 1.4),
-          a: rand(0.05, 0.11),
-          vy: rand(240, 420) * (LOW_POWER ? 0.9 : 1),
-          vx: rand(-36, 36) * (LOW_POWER ? 0.9 : 1),
-        };
+        return { t: "rain", x, y, len: rand(10, 22), w: rand(0.7, 1.2), a: rand(0.04, 0.08), vy: rand(220, 380), vx: rand(-26, 26) };
       }
-
       if (mode === "stars") {
-        return {
-          t: "star",
-          x: rand(0, state.w),
-          y: rand(0, state.h),
-          r: rand(0.6, 1.4),
-          a: rand(0.03, 0.10),
-          tw: rand(0.6, 1.6),
-          phase: rand(0, Math.PI * 2),
-        };
+        return { t: "star", x, y: rand(0, state.h), r: rand(0.6, 1.3), a: rand(0.02, 0.07), tw: rand(0.6, 1.4), phase: rand(0, Math.PI * 2) };
       }
-
       if (mode === "bokeh") {
-        return {
-          t: "bokeh",
-          x: rand(0, state.w),
-          y: spawnInView ? rand(0, state.h) : rand(-state.h, 0),
-          r: rand(10, 42),
-          a: rand(0.012, 0.04),
-          vy: rand(8, 14) * (LOW_POWER ? 0.9 : 1),
-          vx: rand(-6, 6) * (LOW_POWER ? 0.9 : 1),
-          phase: rand(0, Math.PI * 2),
-        };
+        return { t: "bokeh", x, y, r: rand(10, 34), a: rand(0.010, 0.028), vy: rand(7, 12), vx: rand(-5, 5), phase: rand(0, Math.PI * 2) };
       }
-
       if (mode === "dust") {
-        return {
-          t: "dust",
-          x: rand(0, state.w),
-          y: spawnInView ? rand(0, state.h) : rand(-state.h, 0),
-          r: rand(0.6, 1.8),
-          a: rand(0.025, 0.08),
-          vy: rand(10, 20) * (LOW_POWER ? 0.9 : 1),
-          vx: rand(-10, 10) * (LOW_POWER ? 0.9 : 1),
-          wobble: rand(4, 16),
-          phase: rand(0, Math.PI * 2),
-        };
+        return { t: "dust", x, y, r: rand(0.6, 1.6), a: rand(0.02, 0.06), vy: rand(9, 16), vx: rand(-8, 8), wobble: rand(4, 12), phase: rand(0, Math.PI * 2) };
       }
-
-      return {
-        t: "snow",
-        x: rand(0, state.w),
-        y: spawnInView ? rand(0, state.h) : rand(-state.h, 0),
-        r: rand(0.9, 2.3),
-        a: rand(0.035, 0.11),
-        vy: rand(12, 30) * (LOW_POWER ? 0.9 : 1),
-        vx: rand(-10, 10) * (LOW_POWER ? 0.9 : 1),
-        wobble: rand(6, 18),
-        phase: rand(0, Math.PI * 2),
-      };
+      // snow
+      return { t: "snow", x, y, r: rand(0.9, 2.0), a: rand(0.03, 0.085), vy: rand(10, 24), vx: rand(-8, 8), wobble: rand(6, 14), phase: rand(0, Math.PI * 2) };
     };
 
     const reset = (reseed = false) => {
@@ -302,8 +260,8 @@
       state.w = Math.max(1, window.innerWidth);
       state.h = Math.max(1, window.innerHeight);
 
-      const deviceDpr = window.devicePixelRatio || 1;
-      state.dpr = Math.min(LOW_POWER ? 1 : 1.35, deviceDpr);
+      // performance: lock to DPR=1 (huge win)
+      state.dpr = 1;
 
       fxCanvas.width = Math.floor(state.w * state.dpr);
       fxCanvas.height = Math.floor(state.h * state.dpr);
@@ -398,54 +356,41 @@
 
   if (fxBtn) fxBtn.addEventListener("click", () => setMode(fxModeIndex + 1));
 
-  window.addEventListener("keydown", (e) => {
-    if ((e.key || "").toLowerCase() !== "f") return;
-    const tag = (document.activeElement && document.activeElement.tagName) || "";
-    if (["INPUT", "TEXTAREA", "SELECT"].includes(tag)) return;
-    setMode(fxModeIndex + 1);
-  });
-
-  // ===== main render loop (single RAF; throttled) =====
-  let lastFrame = 0;
+  // ===== main loop =====
   let lastNow = performance.now();
+  let lastFxFrame = 0;
 
   const tick = (now) => {
     requestAnimationFrame(tick);
-
-    if (now - lastFrame < FRAME_MS) return;
-    lastFrame = now;
-
     const dt = Math.min(0.05, (now - lastNow) / 1000);
     lastNow = now;
 
     vw = window.innerWidth;
     vh = window.innerHeight;
 
+    // cursor smoothing
     const k = LOW_POWER ? 0.22 : 0.16;
     smx += (mx - smx) * k;
     smy += (my - smy) * k;
 
-    root.style.setProperty("--mx", `${smx.toFixed(1)}px`);
-    root.style.setProperty("--my", `${smy.toFixed(1)}px`);
-    root.style.setProperty("--sx", `${smx.toFixed(1)}px`);
-    root.style.setProperty("--sy", `${smy.toFixed(1)}px`);
+    setPxVar("mx", smx);
+    setPxVar("my", smy);
+    setPxVar("sx", smx);
+    setPxVar("sy", smy);
 
+    // subtle parallax (small amplitude)
     const nx = (smx - vw / 2) / (vw / 2);
     const ny = (smy - vh / 2) / (vh / 2);
     const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
 
-    const amp = LOW_POWER ? 0.55 : 1;
+    setPxVar("aurX", nx * 10 + 0.0);
+    setPxVar("aurY", ny * 7 + clamp(-scrollY * 0.012, -30, 30));
+    setPxVar("orbX", nx * 14 + 0.0);
+    setPxVar("orbY", ny * 10 + clamp(-scrollY * 0.02, -44, 44));
+    setPxVar("fxX", nx * 7 + 0.0);
+    setPxVar("fxY", ny * 6 + clamp(-scrollY * 0.01, -24, 24));
 
-    root.style.setProperty("--aurX", `${(nx * 14 * amp).toFixed(1)}px`);
-    root.style.setProperty("--aurY", `${(ny * 10 * amp + clamp(-scrollY * 0.016, -40, 40)).toFixed(1)}px`);
-
-    root.style.setProperty("--orbX", `${(nx * 20 * amp).toFixed(1)}px`);
-    root.style.setProperty("--orbY", `${(ny * 14 * amp + clamp(-scrollY * 0.028, -60, 60)).toFixed(1)}px`);
-
-    root.style.setProperty("--fxX", `${(nx * 10 * amp).toFixed(1)}px`);
-    root.style.setProperty("--fxY", `${(ny * 8 * amp + clamp(-scrollY * 0.012, -30, 30)).toFixed(1)}px`);
-
-    // orb movement
+    // orb random drift
     const dx = orb.tx - orb.x;
     const dy = orb.ty - orb.y;
     const dist = Math.hypot(dx, dy) || 1;
@@ -456,13 +401,17 @@
     orb.x += dx * t;
     orb.y += dy * t;
 
-    orb.x += Math.sin(now / 1900) * 0.08;
-    orb.y += Math.cos(now / 2200) * 0.08;
+    orb.x += Math.sin(now / 2100) * 0.08;
+    orb.y += Math.cos(now / 2400) * 0.08;
 
-    root.style.setProperty("--ox", `${orb.x.toFixed(1)}px`);
-    root.style.setProperty("--oy", `${orb.y.toFixed(1)}px`);
+    setPxVar("ox", orb.x, 0.3);
+    setPxVar("oy", orb.y, 0.3);
 
-    if (fx) fx.step(dt, now);
+    // FX render throttle (60/30 depending device)
+    if (fx && now - lastFxFrame >= FX_FRAME_MS) {
+      lastFxFrame = now;
+      fx.step(dt, now);
+    }
   };
 
   requestAnimationFrame(tick);
