@@ -28,8 +28,21 @@
   const yearEl = $("#year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
+  // ===== Visual Splash Screen =====
+  const splash = document.getElementById("splash");
+
+  if (splash) {
+    // Let the smooth 3D animation play out, then fade
+    setTimeout(() => {
+      splash.classList.add("is-hidden");
+      setTimeout(() => splash.remove(), 600);
+    }, 2400);
+  }
+
   // ===== Scroll Spy =====
   const navLinks = $$(".nav-item").filter((a) => a.tagName.toLowerCase() === "a");
+  const navIndicator = $(".nav-indicator");
+
   const sections = navLinks
     .map((a) => ({ a, id: (a.getAttribute("href") || "").replace("#", "") }))
     .map((o) => ({ ...o, el: document.getElementById(o.id) }))
@@ -38,9 +51,24 @@
   const setActive = (id) => {
     navLinks.forEach((a) => {
       const href = a.getAttribute("href") || "";
-      a.classList.toggle("is-active", href === `#${id}`);
+      const isActive = href === `#${id}`;
+      a.classList.toggle("is-active", isActive);
+
+      if (isActive && navIndicator) {
+        navIndicator.style.width = `${a.offsetWidth}px`;
+        navIndicator.style.transform = `translateX(${a.offsetLeft}px)`;
+      }
     });
   };
+
+  // Handle window resize for nav indicator
+  window.addEventListener("resize", () => {
+    const activeLink = navLinks.find(a => a.classList.contains("is-active"));
+    if (activeLink && navIndicator) {
+      navIndicator.style.width = `${activeLink.offsetWidth}px`;
+      navIndicator.style.transform = `translateX(${activeLink.offsetLeft}px)`;
+    }
+  }, { passive: true });
 
   if (sections.length) {
     const io = new IntersectionObserver(

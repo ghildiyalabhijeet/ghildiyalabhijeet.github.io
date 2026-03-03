@@ -17,10 +17,22 @@
     />
 
     <link rel="icon" href="assets/img/favicon.svg" />
-    <link rel="stylesheet" href="assets/css/main.css?v=13" />
+    <link rel="stylesheet" href="assets/css/main.css?t=173801" />
   </head>
 
   <body>
+    <!-- Splash Screen -->
+    <div id="splash" class="splash splash-gyro" aria-label="Loading">
+      <div class="gyro-loader">
+        <svg viewBox="0 0 160 160" width="160" height="160" class="gyro-svg">
+          <circle cx="80" cy="80" r="60" class="gyro-ring gyro-ring1" />
+          <circle cx="80" cy="80" r="45" class="gyro-ring gyro-ring2" />
+          <circle cx="80" cy="80" r="30" class="gyro-ring gyro-ring3" />
+          <circle cx="80" cy="80" r="8"  class="gyro-core" />
+        </svg>
+      </div>
+    </div>
+
     <!-- Ambient background -->
     <div id="bgRoot" aria-hidden="true">
       <div class="bg-animated"></div>
@@ -31,14 +43,16 @@
       <div class="bg-spotlight"></div>
     </div>
 
-    <!-- Nav -->
-    <header class="nav-shell" role="banner">
-      <nav class="nav-glass glass" aria-label="Primary">
-        <a class="nav-item" href="#work">Work</a>
-        <a class="nav-item" href="#about">About</a>
-        <a class="nav-item" href="#projects">Projects</a>
+    <main>
+      <!-- Nav -->
+      <header class="nav-shell" role="banner">
+        <nav class="nav-glass glass" aria-label="Primary">
+          <div class="nav-indicator" aria-hidden="true"></div>
+          <a class="nav-item magnetic" href="#work">Work</a>
+          <a class="nav-item magnetic" href="#about">About</a>
+          <a class="nav-item magnetic" href="#projects">Projects</a>
 
-        <button id="fxToggle" class="nav-item nav-fx" type="button" aria-label="Toggle background effect">
+          <button id="fxToggle" class="nav-item nav-fx magnetic" type="button" aria-label="Toggle background effect">
           FX: Snow
         </button>
       </nav>
@@ -68,15 +82,15 @@
             </div>
 
             <div class="hero-actions" aria-label="Primary actions">
-              <a class="primary-btn" href="#projects">Explore projects</a>
-              <a class="secondary-btn" href="#about">About &amp; skills</a>
-              <button id="copyEmailBtn" class="secondary-btn" type="button">Copy email</button>
+              <a class="primary-btn magnetic" href="#projects">Explore projects</a>
+              <a class="secondary-btn magnetic" href="#about">About &amp; skills</a>
+              <button id="copyEmailBtn" class="secondary-btn magnetic" type="button">Copy email</button>
             </div>
           </div>
         </div>
 
         <div class="contact-bar glass focus-card" role="navigation" aria-label="Contact links">
-          <a class="contact-icon" href="mailto:aghildiy@asu.edu" aria-label="Email" title="Email">
+          <a class="contact-icon magnetic" href="mailto:aghildiy@asu.edu" aria-label="Email" title="Email">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M4 6h16v12H4z"></path>
               <path d="M4 7l8 6 8-6"></path>
@@ -84,7 +98,7 @@
           </a>
 
           <a
-            class="contact-icon"
+            class="contact-icon magnetic"
             href="https://www.linkedin.com/in/abhijeet928"
             target="_blank"
             rel="noopener"
@@ -100,7 +114,7 @@
           </a>
 
           <a
-            class="contact-icon"
+            class="contact-icon magnetic"
             href="https://github.com/ghildiyalabhijeet"
             target="_blank"
             rel="noopener"
@@ -367,8 +381,8 @@
           <div class="panel-foot">
             <div class="mono small-muted">© <span id="year"></span> Abhijeet Ghildiyal</div>
             <div class="mini-actions">
-              <a class="mini-btn" href="#work">Work</a>
-              <a class="mini-btn" href="#projects">Projects</a>
+              <a class="mini-btn magnetic" href="#work">Work</a>
+              <a class="mini-btn magnetic" href="#projects">Projects</a>
             </div>
           </div>
         </div>
@@ -382,7 +396,7 @@
       </section>
     </main>
 
-    <script src="assets/js/projects.js?v=13"></script>
-    <script src="assets/js/main.js?v=13"></script>
+    <script src="assets/js/projects.js?t=173801"></script>
+    <script src="assets/js/main.js?t=173801"></script>
   </body>
 </html>
