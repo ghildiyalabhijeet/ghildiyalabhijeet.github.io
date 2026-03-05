@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projects | Abhijeet Ghildiyal</title>
+    <meta
+      name="description"
+      content="Project showcase — Abhijeet Ghildiyal, Data Science & ML."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" href="assets/img/favicon.svg" />
+    <link rel="stylesheet" href="assets/css/main.css?t=176000" />
+  </head>
+
+  <body>
+    <!-- Splash Screen -->
+    <div id="splash" class="splash splash-gyro" aria-label="Loading">
+      <div class="gyro-loader">
+        <svg viewBox="0 0 160 160" width="160" height="160" class="gyro-svg">
+          <circle cx="80" cy="80" r="60" class="gyro-ring gyro-ring1" />
+          <circle cx="80" cy="80" r="45" class="gyro-ring gyro-ring2" />
+          <circle cx="80" cy="80" r="30" class="gyro-ring gyro-ring3" />
+          <circle cx="80" cy="80" r="8"  class="gyro-core" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Ambient background -->
+    <div id="bgRoot" aria-hidden="true">
+      <div class="bg-animated"></div>
+      <div class="bg-noise"></div>
+      <div class="bg-orb"></div>
+      <canvas id="bgFX" class="bg-fx"></canvas>
+      <div class="bg-cursor"></div>
+      <div class="bg-spotlight"></div>
+    </div>
+
+    <main>
+      <!-- Nav -->
+      <header class="nav-shell" role="banner">
+        <nav class="nav-glass glass" aria-label="Primary">
+          <a class="nav-item" href="index.html">Home</a>
+          <a class="nav-item" href="index.html#about">About</a>
+          <a class="nav-item" href="experience.html">Experience</a>
+          <a class="nav-item is-active" href="projects.html">Projects</a>
+        </nav>
+      </header>
+
+      <div class="proj-grid-page">
+        <div class="proj-grid-header">
+          <h1>Projects</h1>
+          <p>Things I've built &amp; explored</p>
+        </div>
+
+        <div class="proj-grid">
+          <!-- 1 -->
+          <a class="proj-card" href="https://github.com/ghildiyalabhijeet/GenAIProject" target="_blank" rel="noopener" style="--card-accent: 250, 204, 21;">
+            <img class="proj-card-img" src="assets/img/1.webp" alt="Faster Diffusion" />
+            <div class="proj-card-body">
+              <div class="proj-card-top">
+                <span class="proj-card-title">Faster Diffusion</span>
+                <span class="proj-card-year">2025</span>
+              </div>
+              <div class="proj-card-desc">Accelerating image generation with optimized diffusion model architectures and advanced sampling strategies.</div>
+              <div class="proj-card-tags">
+                <span class="proj-card-tag">Python</span>
+                <span class="proj-card-tag">PyTorch</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- 2 -->
+          <a class="proj-card" href="https://github.com/ghildiyalabhijeet/MachineLearning_Particle_Pollution/blob/main/Research_Paper_Particle_Pollution.pdf" target="_blank" rel="noopener" style="--card-accent: 34, 197, 94;">
+            <img class="proj-card-img" src="assets/img/2.webp" alt="Particle Pollution" />
+            <div class="proj-card-body">
+              <div class="proj-card-top">
+                <span class="proj-card-title">Particle Pollution</span>
+                <span class="proj-card-year">2022</span>
+              </div>
+              <div class="proj-card-desc">Machine learning research on air quality prediction using environmental sensor data and ensemble methods.</div>
+              <div class="proj-card-tags">
+                <span class="proj-card-tag">Python</span>
+                <span class="proj-card-tag">scikit-learn</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- 3 -->
+          <a class="proj-card" href="https://github.com/AII-projects/DigitalAssetsAnalyticsPipeline" target="_blank" rel="noopener" style="--card-accent: 72, 155, 255;">
+            <img class="proj-card-img" src="assets/img/3.webp" alt="Digital Assets Pipeline" />
+            <div class="proj-card-body">
+              <div class="proj-card-top">
+                <span class="proj-card-title">Digital Assets Pipeline</span>
+                <span class="proj-card-year">Repo</span>
+              </div>
+              <div class="proj-card-desc">End-to-end analytics pipeline for digital asset data ingestion, transformation, and dashboard visualization.</div>
+              <div class="proj-card-tags">
+                <span class="proj-card-tag">Python</span>
+                <span class="proj-card-tag">SQL</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- 4 -->
+          <a class="proj-card" href="https://github.com/AII-projects/slackbot" target="_blank" rel="noopener" style="--card-accent: 167, 139, 250;">
+            <img class="proj-card-img" src="assets/img/4.webp" alt="Slack Python Q&A Bot" />
+            <div class="proj-card-body">
+              <div class="proj-card-top">
+                <span class="proj-card-title">Slack Python Q&amp;A Bot</span>
+                <span class="proj-card-year">2025</span>
+              </div>
+              <div class="proj-card-desc">Conversational Slack bot for answering Python questions using NLP and curated knowledge base retrieval.</div>
+              <div class="proj-card-tags">
+                <span class="proj-card-tag">Python</span>
+                <span class="proj-card-tag">Slack API</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- 5 -->
+          <a class="proj-card" href="#" style="--card-accent: 0, 200, 120;">
+            <img class="proj-card-img" src="assets/img/5.webp" alt="Stock Prediction Pipeline" />
+            <div class="proj-card-body">
+              <div class="proj-card-top">
+                <span class="proj-card-title">Stock Prediction &amp; Trading Pipeline</span>
+                <span class="proj-card-year" style="border-color: rgba(0,200,120,0.4); color: rgba(0,200,120,0.9);">Ongoing</span>
+              </div>
+              <div class="proj-card-desc">End-to-end local research pipeline for U.S. stock prediction and systematic trading — reproducible ETL feature store, Temporal Fusion Transformer forecasting, and backtesting harness.</div>
+              <div class="proj-card-tags">
+                <span class="proj-card-tag">Python</span>
+                <span class="proj-card-tag">PyTorch</span>
+                <span class="proj-card-tag">DuckDB</span>
+                <span class="proj-card-tag">pandas</span>
+                <span class="proj-card-tag">scikit-learn</span>
+                <span class="proj-card-tag">Parquet</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px;">
+          <div class="mono small-muted" style="font-size: 0.78rem; color: rgba(255,255,255,0.4);">© <span id="year"></span> Abhijeet Ghildiyal</div>
+        </div>
+      </div>
+    </main>
+
+    <script src="assets/js/main.js?t=176000"></script>
+  </body>
+</html>

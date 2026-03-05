@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Experience | Abhijeet Ghildiyal</title>
+    <meta
+      name="description"
+      content="Professional experience timeline — Abhijeet Ghildiyal, Data Science & ML."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" href="assets/img/favicon.svg" />
+    <link rel="stylesheet" href="assets/css/main.css?t=176000" />
+  </head>
+
+  <body>
+    <!-- Splash Screen -->
+    <div id="splash" class="splash splash-gyro" aria-label="Loading">
+      <div class="gyro-loader">
+        <svg viewBox="0 0 160 160" width="160" height="160" class="gyro-svg">
+          <circle cx="80" cy="80" r="60" class="gyro-ring gyro-ring1" />
+          <circle cx="80" cy="80" r="45" class="gyro-ring gyro-ring2" />
+          <circle cx="80" cy="80" r="30" class="gyro-ring gyro-ring3" />
+          <circle cx="80" cy="80" r="8"  class="gyro-core" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Ambient background -->
+    <div id="bgRoot" aria-hidden="true">
+      <div class="bg-animated"></div>
+      <div class="bg-noise"></div>
+      <div class="bg-orb"></div>
+      <canvas id="bgFX" class="bg-fx"></canvas>
+      <div class="bg-cursor"></div>
+      <div class="bg-spotlight"></div>
+    </div>
+
+    <main>
+      <!-- Nav -->
+      <header class="nav-shell" role="banner">
+        <nav class="nav-glass glass" aria-label="Primary">
+          <a class="nav-item" href="index.html">Home</a>
+          <a class="nav-item" href="index.html#about">About</a>
+          <a class="nav-item is-active" href="experience.html">Experience</a>
+          <a class="nav-item" href="projects.html">Projects</a>
+        </nav>
+      </header>
+
+      <div class="timeline-page">
+        <div class="timeline-header">
+          <h1>Professional Experience</h1>
+          <p>[ moving through life ]</p>
+        </div>
+
+        <div class="timeline">
+          <!-- Ambient floating dots -->
+          <div class="tl-dot" style="top: 8%; left: 18%;"></div>
+          <div class="tl-dot" style="top: 38%; left: 10%;"></div>
+          <div class="tl-dot" style="top: 22%; right: 15%;"></div>
+          <div class="tl-dot" style="top: 55%; right: 10%;"></div>
+          <div class="tl-dot" style="top: 72%; left: 22%;"></div>
+
+          <!-- Role 1 -->
+          <div class="tl-item">
+            <div class="tl-card">
+              <div class="tl-role">Data Analyst Intern</div>
+              <span class="tl-date">Jul 2022 — Aug 2024</span>
+              <div class="tl-company">BTP ECO Products</div>
+              <ul class="tl-bullets">
+                <li>Designed & deployed 5+ Power BI dashboards to automate reporting and surface key KPIs.</li>
+                <li>Translated complex patterns into clear, actionable strategies for leadership decisions.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Role 2 -->
+          <div class="tl-item">
+            <div class="tl-card">
+              <div class="tl-role">SDE Intern</div>
+              <span class="tl-date">Jul 2021 — Sep 2021</span>
+              <div class="tl-company">BTP ECO Products</div>
+              <ul class="tl-bullets">
+                <li>Built responsive, user-friendly interfaces using HTML and CSS.</li>
+                <li>Improved cross-browser compatibility for consistent UI performance.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Role 3 -->
+          <div class="tl-item">
+            <div class="tl-card">
+              <div class="tl-role">Cyber Security Intern</div>
+              <span class="tl-date">Jan 2021 — Mar 2021</span>
+              <div class="tl-company">Virtually Testing Foundation</div>
+              <ul class="tl-bullets">
+                <li>Assisted with security testing in virtual environments and managed technical content.</li>
+                <li>Drafted guidelines that improved accountability and process consistency.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+          <div class="mono small-muted">© <span id="year"></span> Abhijeet Ghildiyal</div>
+        </div>
+      </div>
+    </main>
+
+    <script src="assets/js/main.js?t=176000"></script>
+  </body>
+</html>
