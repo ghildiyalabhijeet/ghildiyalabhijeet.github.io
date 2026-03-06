@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Details | Abhijeet Ghildiyal</title>
+    <meta name="description" content="Project Details" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" href="assets/img/favicon.svg" />
+    <link rel="stylesheet" href="assets/css/main.css?t=176000" />
+    <style>
+      .detail-page {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 120px 24px 80px;
+      }
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 30px;
+        transition: color var(--dur-2);
+      }
+      .back-link:hover { color: #fff; }
+      
+      .detail-hero { margin-bottom: 40px; }
+      .detail-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        margin-bottom: 16px;
+        color: rgba(255, 255, 255, 0.96);
+      }
+      .detail-meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
+      .detail-year {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+        padding: 4px 12px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        color: rgba(255, 255, 255, 0.8);
+      }
+      
+      .detail-img-wrap {
+        width: 100%;
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        margin-bottom: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.3);
+      }
+      .detail-img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      
+      .detail-content {
+        line-height: 1.8;
+        font-size: 1.05rem;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .detail-content h2 {
+        color: #fff;
+        margin: 40px 0 16px;
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
+      .detail-content h3 {
+        color: #fff;
+        margin: 30px 0 12px;
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+      .detail-content p { margin-bottom: 20px; }
+      .detail-content ul { margin-bottom: 20px; padding-left: 20px; }
+      .detail-content li { margin-bottom: 8px; }
+      
+      .detail-actions {
+        margin-top: 50px;
+        display: flex;
+        gap: 16px;
+      }
+
+      /* Fly-in Animation setup */
+      .fly-in {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: cascadeUp 0.6s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+      }
+      .d1 { animation-delay: 0.1s; }
+      .d2 { animation-delay: 0.2s; }
+      .d3 { animation-delay: 0.3s; }
+      .d4 { animation-delay: 0.4s; }
+      
+      #error-state { display: none; text-align: center; padding: 100px 20px; }
+      #loading-state { text-align: center; padding: 100px 20px; }
+      #content-state { display: none; }
+    </style>
+  </head>
+
+  <body>
+    <!-- Ambient background -->
+    <div id="bgRoot" aria-hidden="true">
+      <div class="bg-animated"></div>
+      <div class="bg-noise"></div>
+      <div class="bg-orb"></div>
+      <div class="bg-cursor"></div>
+      <div class="bg-spotlight"></div>
+    </div>
+
+    <main>
+      <!-- Nav -->
+      <header class="nav-shell" role="banner">
+        <nav class="nav-glass glass" aria-label="Primary">
+          <a class="nav-item" href="index.html">Home</a>
+          <a class="nav-item" href="index.html#about">About</a>
+          <a class="nav-item" href="experience.html">Experience</a>
+          <a class="nav-item is-active" href="projects.html">Projects</a>
+        </nav>
+      </header>
+
+      <div class="detail-page">
+        <a href="projects.html" class="back-link fly-in">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+          Back to Projects
+        </a>
+
+        <div id="loading-state" class="fly-in d1">
+          <div class="mono" style="color: var(--muted);">Loading project details...</div>
+        </div>
+
+        <div id="error-state" class="fly-in d1">
+          <h2>Project Not Found</h2>
+          <p style="color: var(--muted); margin-top: 10px;">The project you're looking for doesn't exist.</p>
+        </div>
+
+        <div id="content-state">
+          <div class="detail-hero">
+            <h1 class="detail-title fly-in d1" id="pd-title">Project Title</h1>
+            <div class="detail-meta fly-in d2">
+              <span class="detail-year" id="pd-year">2025</span>
+              <div class="proj-card-tags" id="pd-tags"></div>
+            </div>
+            <div id="pd-actions" class="detail-actions fly-in d2" style="margin-top: 0; margin-bottom: 30px;">
+              <a id="pd-repo" class="preview-link" href="#" target="_blank" rel="noopener">
+                View Source Code
+                <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="detail-img-wrap fly-in d3">
+            <img id="pd-img" class="detail-img" src="" alt="Project Image" />
+          </div>
+
+          <div class="detail-content fly-in d4" id="pd-content">
+            <!-- Content injected via JS -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="assets/js/main.js?t=176000"></script>
+    <script>
+      // The content injection script runs after main.js loads the projects DB
+      document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const projectId = params.get('id');
+        
+        const loadingState = document.getElementById('loading-state');
+        const errorState = document.getElementById('error-state');
+        const contentState = document.getElementById('content-state');
+        
+        if (!projectId || !window.PROJECT_DB || !window.PROJECT_DB[projectId]) {
+          loadingState.style.display = 'none';
+          errorState.style.display = 'block';
+          return;
+        }
+
+        const project = window.PROJECT_DB[projectId];
+        
+        // Populate DOM
+        document.title = `${project.title} | Abhijeet Ghildiyal`;
+        document.getElementById('pd-title').textContent = project.title;
+        
+        const yearEl = document.getElementById('pd-year');
+        yearEl.textContent = project.year;
+        if (project.year === 'Ongoing') {
+           yearEl.style.borderColor = 'rgba(0,200,120,0.4)';
+           yearEl.style.color = 'rgba(0,200,120,0.9)';
+        }
+        
+        const tagsContainer = document.getElementById('pd-tags');
+        project.tags.forEach(tag => {
+          const span = document.createElement('span');
+          span.className = 'proj-card-tag';
+          span.textContent = tag;
+          tagsContainer.appendChild(span);
+        });
+
+        const repoLink = document.getElementById('pd-repo');
+        if (project.repo) {
+          repoLink.href = project.repo;
+          repoLink.style.display = 'inline-flex';
+        } else {
+          repoLink.style.display = 'none';
+        }
+
+        document.getElementById('pd-img').src = project.img;
+        document.getElementById('pd-img').alt = project.title;
+        
+        document.getElementById('pd-content').innerHTML = project.content;
+        
+        // Show content
+        loadingState.style.display = 'none';
+        contentState.style.display = 'block';
+      });
+    </script>
+  </body>
+</html>

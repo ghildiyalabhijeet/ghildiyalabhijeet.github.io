@@ -444,3 +444,102 @@
 
   requestAnimationFrame(tick);
 })();
+
+// ==========================================
+// PROJECT DATA STORE FOR DETAIL PAGES
+// ==========================================
+window.PROJECT_DB = {
+  "faster-diffusion": {
+    title: "Faster Diffusion",
+    year: "2025",
+    tags: ["Python", "PyTorch"],
+    img: "assets/img/1.webp",
+    repo: "https://github.com/ghildiyalabhijeet/GenAIProject",
+    content: `
+      <h2>Overview</h2>
+      <p>A deep learning research initiative focused on accelerating image generation with optimized diffusion model architectures and advanced sampling strategies. This project tackles the computational bottlenecks of standard Stable Diffusion pipelines.</p>
+      
+      <h3>Key Features</h3>
+      <ul>
+        <li>Implemented custom sampling schedulers resulting in a significant reduction in required inference steps.</li>
+        <li>Optimized memory footprints using PyTorch's native memory-efficient attention (FlashAttention).</li>
+        <li>End-to-end pipeline constructed entirely in Python, utilizing standard deep learning tooling for reproducibility and broad hardware compatibility.</li>
+      </ul>
+    `
+  },
+  "particle-pollution": {
+    title: "Particle Pollution Prediction",
+    year: "2022",
+    tags: ["Python", "scikit-learn", "Machine Learning"],
+    img: "assets/img/2.webp",
+    repo: "https://github.com/ghildiyalabhijeet/MachineLearning_Particle_Pollution/blob/main/Research_Paper_Particle_Pollution.pdf",
+    content: `
+      <h2>Overview</h2>
+      <p>Machine learning research focused on air quality prediction using environmental sensor data and ensemble methods. The goal of the project was to develop a robust, highly-accurate predictive model for measuring urban particulate matter (PM2.5/PM10).</p>
+      
+      <h3>Key Highlights</h3>
+      <ul>
+        <li>Exploratory Data Analysis (EDA) to find correlations between meteorological variables and pollution spikes.</li>
+        <li>Extensive feature engineering to capture temporal dynamics (time-of-day, day-of-week seasonality).</li>
+        <li>Benchmarked multiple models including Random Forests, XGBoost, and standard linear regressors.</li>
+        <li>Research findings compiled into a comprehensive academic paper detailing feature importance and predictive accuracy.</li>
+      </ul>
+    `
+  },
+  "digital-assets-pipeline": {
+    title: "Digital Assets Analytics Pipeline",
+    year: "Repo",
+    tags: ["Python", "SQL", "Data Engineering"],
+    img: "assets/img/3.webp",
+    repo: "https://github.com/AII-projects/DigitalAssetsAnalyticsPipeline",
+    content: `
+      <h2>Overview</h2>
+      <p>An end-to-end analytics pipeline designed for digital asset data ingestion, transformation, and dashboard visualization. This infrastructure supports high-volume daily processing of crypto and token metrics.</p>
+      
+      <h3>Architecture & Tech Stack</h3>
+      <ul>
+        <li><strong>Ingestion:</strong> Python-based ETL scripts pulling via public APIs and WebSockets.</li>
+        <li><strong>Transformation:</strong> SQL-heavy transformations normalizing varying schema definitions into a unified dimensional model.</li>
+        <li><strong>Automation:</strong> Scheduled daily runs maintaining historical ledgers with minimal latency.</li>
+      </ul>
+    `
+  },
+  "slack-qa-bot": {
+    title: "Slack Python Q&A Bot",
+    year: "2025",
+    tags: ["Python", "Slack API", "NLP"],
+    img: "assets/img/4.webp",
+    repo: "https://github.com/AII-projects/slackbot",
+    content: `
+      <h2>Overview</h2>
+      <p>A conversational Slack bot built for answering Python questions using Natural Language Processing and curated knowledge base retrieval. It's designed to automatically assist developers with syntactical and architectural queries directly inside their workflow.</p>
+      
+      <h3>Features</h3>
+      <ul>
+        <li>Event-driven architecture listening to Slack workspace mentions and DMs.</li>
+        <li>Semantic search against a localized knowledge base to retrieve highly relevant code snippets and documentation.</li>
+        <li>Context-aware conversational memory allowing for follow-up questions within threads.</li>
+      </ul>
+    `
+  },
+  "stock-prediction": {
+    title: "Stock Prediction & Trading Pipeline",
+    year: "Ongoing",
+    tags: ["Python", "PyTorch", "DuckDB", "pandas", "scikit-learn", "Parquet"],
+    img: "assets/img/5.webp",
+    repo: null, // Ongoing
+    content: `
+      <h2>Overview</h2>
+      <p>An end‑to‑end, local‑friendly research pipeline for U.S. stock prediction and systematic trading. This pipeline takes market data from raw ingestion to model forecasts, ending in automated trade generation and evaluation.</p>
+      
+      <h3>1. Reproducible ETL Pipeline</h3>
+      <p>Produces a clean, leakage‑controlled daily feature store. Downloads data using <strong>yfinance</strong> (daily OHLCV), <strong>SEC EDGAR</strong> (fundamentals), and <strong>GDELT API</strong> (topic counts/timeseries). Transformations are handled natively by <strong>pandas/NumPy</strong> and stored locally in <strong>Parquet</strong>, optionally querying via <strong>DuckDB</strong>.</p>
+      
+      <h3>2. Temporal Fusion Transformer (TFT)</h3>
+      <p>The forecasting model relies on PyTorch Forecasting’s TimeSeriesDataSet + Temporal Fusion Transformer. It natively supports multi-series prediction with mixed features (prices + fundamentals + macro + news).</p>
+      
+      <h3>3. Backtesting Harness</h3>
+      <p>A custom vectorized trading bot / backtesting harness built in pandas/NumPy that consumes the TFT forecasts, formulates trading decisions, and evaluates historical performance without lookahead bias (managed via carefully aligned trading calendars).</p>
+    `
+  }
+};
